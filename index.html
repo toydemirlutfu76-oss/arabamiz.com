@@ -134,11 +134,9 @@
 </head>
 <body>
 
-    <!-- GÜVENLİK BİLDİRİM ALANI - ÖDEMEYE GİT LİNKİ EKLENDİ -->
-    <div id="paymentAlertBar" class="text-white text-center py-2.5 fw-bold shadow-lg" style="display: none; font-size: 14px; background: linear-gradient(90deg, #ef4444, #dc2626); z-index: 9999;">
+    <div id="paymentAlertBar" class="text-white text-center py-2.5 fw-bold shadow-lg" style="display: none; font-size: 14px; background: linear-gradient(90deg, #ef4444, #dc2626); box-shadow: 0 4px 20px rgba(239, 68, 68, 0.45); z-index: 9999;">
         <i class="fa-solid fa-triangle-exclamation text-warning me-2 animate-bounce fs-5"></i> 
-        🚨 GÜVENLİK BİLDİRİMİ: Verdiğiniz bir fiyat teklifi kabul edildi! 
-        <a href="#" onclick="event.preventDefault(); showGarageListings();" class="btn btn-sm btn-light text-danger fw-bold ms-3 px-3 rounded-pill shadow-sm" style="font-size: 12px; border: none;">Ödemeye Git <i class="fa-solid fa-arrow-right ms-1"></i></a>
+        🚨 GÜVENLİK BİLDİRİMİ: Verdiğiniz bir fiyat teklifi kabul edildi! Lütfen sol menuden "Garajım" sekmesine giderek ödemenizi tamamlayınız.
     </div>
 
     <nav class="navbar top-navbar sticky-top py-3 px-4 navbar-dark shadow">
@@ -546,20 +544,10 @@
                 const spinner = document.getElementById('globalSpinner');
                 if(spinner) spinner.style.display = 'none';
                 
-               function checkAcceptedOffersForAlert() {
-            const alertBar = document.getElementById('paymentAlertBar');
-            if(!alertBar) return;
-
-            if (activeUser) {
-                // Kullanıcının satın aldığı veya teklifle kazandığı ama henüz ödeme listesine (dbBought) eklenmeyen araç var mı kontrolü
-                const hasUnpaidCar = dbCars.some(c => c.boughtBy && activeUser && c.boughtBy.toLowerCase().trim() === activeUser.toLowerCase().trim() && !dbBought.some(b => b.id === c.id));
-                if (hasUnpaidCar) {
-                    alertBar.style.display = 'block';
-                } else {
-                    alertBar.style.display = 'none';
-                }
-            } else {
-                alertBar.style.display = 'none';
+                checkAcceptedOffersForAlert(); 
+                applyFilters();
+            } catch (error) {
+                console.error("Bulut veri çekme hatası: ", error);
             }
         }
 
