@@ -89,8 +89,10 @@
             
             <div class="col-md-2 left-sidebar p-3 d-flex flex-column justify-content-between">
                 <div>
-                    <!-- Kanka buraya çift tıklayınca admin paneli açılıyor gizlice -->
-                    <h6 class="text-muted text-uppercase fw-bold mb-3 small" id="panelTitleHeader" ondblclick="triggerAdminLogin()" style="cursor: pointer; user-select: none;" title="Yönetici paneli için çift tıklayın kanka">Panel Kontrol</h6>
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h6 class="text-muted text-uppercase fw-bold m-0 small" id="panelTitleHeader" ondblclick="triggerAdminLogin()" style="cursor: pointer; user-select: none;" title="Yönetici paneli için çift tıklayın kanka">Panel Kontrol</h6>
+                        <button id="adminLogoutBtn" class="btn btn-xs btn-danger py-0 px-1 text-xs fw-bold" style="display: none; font-size: 10px;" onclick="logoutAdminMode()" title="Admin modundan çık kanka">Çıkış</button>
+                    </div>
                     <ul class="nav flex-column gap-2" id="menuList">
                         <li class="nav-item"><a id="menuAll" class="nav-link text-dark fw-bold bg-white shadow-sm rounded" onclick="showAllListings()"><i class="fa-solid fa-border-all me-2 text-primary"></i> Vitrin İlanları</a></li>
                         <li class="nav-item"><a id="menuDoping" class="nav-link text-secondary fw-semibold" onclick="showDopingListings()"><i class="fa-solid fa-star me-2 text-warning"></i> Haftanın Yıldızları</a></li>
@@ -162,6 +164,32 @@
                 </div>
             </div>
 
+        </div>
+    </div>
+
+    <!-- İLAN TEKLİF VERME MODALI -->
+    <div class="modal fade" id="offerModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-sm">
+            <div class="modal-content border-0 shadow">
+                <div class="modal-header bg-primary text-white py-2">
+                    <h6 class="modal-title fw-bold"><i class="fa-solid fa-hand-holding-dollar me-2"></i>Fiyat Teklifi Gönder</h6>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body p-3">
+                    <div class="mb-2 bg-light p-2 rounded text-center">
+                        <small class="text-muted d-block">Aracın Orijinal Fiyatı</small>
+                        <b class="text-dark fs-5" id="offerCarPriceView">0 TL</b>
+                    </div>
+                    <form id="offerForm" onsubmit="submitOfferToCloud(event)">
+                        <div class="mb-3">
+                            <label class="form-label small fw-bold">Teklif Ettiğiniz Tutar (TL)</label>
+                            <input type="number" id="offerAmountInput" class="form-control fw-bold text-primary" required placeholder="Örn: 850000">
+                            <p class="text-xs text-muted mt-1">Ölücülüğü önlemek için orijinal fiyatın en az %70'ini teklif etmelisiniz kanka.</p>
+                        </div>
+                        <button type="submit" class="btn btn-primary w-100 fw-bold">Teklifi Buluta Gönder</button>
+                    </form>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -384,9 +412,11 @@
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
         const carsCollection = collection(db, "cars");
+        const offersCollection = collection(db, "offers"); // Bulut teklif koleksiyonu kanka
 
         // Yerel Altyapı Değişkenleri
         let dbCars = [];
+        let dbOffers = []; // Gelen bulut tekliflerini burada tutacağız
         let dbUsers = JSON.parse(localStorage.getItem('dbUsers')) || {"demo": {pass:"1234", email:"demo@otomarket.com"}};
         let dbBought = JSON.parse(localStorage.getItem('dbBought')) || [];
         let dbMessages = JSON.parse(localStorage.getItem('dbMessages')) || []; 
@@ -398,7 +428,8 @@
         let paymentPurpose = "buy"; 
         let activeChatPartner = null;
         let selectedCarIdToBuy = null;
-        let isAdminLoggedIn = false; // Kanka admin durumunu burada tutuyoruz
+        let selectedCarIdToOffer = null; // Teklif verilen araç ID'si
+        let isAdminLoggedIn = false; 
 
         // Buluttan Gerçek Zamanlı Verileri Çeken Fonksiyon
         async function fetchCarsFromCloud() {
@@ -408,9 +439,19 @@
                 dbCars = [];
                 querySnapshot.forEach((doc) => {
                     let data = doc.data();
-                    data.id = doc.id; // Firebase doküman ID'sini atıyoruz kanka
+                    data.id = doc.id; 
                     dbCars.push(data);
                 });
+
+                // Teklifleri de buluttan çekelim kanka
+                const offerSnapshot = await getDocs(offersCollection);
+                dbOffers = [];
+                offerSnapshot.forEach((doc) => {
+                    let oData = doc.data();
+                    oData.id = doc.id;
+                    dbOffers.push(oData);
+                });
+
                 const spinner = document.getElementById('globalSpinner');
                 if(spinner) spinner.style.display = 'none';
                 applyFilters();
@@ -529,7 +570,6 @@
                     actionBtnHTML = `<button class="btn btn-sm btn-light text-muted" disabled><i class="fa-solid fa-lock"></i> Satıcı</button>`;
                 }
                 
-                // Kanka gizli admin modu aktifse kırmızı silme butonunu buraya gömüyoruz
                 let adminBtnHTML = '';
                 if(isAdminLoggedIn) {
                     adminBtnHTML = `<button onclick="deleteCar('${c.id}')" class="btn btn-sm btn-danger w-100 mt-2 fw-bold"><i class="fa-solid fa-radiation"></i> Admin Yetkisiyle Buluttan Sil</button>`;
@@ -589,10 +629,12 @@
 
         // GİZLI ADMIN PANELINI TETIKLEYEN SISTEM
         window.triggerAdminLogin = function() {
+            if(isAdminLoggedIn) return;
             const pass = prompt("Yönetici modunu açmak için şifreyi gir kanka:");
             if(pass === "admin123") {
                 isAdminLoggedIn = true;
                 document.getElementById('panelTitleHeader').innerHTML = `<i class="fa-solid fa-user-gear text-danger me-1"></i> Panel Kontrol (ADMIN)`;
+                document.getElementById('adminLogoutBtn').style.display = 'block'; 
                 alert("Yönetici modu başarıyla açıldı kanka! Artık istemediğin sahte ilanları doğrudan silebilirsin.");
                 applyFilters();
             } else if (pass !== null) {
@@ -600,7 +642,86 @@
             }
         }
 
-        // HAKKIMIZDA BÖLÜMÜNÜ EKLEME SİSTEMİ
+        window.logoutAdminMode = function() {
+            isAdminLoggedIn = false;
+            document.getElementById('panelTitleHeader').innerHTML = "Panel Kontrol";
+            document.getElementById('adminLogoutBtn').style.display = 'none'; 
+            alert("Yönetici modundan güvenle çıkış yapıldı kanka.");
+            applyFilters();
+        }
+
+        // TEKLİF PENCERESİNİ AÇMA MOTORU
+        window.openOfferModal = function(carId) {
+            if (!activeUser) { showAuthWarning("Teklif vermek için oturum açmalısınız kanka."); return; }
+            const car = dbCars.find(c => c.id === carId);
+            if(!car) return;
+
+            selectedCarIdToOffer = carId;
+            document.getElementById('offerCarPriceView').innerText = car.price.toLocaleString('tr-TR') + " TL";
+            document.getElementById('offerForm').reset();
+            
+            bootstrap.Modal.getInstance(document.getElementById('detailModal')).hide();
+            new bootstrap.Modal(document.getElementById('offerModal')).show();
+        }
+
+        // TEKLİFİ BULUT VERİTABANINA GÖNDEREN MOTOR
+        window.submitOfferToCloud = async function(e) {
+            e.preventDefault();
+            const car = dbCars.find(c => c.id === selectedCarIdToOffer);
+            if(!car) return;
+
+            const offerAmount = parseFloat(document.getElementById('offerAmountInput').value);
+            const minAcceptableOffer = car.price * 0.70; // %30 ölücü limiti kanka
+
+            // SPAM VE ÖLÜCÜ ENGELİ (Kural 2)
+            if (offerAmount < minAcceptableOffer) {
+                alert(`❌ TEKLİF OTOMATİK REDDEDİLDİ kanka!\n\nBu araca en az ${minAcceptableOffer.toLocaleString('tr-TR')} TL (%70) teklif edebilirsiniz. Ölücü teklifler sistem tarafından engellenir!`);
+                return;
+            }
+
+            const offerData = {
+                carId: selectedCarIdToOffer,
+                carTitle: car.title,
+                carOriginalPrice: car.price,
+                offerer: activeUser,
+                owner: car.owner,
+                amount: offerAmount,
+                createdAt: new Date().getTime()
+            };
+
+            try {
+                await addDoc(offersCollection, offerData);
+                bootstrap.Modal.getInstance(document.getElementById('offerModal')).hide();
+                alert(`🎉 TEKLİFİN BULUTA UÇTU kanka!\n\n"${car.title}" için ${offerAmount.toLocaleString('tr-TR')} TL teklifiniz ilan sahibine iletildi.`);
+                fetchCarsFromCloud();
+            } catch (err) {
+                console.error("Teklif yazma hatası: ", err);
+            }
+        }
+
+        // TEKLİFİ GARAJDA ONAYLAYIP SATIŞI BİTİREN MOTOR
+        window.acceptOfferAndSell = async function(offerId, carId, offerer, amount) {
+            if (confirm(`Bu teklifi onaylayıp aracı ${amount.toLocaleString('tr-TR')} TL'ye ${offerer} kullanıcısına satmak istiyor musunuz kanka?`)) {
+                try {
+                    const carDocRef = doc(db, "cars", carId);
+                    // Aracın fiyatını teklif fiyatı yapıp satın alan kişiyi atıyoruz kanka
+                    await updateDoc(carDocRef, { 
+                        boughtBy: offerer,
+                        price: amount 
+                    });
+
+                    // İşlemi tamamlanan teklifi silelim buluttan karışıklık olmasın kanka
+                    await deleteDoc(doc(db, "offers", offerId));
+
+                    alert(`🏁 TEBRİKLER, ARAÇ SATILDI!\n\nAraç ${amount.toLocaleString('tr-TR')} TL üzerinden ${offerer} kişisinin garajına devredildi.`);
+                    fetchCarsFromCloud();
+                } catch (err) {
+                    console.error("Teklif onaylama hatası: ", err);
+                }
+            }
+        }
+
+        // HAKKIMIZDA BÖLÜMÜ
         window.showAboutSection = function() {
             currentViewMode = "about";
             setMenuClass('menuAbout');
@@ -617,30 +738,6 @@
                     <p class="text-secondary leading-relaxed mt-2">
                         Misyonumuz, kullanıcılarımızın ekpertiz randevularından kredi hesaplamalarına, anlık satıcı mesajlaşmalarından haftanın yıldızları doping sistemine kadar her türlü ihtiyacını tek bir çatı altında toplamaktır. 
                     </p>
-                    <hr class="my-4">
-                    <div class="row g-3 text-center">
-                        <div class="col-md-4">
-                            <div class="p-3 bg-light rounded border">
-                                <i class="fa-solid fa-cloud text-primary fs-3 mb-2"></i>
-                                <h6 class="fw-bold m-0">Firebase Cloud</h6>
-                                <small class="text-muted">%100 Canlı Veri Akışı</small>
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="p-3 bg-light rounded border">
-                                <i class="fa-solid fa-user-shield text-success fs-3 mb-2"></i>
-                                <h6 class="fw-bold m-0">E-E-A-T Uyumlu</h6>
-                                <small class="text-muted">Güvenli Oturum Katmanı</small>
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="p-3 bg-light rounded border">
-                                <i class="fa-solid fa-bolt text-warning fs-3 mb-2"></i>
-                                <h6 class="fw-bold m-0">Süper Hızlı</h6>
-                                <small class="text-muted">Hafif Altyapı Düzeni</small>
-                            </div>
-                        </div>
-                    </div>
                 </div>`;
         }
 
@@ -700,7 +797,7 @@
             if(v.length >= 2) { el.value = v.substring(0,2) + '/' + v.substring(2,4); } else { el.value = v; }
         }
 
-        // 3D SAKAL ÖDEME SİMÜLASYONU VE BULUT GÜNCELLEMESİ
+        // 3D ÖDEME SİMÜLASYONU
         window.processPayment = async function(e) {
             e.preventDefault();
             const car = dbCars.find(c => c.id === selectedCarIdToBuy);
@@ -914,10 +1011,6 @@
                                     <option value="36">36 Ay Vade</option>
                                 </select>
                             </div>
-                            <div class="mb-3">
-                                <label class="form-label small fw-bold">Yıllık Faiz Oranı (%)</label>
-                                <input type="text" class="form-control bg-light" value="% 2.89 (Sabit Banka Oranı)" disabled>
-                            </div>
                         </div>
                         <div class="col-md-7 bg-light-subtle d-flex flex-column justify-content-center p-4">
                             <h6 class="fw-bold text-success mb-3">Hesaplama Sonuç Özet Raporu</h6>
@@ -925,8 +1018,6 @@
                                 <div class="col-6"><p class="m-0 small text-muted">Aylık Taksit Tutarı:</p><h4 class="fw-bold text-danger" id="loanMonthly">0 TL</h4></div>
                                 <div class="col-6"><p class="m-0 small text-muted">Geri Ödenecek Toplam:</p><h4 class="fw-bold text-dark" id="loanTotal">0 TL</h4></div>
                             </div>
-                            <hr>
-                            <p class="small text-muted m-0"><i class="fa-solid fa-circle-info text-info me-1"></i>Hesaplanan veriler BDDK mevzuat kurallarına göre simüle edilmiştir.</p>
                         </div>
                     </div>
                 </div>`;
@@ -1007,7 +1098,10 @@
             let btns = '';
             if(!car.boughtBy) {
                 btns += `<button onclick="openPaymentGateway('${car.id}')" class="btn btn-primary fw-bold px-4"><i class="fa-solid fa-basket-shopping me-2"></i>Satın Al</button>`;
+                
+                // KULLANICI KENDİ İLANINA TEKLİF VEREMEZ (Kural 1)
                 if(activeUser && car.owner !== activeUser) {
+                    btns += `<button onclick="openOfferModal('${car.id}')" class="btn btn-warning fw-bold px-3 text-dark"><i class="fa-solid fa-hand-holding-dollar me-1"></i>Teklif Ver</button>`;
                     btns += `<button onclick="triggerDirectMessage('${car.id}')" class="btn btn-success fw-bold px-3"><i class="fa-solid fa-envelope me-1"></i>Satıcıya Mesaj At</button>`;
                 }
             } else {
@@ -1027,9 +1121,45 @@
 
         window.showAllListings = function() { currentViewMode = "all"; setMenuClass('menuAll'); hideRightFilterBar(false); applyFilters(); }
         window.showFavoriteListings = function() { currentViewMode = "fav"; setMenuClass('menuFav'); hideRightFilterBar(false); applyFilters(); }
+        
+        // GARAJ VE GELEN TEKLİFLER BÖLÜMÜ (Mevcut Görünüm Korundu)
         window.showGarageListings = function() {
             if(!activeUser) { showAuthWarning("Garajınızı görmek için oturum açmalısınız."); return; }
-            currentViewMode = "garage"; setMenuClass('menuGarage'); hideRightFilterBar(false); applyFilters();
+            currentViewMode = "garage"; setMenuClass('menuGarage'); hideRightFilterBar(false);
+            
+            // Önce ilanları filtrele kanka
+            let myCars = dbCars.filter(c => c.owner === activeUser || c.boughtBy === activeUser);
+            renderList(myCars);
+
+            // Filtre bittikten sonra sayfanın altına gelen bulut tekliflerini ekle kanka
+            let myOffers = dbOffers.filter(o => o.owner === activeUser);
+            const container = document.getElementById('mainDynamicContainer');
+
+            let offersHTML = `
+                <h5 class="fw-bold mt-5 mb-3 text-primary"><i class="fa-solid fa-bell text-warning me-2"></i>Aracınıza Gelen Bulut Teklifleri</h5>
+                <div class="card p-3 border-0 shadow-sm bg-white rounded-3">
+                    <div class="table-responsive">
+                        <table class="table table-sm table-hover align-middle">
+                            <thead class="table-primary">
+                                <tr><th>Araç</th><th>Teklif Veren</th><th>Orijinal Fiyat</th><th>Teklif Tutarı</th><th>Aksiyon</th></tr>
+                            </thead>
+                            <tbody>
+                                ${myOffers.map(o => `
+                                    <tr>
+                                        <td><b>${o.carTitle}</b></td>
+                                        <td><span class="badge bg-secondary">${o.offerer}</span></td>
+                                        <td><small class="text-muted">${o.carOriginalPrice.toLocaleString('tr-TR')} TL</small></td>
+                                        <td><b class="text-success">${o.amount.toLocaleString('tr-TR')} TL</b></td>
+                                        <td><button onclick="acceptOfferAndSell('${o.id}', '${o.carId}', '${o.offerer}', ${o.amount})" class="btn btn-xs btn-success fw-bold py-1 px-2 text-xs" style="font-size:12px;">Onayla ve Sat</button></td>
+                                    </tr>
+                                `).join('')}
+                                ${myOffers.length === 0 ? '<tr><td colspan="5" class="text-muted text-center py-3 small">Henüz ilanlarınıza gelen bir bulut teklifi yok kanka.</td></tr>':''}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            `;
+            container.innerHTML += offersHTML;
         }
 
         window.setMenuClass = function(id) {
@@ -1050,7 +1180,7 @@
             if(currentViewMode === "all") res = dbCars.filter(c => !c.boughtBy);
             else if(currentViewMode === "fav") res = dbCars.filter(c => favSet.has(c.id) && !c.boughtBy);
             else if(currentViewMode === "doping") res = dbCars.filter(c => c.isDoping && !c.boughtBy);
-            else if(currentViewMode === "garage") res = dbCars.filter(c => c.owner === activeUser || c.boughtBy === activeUser);
+            else if(currentViewMode === "garage") { window.showGarageListings(); return; }
 
             if (!["all", "fav", "garage", "doping"].includes(currentViewMode)) return;
 
@@ -1109,7 +1239,7 @@
             const p = document.getElementById('rPass').value;
             if(dbUsers[u]) { alert("Bu kullanıcı adı zaten alınmış!"); return; }
             dbUsers[u] = {pass: p, email: em}; updateLocalStorage();
-            alert("Hesabınız e-posta katmanıyla kaydedildi! Giriş yapabilirsiniz.");
+            alert("Hesabınız başarıyla kaydedildi kanka! Giriş yapabilirsiniz.");
             toggleAuthMode('login');
         }
 
@@ -1125,8 +1255,9 @@
         }
 
         window.logoutUser = function() {
-            activeUser = null; favSet.clear(); activeChatPartner = null; isAdminLoggedIn = false; // Admini kapatıyoruz
+            activeUser = null; favSet.clear(); activeChatPartner = null; isAdminLoggedIn = false; 
             document.getElementById('panelTitleHeader').innerHTML = "Panel Kontrol";
+            document.getElementById('adminLogoutBtn').style.display = 'none';
             updateLocalStorage(); updateFavCount(); checkSession(); updateMsgCount();
             showAllListings(); alert("Güvenli çıkış yapıldı.");
         }
