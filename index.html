@@ -1247,7 +1247,7 @@
             const maxP = document.getElementById('fMaxPrice').value;
             const arama = document.getElementById('searchInp').value.toLowerCase();
 
-            if(kasa) res = res.filter(c => .bodyType === kasa);
+            if(kasa) res = res.filter(c => bodyType === kasa);
             if(renk) res = res.filter(c => c.color.toLowerCase().includes(renk));
             if(yil) res = res.filter(c => c.year >= parseInt(yil));
             if(minP) res = res.filter(c => c.price >= parseFloat(minP));
