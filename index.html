@@ -51,7 +51,7 @@
             box-shadow: 0 4px 15px rgba(37, 99, 235, 0.4);
         }
 
-        /* PREMIUM İLAN KARTLARI */
+        /* PREMIUM PREMIUM İLAN KARTLARI */
         .car-card { 
             transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1); 
             border: 1px solid rgba(255, 255, 255, 0.05); 
@@ -115,11 +115,8 @@
         .black-strip { width: 100%; height: 45px; background-color: #000; }
         .ccv-strip { width: 80%; height: 35px; background-color: #fff; color: #000; margin: 15px auto; padding: 5px 15px; text-align: right; font-weight: bold; font-style: italic; border-radius: 4px; }
         
-        /* SOHBET KUTUSU PREMIUM SAĞLI SOLLU TASARIMI */
+        /* SOHBET KUTUSU PREMIUM RE-DESIGN */
         .chat-box { height: 350px; overflow-y: auto; background-color: rgba(15, 23, 42, 0.4); border: 1px solid rgba(255,255,255,0.05); border-radius: 12px; padding: 15px; }
-        .message-row { display: flex; width: 100%; margin-bottom: 12px; }
-        .message-row.sent { justify-content: flex-end; }
-        .message-row.received { justify-content: flex-start; }
         .message-bubble { max-width: 70%; padding: 12px 16px; border-radius: 16px; font-size: 14px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
         .message-row.sent .message-bubble { background: linear-gradient(135deg, #2563eb, #1d4ed8); color: white; border-bottom-right-radius: 2px; }
         .message-row.received .message-bubble { background-color: rgba(255,255,255,0.1); color: #f1f5f9; border-bottom-left-radius: 2px; }
@@ -137,7 +134,6 @@
 </head>
 <body>
 
-    <!-- GÜVENLİK BİLDİRİM ALANI -->
     <div id="paymentAlertBar" class="text-white text-center py-2.5 fw-bold shadow-lg" style="display: none; font-size: 14px; background: linear-gradient(90deg, #ef4444, #dc2626); box-shadow: 0 4px 20px rgba(239, 68, 68, 0.45); z-index: 9999;">
         <i class="fa-solid fa-triangle-exclamation text-warning me-2 animate-bounce fs-5"></i> 
         🚨 GÜVENLİK BİLDİRİMİ: Verdiğiniz bir fiyat teklifi kabul edildi! Lütfen sol menuden "Garajım" sekmesine giderek ödemenizi tamamlayınız.
@@ -244,7 +240,6 @@
         </div>
     </div>
 
-    <!-- İLAN TEKLİF VERME MODALI -->
     <div class="modal fade" id="offerModal" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered modal-sm">
             <div class="modal-content border-0 shadow">
@@ -270,7 +265,6 @@
         </div>
     </div>
 
-    <!-- DETAY MODALI -->
     <div class="modal fade" id="detailModal" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-lg modal-dialog-centered">
             <div class="modal-content">
@@ -314,7 +308,6 @@
         </div>
     </div>
 
-    <!-- ÖDEME MODALI -->
     <div class="modal fade" id="paymentModal" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content border-0 shadow">
@@ -373,7 +366,6 @@
         </div>
     </div>
 
-    <!-- İLAN EKLEME MODALI -->
     <div class="modal fade" id="addCarModal" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-lg modal-dialog-centered">
             <div class="modal-content">
@@ -445,7 +437,6 @@
         </div>
     </div>
 
-    <!-- KİMLİK DOĞRULAMA MODALI -->
     <div class="modal fade" id="authModal" data-bs-backdrop="static" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content border-0 shadow">
@@ -522,7 +513,7 @@
         let selectedCarIdToOffer = null; 
         let isAdminLoggedIn = false; 
 
-        // BULUTTAN VERİLERİ ÇEKEN MOTOR
+        // REALTIME BULUT ENTEGRASYONU
         async function fetchCarsFromCloud() {
             try {
                 const q = query(carsCollection, orderBy("createdAt", "desc"));
@@ -576,7 +567,7 @@
             }
         }
 
-        window.updateLocalStorage = function() {
+        function updateLocalStorage() {
             localStorage.setItem('dbUsers', JSON.stringify(dbUsers));
             localStorage.setItem('dbBought', JSON.stringify(dbBought));
             localStorage.setItem('dbMessages', JSON.stringify(dbMessages));
@@ -773,7 +764,7 @@
         }
 
         window.openOfferModal = function(carId) {
-            if (!activeUser) { showAuthWarning("Teklif vermek için oturum açmalısınız kanka."); return; }
+            if (!activeUser) { showAuthWarning("Teklif vermek için oturum açmalısınız."); return; }
             const car = dbCars.find(c => c.id === carId);
             if(!car) return;
 
@@ -819,7 +810,7 @@
         }
 
         window.acceptOfferAndSell = async function(offerId, carId, offerer, amount) {
-            if (confirm("Bu teklifi onaylayıp satışı bitirmek istiyor musunuz?")) {
+            if (confirm(`Bu teklifi onaylayıp aracı ${amount.toLocaleString('tr-TR')} TL'ye ${offerer} kullanıcısına satmak istiyor musunuz?`)) {
                 try {
                     const carDocRef = doc(db, "cars", carId);
                     await updateDoc(carDocRef, { 
@@ -836,9 +827,8 @@
             }
         }
 
-        // REDDETME FONKSİYONUNDAKİ EKSİK PARANTEZ DÜZELTİLDİ
         window.rejectOfferFromCloud = async function(offerId, carTitle, offerer, amount) {
-            if (confirm("Bu teklifi reddetmek istediğinize emin misiniz?")) {
+            if (confirm(`Bu teklifi reddetmek istediğinize emin misiniz?`)) {
                 try {
                     await deleteDoc(doc(db, "offers", offerId));
 
@@ -848,7 +838,7 @@
                         text: `⚠️ [SİSTEM BİLDİRİMİ]: "${carTitle}" aracına yapmış olduğunuz ${amount.toLocaleString('tr-TR')} TL tutarındaki fiyat teklifiniz ilan sahibi tarafından reddedilmiştir.`
                     });
                     
-                    window.updateLocalStorage();
+                    updateLocalStorage();
                     alert("Teklif reddedildi ve bilgilendirme mesajı gönderildi.");
                     fetchCarsFromCloud();
                 } catch (err) {
@@ -953,7 +943,7 @@
                 document.getElementById('paySubmitBtn').innerHTML = `Güvenli Ödemeyi Yap`;
                 document.getElementById('paySubmitBtn').disabled = false;
 
-                window.updateLocalStorage(); updateFavCount(); fetchCarsFromCloud();
+                updateLocalStorage(); updateFavCount(); fetchCarsFromCloud();
             }, 1500);
         }
 
@@ -1042,7 +1032,7 @@
                 text: inp.value.trim()
             });
             inp.value = "";
-            window.updateLocalStorage();
+            updateLocalStorage();
             loadChatWith(activeChatPartner);
         }
 
@@ -1052,15 +1042,12 @@
             document.getElementById('msgCount').innerText = count;
         }
 
-        // KREDİ VE RANDEVU GRİ TABLOLAR GERİ GETİRİLDİ
         window.showEkspertizSection = function() {
             if(!activeUser) { showAuthWarning("Randevu oluşturmak için oturum açmalısınız."); return; }
             currentViewMode = "ekspertiz";
             setMenuClass('menuEkspertiz'); hideRightFilterBar(true);
 
             const container = document.getElementById('mainDynamicContainer');
-            let myAppointments = dbAppointments.filter(a => a.user === activeUser);
-
             container.innerHTML = `
                 <h4 class="fw-bold mb-4 text-white"><i class="fa-solid fa-screwdriver-wrench text-secondary me-2"></i>Ekspertiz & Yetkili Bakım Servisi</h4>
                 <div class="row g-3">
@@ -1092,20 +1079,6 @@
                             </form>
                         </div>
                     </div>
-                    <div class="col-md-7">
-                        <div class="card p-4 border-0 shadow-sm rounded-3 text-white" style="background-color: rgba(30,41,59,0.7);">
-                            <h6 class="fw-bold mb-3 text-success"><i class="fa-solid fa-clock-rotate-left me-1"></i>Aktif Randevularım</h6>
-                            <div class="table-responsive">
-                                <table class="table table-sm table-dark table-hover m-0">
-                                    <thead><tr><th>Hizmet</th><th>İstasyon</th><th>Tarih</th></tr></thead>
-                                    <tbody>
-                                        ${myAppointments.map(a => `<tr><td><small class="fw-bold text-info">${a.type}</small></td><td><small>${a.station}</small></td><td><span class="badge bg-secondary">${a.date}</span></td></tr>`).join('')}
-                                        ${myAppointments.length === 0 ? '<tr><td colspan="3" class="text-muted text-center py-3 small">Kayıtlı aktif randevunuz yoktur.</td></tr>':''}
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
                 </div>`;
         }
 
@@ -1117,7 +1090,7 @@
                 station: document.getElementById('apStation').value,
                 date: document.getElementById('apDate').value
             });
-            window.updateLocalStorage(); alert("Randevunuz başarıyla merkez istasyona iletildi!");
+            updateLocalStorage(); alert("Randevunuz başarıyla merkez istasyona iletildi!");
             showEkspertizSection();
         }
 
@@ -1143,19 +1116,6 @@
                                     <option value="36">36 Ay Vade</option>
                                 </select>
                             </div>
-                            <div class="mb-3">
-                                <label class="form-label small fw-bold text-secondary">Yıllık Faiz Oranı (%)</label>
-                                <input type="text" class="form-control bg-dark text-muted" value="% 2.89 (Sabit Banka Oranı)" disabled>
-                            </div>
-                        </div>
-                        <div class="col-md-7 d-flex flex-column justify-content-center p-4 rounded-3" style="background: rgba(15,23,42,0.3)">
-                            <h6 class="fw-bold text-success mb-3">Hesaplama Sonuç Özet Raporu</h6>
-                            <div class="row g-3">
-                                <div class="col-6"><p class="m-0 small text-muted">Aylık Taksit Tutarı:</p><h4 class="fw-bold text-danger" id="loanMonthly">0 TL</h4></div>
-                                <div class="col-6"><p class="m-0 small text-muted">Geri Ödenecek Toplam:</p><h4 class="fw-bold text-white" id="loanTotal">0 TL</h4></div>
-                            </div>
-                            <hr class="border-secondary">
-                            <p class="small text-muted m-0"><i class="fa-solid fa-circle-info text-info me-1"></i>Hesaplanan veriler BDDK mevzuat kurallarına göre simüle edilmiştir.</p>
                         </div>
                     </div>
                 </div>`;
@@ -1191,7 +1151,7 @@
                 try {
                     await deleteDoc(doc(db, "cars", id));
                     favSet.delete(id); 
-                    window.updateLocalStorage(); updateFavCount();
+                    updateLocalStorage(); updateFavCount();
                     alert("İlan buluttan başarıyla silindi!");
                     fetchCarsFromCloud();
                 } catch (err) {
@@ -1257,7 +1217,7 @@
             const car = dbCars.find(c => c.id === id); 
             if(!car || (activeUser && car.owner && activeUser.toLowerCase().trim() === car.owner.toLowerCase().trim())) return;
             if(favSet.has(id)) favSet.delete(id); else favSet.add(id);
-            window.updateLocalStorage(); updateFavCount(); applyFilters();
+            updateLocalStorage(); updateFavCount(); applyFilters();
         }
 
         window.updateFavCount = function() { document.getElementById('favCount').innerText = favSet.size; }
@@ -1293,7 +1253,7 @@
                                         <td>
                                             <div class="d-flex gap-1">
                                                 <button onclick="acceptOfferAndSell('${o.id}', '${o.carId}', '${o.offerer}', ${o.amount})" class="btn btn-sm btn-success fw-bold py-1 px-2 text-xs" style="font-size:11px; border-radius:6px">Onayla ve Sat</button>
-                                                <button onclick="rejectOfferFromCloud('${o.id}', '${o.carTitle}', '${o.offerer}', ${o.amount})" class="btn btn-sm btn-outline-danger fw-bold py-1 px-2 text-xs" style="font-size:11px; border-radius:6px">Reddet</button>
+                                                <button onclick="rejectOfferFromCloud('${o.id}', '${o.carTitle}', '${o.offerer}', ${o.amount}')" class="btn btn-sm btn-outline-danger fw-bold py-1 px-2 text-xs" style="font-size:11px; border-radius:6px">Reddet</button>
                                             </div>
                                         </td>
                                     </tr>
@@ -1373,7 +1333,7 @@
             const u = document.getElementById('lUser').value;
             const p = document.getElementById('lPass').value;
             if(dbUsers[u] && dbUsers[u].pass === p) {
-                activeUser = u; window.updateLocalStorage(); checkSession();
+                activeUser = u; updateLocalStorage(); checkSession();
                 bootstrap.Modal.getInstance(document.getElementById('authModal')).hide();
                 clearAuthForm(); updateFavCount(); updateMsgCount(); showAllListings();
             } else { alert("Hatalı kullanıcı adı veya şifre!"); }
@@ -1385,7 +1345,7 @@
             const em = document.getElementById('rEmail').value;
             const p = document.getElementById('rPass').value;
             if(dbUsers[u]) { alert("Bu kullanıcı adı zaten alınmış!"); return; }
-            dbUsers[u] = {pass: p, email: em}; window.updateLocalStorage();
+            dbUsers[u] = {pass: p, email: em}; updateLocalStorage();
             alert("Hesabınız başarıyla kaydedildi! Giriş yapabilirsiniz.");
             toggleAuthMode('login');
         }
@@ -1396,7 +1356,7 @@
             const em = document.getElementById('forE').value;
             const np = document.getElementById('forP').value;
             if(dbUsers[u] && dbUsers[u].email === em) { 
-                dbUsers[u].pass = np; window.updateLocalStorage();
+                dbUsers[u].pass = np; updateLocalStorage();
                 alert("Şifreniz başarıyla yenilendi."); toggleAuthMode('login'); 
             } else { alert("HATA: Bilgiler uyuşmuyor!"); }
         }
@@ -1405,7 +1365,7 @@
             activeUser = null; favSet.clear(); activeChatPartner = null; isAdminLoggedIn = false; 
             document.getElementById('panelTitleHeader').innerHTML = "Panel Kontrol";
             document.getElementById('adminLogoutBtn').style.display = 'none';
-            window.updateLocalStorage(); updateFavCount(); checkSession(); updateMsgCount();
+            updateLocalStorage(); updateFavCount(); checkSession(); updateMsgCount();
             showAllListings(); alert("Güvenli çıkış yapıldı.");
         }
 
