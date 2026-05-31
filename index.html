@@ -66,6 +66,12 @@
 </head>
 <body>
 
+    <!-- SÜPER ÖDEME BİLDİRİM UYARI ALANI kanka -->
+    <div id="paymentAlertBar" class="bg-danger text-white text-center py-2 fw-bold shadow-sm" style="display: none; font-size: 14px; position: relative; z-index: 9999;">
+        <i class="fa-solid fa-triangle-exclamation text-warning me-2 animate-bounce"></i> 
+        🚨 GÜVENLİK BİLDİRİMİ: Verdiğiniz bir fiyat teklifi kabul edildi! Lütfen sol menüden "Garajım" sekmesine giderek ödemenizi tamamlayınız.
+    </div>
+
     <nav class="navbar top-navbar sticky-top py-2 px-4 navbar-dark">
         <div class="container-fluid d-flex justify-content-between align-items-center">
             <a class="navbar-brand fw-bold text-warning fs-4" href="#" onclick="showAllListings()"><i class="fa-solid fa-car-rear me-2"></i> OTOMARKET <span class="badge bg-danger fs-6 pb-1">PRO</span></a>
@@ -91,7 +97,7 @@
                 <div>
                     <div class="d-flex justify-content-between align-items-center mb-3">
                         <h6 class="text-muted text-uppercase fw-bold m-0 small" id="panelTitleHeader" ondblclick="triggerAdminLogin()" style="cursor: pointer; user-select: none;" title="Yönetici paneli için çift tıklayın kanka">Panel Kontrol</h6>
-                        <button id="adminLogoutBtn" class="btn btn-xs btn-danger py-0 px-1 text-xs fw-bold" style="display: none; font-size: 10px;" onclick="logoutAdminMode()" title="Admin modundan çık kanka">Çıkış</button>
+                        <button id="adminLogoutBtn" class="btn btn-xs btn-danger py-0 px-2 fw-bold" style="display: none; font-size: 11px; border-radius: 4px;" onclick="logoutAdminMode()">Çıkış</button>
                     </div>
                     <ul class="nav flex-column gap-2" id="menuList">
                         <li class="nav-item"><a id="menuAll" class="nav-link text-dark fw-bold bg-white shadow-sm rounded" onclick="showAllListings()"><i class="fa-solid fa-border-all me-2 text-primary"></i> Vitrin İlanları</a></li>
@@ -223,6 +229,13 @@
                                 <tr><th class="bg-light">İlan Sahibi</th><td><span id="detTableOwner" class="badge bg-secondary"></span></td></tr>
                             </table>
                         </div>
+                        <!-- KANKA ZORUNLU AÇIKLAMANIN GÖRÜNECEĞİ YER -->
+                        <div class="col-md-12 mt-2">
+                            <div class="p-3 bg-light rounded border">
+                                <h6 class="fw-bold text-dark"><i class="fa-solid fa-file-lines me-1 text-secondary"></i> Satıcı Açıklaması:</h6>
+                                <p class="m-0 small text-secondary" id="detTableDescription" style="white-space: pre-line;"></p>
+                            </div>
+                        </div>
                     </div>
                     <div id="detailActionBox" class="mt-3 d-flex justify-content-end gap-2"></div>
                 </div>
@@ -322,6 +335,11 @@
                                     <option value="SUV">SUV</option>
                                 </select>
                             </div>
+                            <!-- KANKA ZORUNLU AÇIKLAMA METİN ALANI -->
+                            <div class="col-md-12">
+                                <label class="form-label small fw-bold text-danger">İlan Açıklaması (Zorunlu - En az 15 karakter)</label>
+                                <textarea id="aDescription" class="form-control form-control-sm" rows="3" required placeholder="Örn: Araç ilk sahibinden olup hatasız, boyasız ve değişensizdir. Garaj arabasıdır..."></textarea>
+                            </div>
                             <div class="col-md-3">
                                 <label class="form-label small fw-bold text-primary">Kapak Fotoğrafı</label>
                                 <div class="img-preview-box" id="p_cover" onclick="triggerFile('file_cover')"><span class="small text-muted">Seç</span></div>
@@ -412,11 +430,11 @@
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
         const carsCollection = collection(db, "cars");
-        const offersCollection = collection(db, "offers"); // Bulut teklif koleksiyonu kanka
+        const offersCollection = collection(db, "offers"); 
 
         // Yerel Altyapı Değişkenleri
         let dbCars = [];
-        let dbOffers = []; // Gelen bulut tekliflerini burada tutacağız
+        let dbOffers = []; 
         let dbUsers = JSON.parse(localStorage.getItem('dbUsers')) || {"demo": {pass:"1234", email:"demo@otomarket.com"}};
         let dbBought = JSON.parse(localStorage.getItem('dbBought')) || [];
         let dbMessages = JSON.parse(localStorage.getItem('dbMessages')) || []; 
@@ -428,10 +446,10 @@
         let paymentPurpose = "buy"; 
         let activeChatPartner = null;
         let selectedCarIdToBuy = null;
-        let selectedCarIdToOffer = null; // Teklif verilen araç ID'si
+        let selectedCarIdToOffer = null; 
         let isAdminLoggedIn = false; 
 
-        // Buluttan Gerçek Zamanlı Verileri Çeken Fonksiyon
+        // BULUTTAN GERÇEK ZAMANLI VERİLERİ ÇEKEN MOTOR
         async function fetchCarsFromCloud() {
             try {
                 const q = query(carsCollection, orderBy("createdAt", "desc"));
@@ -446,17 +464,46 @@
                 // Teklifleri de buluttan çekelim kanka
                 const offerSnapshot = await getDocs(offersCollection);
                 dbOffers = [];
-                offerSnapshot.forEach((doc) => {
-                    let oData = doc.data();
-                    oData.id = doc.id;
-                    dbOffers.push(oData);
-                });
+                const simdi = new Date().getTime();
+                const yirmiDortSaat = 24 * 60 * 60 * 1000; // Milisaniye cinsinden kanka
+
+                for (const documentDoc of offerSnapshot.docs) {
+                    let oData = documentDoc.data();
+                    oData.id = documentDoc.id;
+
+                    // 24 SAATLİK ZAMAN AŞIMI FİLTRESİ kanka
+                    if (oData.createdAt && (simdi - oData.createdAt > yirmiDortSaat)) {
+                        await deleteDoc(doc(db, "offers", oData.id)); // 24 saati geçen cevapsız teklif buluttan silinir
+                    } else {
+                        dbOffers.push(oData);
+                    }
+                }
 
                 const spinner = document.getElementById('globalSpinner');
                 if(spinner) spinner.style.display = 'none';
+                
+                checkAcceptedOffersForAlert(); // Ödeme uyarısı kontrolü tetiklenir kanka
                 applyFilters();
             } catch (error) {
                 console.error("Bulut çekme hatası: ", error);
+            }
+        }
+
+        // KULLANICININ ONAYLANMIŞ TEKLİFİ VARSA ÜSTTEKİ UYARI BARINI AÇAN MOTOR kanka
+        function checkAcceptedOffersForAlert() {
+            const alertBar = document.getElementById('paymentAlertBar');
+            if(!alertBar) return;
+
+            if (activeUser) {
+                // Kullanıcının satın aldığı ama henüz ödemediği (veya teklifle kazandığı) araç var mı kontrolü kanka
+                const hasUnpaidCar = dbCars.some(c => c.boughtBy === activeUser && !dbBought.some(b => b.id === c.id));
+                if (hasUnpaidCar) {
+                    alertBar.style.display = 'block';
+                } else {
+                    alertBar.style.display = 'none';
+                }
+            } else {
+                alertBar.style.display = 'none';
             }
         }
 
@@ -505,9 +552,17 @@
             }
         }
 
-        // BULUTA İLAN EKLEME MOTORU
+        // BULUTA İLAN EKLEME MOTORU (ZORUNLU AÇIKLAMALI kanka)
         window.saveCar = async function(e) {
             e.preventDefault();
+            const desc = document.getElementById('aDescription').value.trim();
+
+            // 15 KARAKTERLİK ZORUNLU AÇIKLAMA KONTROLÜ kanka
+            if (desc.length < 15) {
+                alert("❌ HATA kanka! İlan açıklaması en az 15 karakter uzunluğunda olmalıdır.");
+                return;
+            }
+
             const cover = document.getElementById('h_cover').value || "https://images.unsplash.com/photo-1542282088-72c9c27ed0cd?w=500";
             
             const car = {
@@ -516,6 +571,7 @@
                 price: parseFloat(document.getElementById('aPrice').value),
                 bodyType: document.getElementById('aBody').value,
                 color: document.getElementById('aColor').value,
+                description: desc, // Kodlama katmanına eklendi kanka
                 owner: activeUser,
                 coverImage: cover,
                 images: [cover, document.getElementById('h_i1').value || cover, document.getElementById('h_i2').value || cover, document.getElementById('h_i3').value || cover],
@@ -528,7 +584,7 @@
                 document.getElementById('addCarForm').reset();
                 document.querySelectorAll('.img-preview-box').forEach(b => { b.style.backgroundImage = 'none'; b.innerHTML = "Seç"; });
                 bootstrap.Modal.getInstance(document.getElementById('addCarModal')).hide();
-                alert("Müjde kanka, ilan başarıyla buluta gönderildi! 🚀");
+                alert("Müjde kanka, ilan başarıyla açıklamasıyla buluta gönderildi! 🚀");
                 fetchCarsFromCloud();
             } catch (err) {
                 console.error("Bulut yazma hatası: ", err);
@@ -671,9 +727,8 @@
             if(!car) return;
 
             const offerAmount = parseFloat(document.getElementById('offerAmountInput').value);
-            const minAcceptableOffer = car.price * 0.70; // %30 ölücü limiti kanka
+            const minAcceptableOffer = car.price * 0.70; 
 
-            // SPAM VE ÖLÜCÜ ENGELİ (Kural 2)
             if (offerAmount < minAcceptableOffer) {
                 alert(`❌ TEKLİF OTOMATİK REDDEDİLDİ kanka!\n\nBu araca en az ${minAcceptableOffer.toLocaleString('tr-TR')} TL (%70) teklif edebilirsiniz. Ölücü teklifler sistem tarafından engellenir!`);
                 return;
@@ -686,7 +741,7 @@
                 offerer: activeUser,
                 owner: car.owner,
                 amount: offerAmount,
-                createdAt: new Date().getTime()
+                createdAt: new Date().getTime() // Zaman aşımı kontrolü için timestamp kanka
             };
 
             try {
@@ -704,19 +759,39 @@
             if (confirm(`Bu teklifi onaylayıp aracı ${amount.toLocaleString('tr-TR')} TL'ye ${offerer} kullanıcısına satmak istiyor musunuz kanka?`)) {
                 try {
                     const carDocRef = doc(db, "cars", carId);
-                    // Aracın fiyatını teklif fiyatı yapıp satın alan kişiyi atıyoruz kanka
                     await updateDoc(carDocRef, { 
                         boughtBy: offerer,
                         price: amount 
                     });
 
-                    // İşlemi tamamlanan teklifi silelim buluttan karışıklık olmasın kanka
                     await deleteDoc(doc(db, "offers", offerId));
-
                     alert(`🏁 TEBRİKLER, ARAÇ SATILDI!\n\nAraç ${amount.toLocaleString('tr-TR')} TL üzerinden ${offerer} kişisinin garajına devredildi.`);
                     fetchCarsFromCloud();
                 } catch (err) {
                     console.error("Teklif onaylama hatası: ", err);
+                }
+            }
+        }
+
+        // TEKLİF REDDETME VE OTOMATİK SİSTEM MESAJI MOTORU kanka
+        window.rejectOfferFromCloud = async function(offerId, carTitle, offerer, amount) {
+            if (confirm(`Bu teklifi reddetmek istediğinize emin misiniz kanka?`)) {
+                try {
+                    // 1. Adım: Teklifi bulut veritabanından kalıcı olarak sil kanka
+                    await deleteDoc(doc(db, "offers", offerId));
+
+                    // 2. Adım: Reddedilen kullanıcıya otomatik sistem mesajı ekle kanka
+                    dbMessages.push({
+                        sender: "SİSTEM",
+                        receiver: offerer,
+                        text: `⚠️ [SİSTEM BİLDİRİMİ]: "${carTitle}" aracına yapmış olduğunuz ${amount.toLocaleString('tr-TR')} TL tutarındaki fiyat teklifiniz ilan sahibi tarafından reddedilmiştir kanka.`
+                    });
+                    
+                    updateLocalStorage();
+                    alert("Teklif başarıyla reddedildi ve müşteriye otomatik bilgi mesajı fırlatıldı! 📩");
+                    fetchCarsFromCloud();
+                } catch (err) {
+                    console.error("Teklif reddetme hatası: ", err);
                 }
             }
         }
@@ -734,9 +809,6 @@
                     <h5 class="fw-bold text-primary mb-3">Güvenli ve Profesyonel Otomobil Dünyasına Hoş Geldiniz!</h5>
                     <p class="text-secondary leading-relaxed">
                         <b>OtoMarket Pro</b>, araba alım satım süreçlerini tamamen şeffaf, bulut tabanlı ve güvenli hale getirmek amacıyla kurulmuş yeni nesil bir dijital araç kataloğudur. Google Firebase Firestore altyapısı sayesinde tüm ilanlarımız, fiyat güncellemelerimiz ve üyelik verilerimiz gerçek zamanlı olarak dünya standartlarında korunmakta ve senkronize edilmektedir.
-                    </p>
-                    <p class="text-secondary leading-relaxed mt-2">
-                        Misyonumuz, kullanıcılarımızın ekpertiz randevularından kredi hesaplamalarına, anlık satıcı mesajlaşmalarından haftanın yıldızları doping sistemine kadar her türlü ihtiyacını tek bir çatı altında toplamaktır. 
                     </p>
                 </div>`;
         }
@@ -960,20 +1032,6 @@
                             </form>
                         </div>
                     </div>
-                    <div class="col-md-7">
-                        <div class="card p-4 border-0 shadow-sm bg-white rounded-3">
-                            <h6 class="fw-bold mb-3 text-success"><i class="fa-solid fa-clock-rotate-left me-1"></i>Aktif Randevularım</h6>
-                            <div class="table-responsive">
-                                <table class="table table-sm table-hover table-striped">
-                                    <thead class="table-dark"><tr><th>Hizmet</th><th>İstasyon</th><th>Tarih</th></tr></thead>
-                                    <tbody>
-                                        ${myAppointments.map(a => `<tr><td><small class="fw-bold">${a.type}</small></td><td><small>${a.station}</small></td><td><span class="badge bg-secondary">${a.date}</span></td></tr>`).join('')}
-                                        ${myAppointments.length === 0 ? '<tr><td colspan="3" class="text-muted text-center py-3 small">Kayıtlı aktif randevunuz yoktur.</td></tr>':''}
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
                 </div>`;
         }
 
@@ -1010,13 +1068,6 @@
                                     <option value="24" selected>24 Ay Vade</option>
                                     <option value="36">36 Ay Vade</option>
                                 </select>
-                            </div>
-                        </div>
-                        <div class="col-md-7 bg-light-subtle d-flex flex-column justify-content-center p-4">
-                            <h6 class="fw-bold text-success mb-3">Hesaplama Sonuç Özet Raporu</h6>
-                            <div class="row g-3">
-                                <div class="col-6"><p class="m-0 small text-muted">Aylık Taksit Tutarı:</p><h4 class="fw-bold text-danger" id="loanMonthly">0 TL</h4></div>
-                                <div class="col-6"><p class="m-0 small text-muted">Geri Ödenecek Toplam:</p><h4 class="fw-bold text-dark" id="loanTotal">0 TL</h4></div>
                             </div>
                         </div>
                     </div>
@@ -1085,6 +1136,8 @@
             document.getElementById('detTableColor').innerText = car.color;
             document.getElementById('detTablePrice').innerText = car.price.toLocaleString('tr-TR') + " TL";
             document.getElementById('detTableOwner').innerText = car.owner;
+            // Kanka araç açıklaması modal içine aktarılır
+            document.getElementById('detTableDescription').innerText = car.description || "Satıcı açıklama belirtmemiş kanka.";
 
             const sliderInner = document.getElementById('sliderInner');
             if(sliderInner) {
@@ -1099,7 +1152,6 @@
             if(!car.boughtBy) {
                 btns += `<button onclick="openPaymentGateway('${car.id}')" class="btn btn-primary fw-bold px-4"><i class="fa-solid fa-basket-shopping me-2"></i>Satın Al</button>`;
                 
-                // KULLANICI KENDİ İLANINA TEKLİF VEREMEZ (Kural 1)
                 if(activeUser && car.owner !== activeUser) {
                     btns += `<button onclick="openOfferModal('${car.id}')" class="btn btn-warning fw-bold px-3 text-dark"><i class="fa-solid fa-hand-holding-dollar me-1"></i>Teklif Ver</button>`;
                     btns += `<button onclick="triggerDirectMessage('${car.id}')" class="btn btn-success fw-bold px-3"><i class="fa-solid fa-envelope me-1"></i>Satıcıya Mesaj At</button>`;
@@ -1122,16 +1174,14 @@
         window.showAllListings = function() { currentViewMode = "all"; setMenuClass('menuAll'); hideRightFilterBar(false); applyFilters(); }
         window.showFavoriteListings = function() { currentViewMode = "fav"; setMenuClass('menuFav'); hideRightFilterBar(false); applyFilters(); }
         
-        // GARAJ VE GELEN TEKLİFLER BÖLÜMÜ (Mevcut Görünüm Korundu)
+        // GARAJ VE GELEN TEKLİFLER BÖLÜMÜ
         window.showGarageListings = function() {
             if(!activeUser) { showAuthWarning("Garajınızı görmek için oturum açmalısınız."); return; }
             currentViewMode = "garage"; setMenuClass('menuGarage'); hideRightFilterBar(false);
             
-            // Önce ilanları filtrele kanka
             let myCars = dbCars.filter(c => c.owner === activeUser || c.boughtBy === activeUser);
             renderList(myCars);
 
-            // Filtre bittikten sonra sayfanın altına gelen bulut tekliflerini ekle kanka
             let myOffers = dbOffers.filter(o => o.owner === activeUser);
             const container = document.getElementById('mainDynamicContainer');
 
@@ -1150,7 +1200,13 @@
                                         <td><span class="badge bg-secondary">${o.offerer}</span></td>
                                         <td><small class="text-muted">${o.carOriginalPrice.toLocaleString('tr-TR')} TL</small></td>
                                         <td><b class="text-success">${o.amount.toLocaleString('tr-TR')} TL</b></td>
-                                        <td><button onclick="acceptOfferAndSell('${o.id}', '${o.carId}', '${o.offerer}', ${o.amount})" class="btn btn-xs btn-success fw-bold py-1 px-2 text-xs" style="font-size:12px;">Onayla ve Sat</button></td>
+                                        <td>
+                                            <div class="d-flex gap-1">
+                                                <button onclick="acceptOfferAndSell('${o.id}', '${o.carId}', '${o.offerer}', ${o.amount})" class="btn btn-sm btn-success fw-bold py-1 px-2 text-xs" style="font-size:11px;">Onayla ve Sat</button>
+                                                <!-- REDDETME BUTONU BURAYA EKLENDİ kanka -->
+                                                <button onclick="rejectOfferFromCloud('${o.id}', '${o.carTitle}', '${o.offerer}', ${o.amount}')" class="btn btn-sm btn-outline-danger fw-bold py-1 px-2 text-xs" style="font-size:11px;">Reddet</button>
+                                            </div>
+                                        </td>
                                     </tr>
                                 `).join('')}
                                 ${myOffers.length === 0 ? '<tr><td colspan="5" class="text-muted text-center py-3 small">Henüz ilanlarınıza gelen bir bulut teklifi yok kanka.</td></tr>':''}
@@ -1191,7 +1247,7 @@
             const maxP = document.getElementById('fMaxPrice').value;
             const arama = document.getElementById('searchInp').value.toLowerCase();
 
-            if(kasa) res = res.filter(c => c.bodyType === kasa);
+            if(kasa) res = res.filter(c => .bodyType === kasa);
             if(renk) res = res.filter(c => c.color.toLowerCase().includes(renk));
             if(yil) res = res.filter(c => c.year >= parseInt(yil));
             if(minP) res = res.filter(c => c.price >= parseFloat(minP));
@@ -1219,6 +1275,7 @@
                 document.getElementById('authBtn').style.display = 'block';
                 document.getElementById('userActionPanel').style.display = 'none';
             }
+            checkAcceptedOffersForAlert();
         }
 
         window.authLogin = function(e) {
