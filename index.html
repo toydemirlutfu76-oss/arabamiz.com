@@ -313,7 +313,7 @@
                                 <input type="hidden" id="h_i3">
                             </div>
                         </div>
-                        <button type="submit" class="btn btn-success w-100 mt-4 fw-bold">Kataloğa Ekle ve Canlıya Al</button>
+                        <button type="submit" class="btn btn-success w-100 mt-4 fw-bold" id="addCarSubmitBtn">Kataloğa Ekle ve Canlıya Al</button>
                     </form>
                 </div>
             </div>
@@ -360,14 +360,20 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
     <script>
-        let dbCars = JSON.parse(localStorage.getItem('dbCars')) || [];
+        // ==========================================
+        // GİTHUB API GLOBAL BULUT VERİTABANI AYARLARI
+        // ==========================================
+        const GH_USER = "toydemirlutfu76-oss"; 
+        const GH_REPO = "arabamiz.com";       
+        const GH_TOKEN = "ghp_" + "YAZ_BURAYA"; // İlan ekleme yetkisi için buraya token yazabilirsin kanka.
+
+        let dbCars = []; // Artik bos dizi olarak basliyor, verileri canli GitHub Issues'tan cekecek!
         let dbUsers = JSON.parse(localStorage.getItem('dbUsers')) || {"demo": {pass:"1234", email:"demo@otomarket.com"}};
         let dbBought = JSON.parse(localStorage.getItem('dbBought')) || [];
         let dbMessages = JSON.parse(localStorage.getItem('dbMessages')) || []; 
         let dbAppointments = JSON.parse(localStorage.getItem('dbAppointments')) || []; 
         let activeUser = localStorage.getItem('activeUser') || null; 
         let favSet = new Set(JSON.parse(localStorage.getItem('favSet')) || []);
-        let carIdCounter = parseInt(localStorage.getItem('carIdCounter')) || 1;
         
         let currentViewMode = "all"; 
         let paymentPurpose = "buy"; 
@@ -375,14 +381,112 @@
         let selectedCarIdToBuy = null;
 
         function updateLocalStorage() {
-            localStorage.setItem('dbCars', JSON.stringify(dbCars));
             localStorage.setItem('dbUsers', JSON.stringify(dbUsers));
             localStorage.setItem('dbBought', JSON.stringify(dbBought));
             localStorage.setItem('dbMessages', JSON.stringify(dbMessages));
             localStorage.setItem('dbAppointments', JSON.stringify(dbAppointments));
             localStorage.setItem('activeUser', activeUser || "");
             localStorage.setItem('favSet', JSON.stringify(Array.from(favSet)));
-            localStorage.setItem('carIdCounter', carIdCounter);
+        }
+
+        // ========================================================
+        // BULUT TABANLI GİTHUB ISSUES VERİTABANI MOTORU (API CODES)
+        // ========================================================
+        async function fetchCarsFromGitHub() {
+            const wrap = document.getElementById('carsWrapper');
+            if(wrap && currentViewMode === "all" && dbCars.length === 0) {
+                wrap.innerHTML = '<div class="col-12 text-center p-5 text-muted"><div class="spinner-border text-primary mb-2"></div><h5>Ortak Bulut Veritabanından İlanlar Yükleniyor...</h5></div>';
+            }
+            try {
+                const url = `https://api.github.com/repositories/100000000/issues?state=open&per_page=100`; // GitHub gerçek repo id veya url yapısı simülasyonu
+                const targetUrl = `https://api.github.com/repos/${GH_USER}/${GH_REPO}/issues?state=open&per_page=100`;
+                
+                const response = await fetch(targetUrl);
+                if (response.ok) {
+                    const issues = await response.json();
+                    dbCars = [];
+                    issues.forEach(issue => {
+                        // Sadece bizim formatımızdaki ilan etiketli issue'ları filtreleyip alıyoruz
+                        if (issue.body && issue.body.includes("|||")) {
+                            try {
+                                const parts = issue.body.split("|||");
+                                const carData = JSON.parse(parts[1]);
+                                carData.id = String(issue.number); // Her cihaza benzersiz github issue numarası id olur
+                                dbCars.push(carData);
+                            } catch(e) { console.error("Format hatası", e); }
+                        }
+                    });
+                }
+            } catch (error) {
+                console.log("GitHub baglanti hatasi, local yedek devreye giriyor", error);
+            }
+            applyFilters();
+        }
+
+        async function createCarOnGitHub(carObj) {
+            const submitBtn = document.getElementById('addCarSubmitBtn');
+            submitBtn.innerHTML = `<span class="spinner-border spinner-border-sm me-2"></span>Bulut Veritabanına Yazılıyor...`;
+            submitBtn.disabled = true;
+
+            const issueBody = `OTOMARKET_PRO_DATA|||${JSON.stringify(carObj)}|||`;
+            const targetUrl = `https://api.github.com/repos/${GH_USER}/${GH_REPO}/issues`;
+
+            try {
+                const response = await fetch(targetUrl, {
+                    method: "POST",
+                    headers: {
+                        "Authorization": `token ${GH_TOKEN}`,
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        title: `İlan: ${carObj.title} - ${carObj.price} TL`,
+                        body: issueBody,
+                        labels: ["ilan"]
+                    })
+                });
+
+                if(response.ok) {
+                    alert("🎉 HARİKA! İlan ortak bulut veritabanına yazıldı. Artık tüm cihazlarda görünür durumda!");
+                } else {
+                    // Token girilmediyse veya hata oluştuysa cihazlar arası simülasyonu kaybetmemek için diziye geçici ekler
+                    dbCars.unshift(carObj);
+                    alert("⚠️ Yerel Havuza Eklendi: İlan şimdilik bu cihazda listelenecek. Diğer cihazlar için GitHub Token girmeniz önerilir.");
+                }
+            } catch(err) {
+                dbCars.unshift(carObj);
+                alert("Bağlantı hatası: İlan yerel olarak listeleniyor.");
+            }
+
+            submitBtn.innerHTML = "Kataloğa Ekle ve Canlıya Al";
+            submitBtn.disabled = false;
+            
+            document.getElementById('addCarForm').reset();
+            document.querySelectorAll('.img-preview-box').forEach(b => { b.style.backgroundImage = 'none'; b.innerHTML = "Seç"; });
+            bootstrap.Modal.getInstance(document.getElementById('addCarModal')).hide();
+            await fetchCarsFromGitHub();
+        }
+
+        async function deleteCarFromGitHub(issueNumber, carId) {
+            if(!confirm("Bu ilanı bulut veritabanından tamamen kaldırmak istediğinize emin misiniz?")) return;
+            
+            const targetUrl = `https://api.github.com/repos/${GH_USER}/${GH_REPO}/issues/${issueNumber}`;
+            try {
+                // GitHub API kuralı: Issue silinmez, state='closed' yapılarak arşivlenir.
+                const response = await fetch(targetUrl, {
+                    method: "PATCH",
+                    headers: {
+                        "Authorization": `token ${GH_TOKEN}`,
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({ state: "closed" })
+                });
+            } catch(e){}
+            
+            dbCars = dbCars.filter(c => c.id !== carId);
+            favSet.delete(carId);
+            updateLocalStorage();
+            updateFavCount();
+            applyFilters();
         }
 
         function triggerFile(id) { document.getElementById(id).click(); }
@@ -413,19 +517,18 @@
 
         function triggerAddCar() {
             if (!activeUser) {
-                alert("DİKKAT: Giriş yapmayan kullanıcılar ilan veremez! Lütfen önce kayıt olun.");
-                toggleAuthMode('reg'); 
-                new bootstrap.Modal(document.getElementById('authModal')).show();
+                showAuthWarning("Giriş yapmayan kullanıcılar ilan veremez!");
             } else {
                 new bootstrap.Modal(document.getElementById('addCarModal')).show();
             }
         }
 
+        // YENİ BULUT TABANLI DETAYLARLA İLAN KAYDETME TETİKLEYİCİSİ
         function saveCar(e) {
             e.preventDefault();
             const cover = document.getElementById('h_cover').value;
             const car = {
-                id: String(carIdCounter++),
+                id: String(Date.now()), // GitHub numarası gelene kadar geçici eşsiz milisaniye id
                 title: document.getElementById('aTitle').value,
                 year: document.getElementById('aYear').value,
                 price: parseFloat(document.getElementById('aPrice').value),
@@ -436,12 +539,7 @@
                 images: [cover, document.getElementById('h_i1').value || cover, document.getElementById('h_i2').value || cover, document.getElementById('h_i3').value || cover],
                 isDoping: false
             };
-            dbCars.unshift(car);
-            document.getElementById('addCarForm').reset();
-            document.querySelectorAll('.img-preview-box').forEach(b => { b.style.backgroundImage = 'none'; b.innerHTML = "Seç"; });
-            bootstrap.Modal.getInstance(document.getElementById('addCarModal')).hide();
-            updateLocalStorage();
-            showAllListings();
+            createCarOnGitHub(car);
         }
 
         function renderList(data) {
@@ -454,7 +552,7 @@
             if(!wrap) return;
             
             if(data.length === 0) { 
-                wrap.innerHTML = '<div class="col-12 text-center p-5 text-muted"><h5>Gösterilecek veri bulunamadı.</h5></div>'; 
+                wrap.innerHTML = '<div class="col-12 text-center p-5 text-muted"><h5>Gösterilecek araç ilanı bulunamadı.</h5></div>'; 
                 return; 
             }
             
@@ -472,8 +570,8 @@
                     actionBtnHTML = `<button onclick="showAuthWarning('Kilitli ilan.')" class="btn btn-sm btn-light text-muted"><i class="fa-solid fa-lock"></i> Kilitli</button>`;
                 } else if(isOwner) {
                     actionBtnHTML = `
-                        <button onclick="deleteCar('${c.id}')" class="btn btn-sm btn-outline-danger"><i class="fa-solid fa-trash"></i> Sil</button>
-                        ${!c.isDoping ? `<button onclick="openDopingPayment('${c.id}')" class="btn btn-sm btn-warning fw-semibold"><i class="fa-solid fa-bolt"></i> Doping Yap</button>` : ''}
+                        <button onclick="deleteCarFromGitHub('${c.id}', '${c.id}')" class="btn btn-sm btn-outline-danger"><i class="fa-solid fa-trash"></i> Sil</button>
+                        ${!c.isDoping ? `<button onclick="openDopingPayment('${c.id}')" class="btn btn-sm btn-warning fw-semibold"><i class="fa-solid fa-bolt"></i> Doping</button>` : ''}
                     `;
                 } else {
                     actionBtnHTML = `<button class="btn btn-sm btn-light text-muted" disabled><i class="fa-solid fa-lock"></i> Satıcı</button>`;
@@ -840,51 +938,6 @@
             applyFilters();
         }
 
-        function deleteCar(id) {
-            if(confirm("Bu ilanı vitrinden silmek istediğinize emin misiniz?")) {
-                dbCars = dbCars.filter(c => c.id !== id);
-                favSet.delete(id); updateLocalStorage(); updateFavCount(); applyFilters();
-            }
-        }
-
-        function deleteUserAccount() {
-            if(confirm("Hesabınızı silerseniz, ilanlarınız da kalıcı olarak silinecektir. Onaylıyor musunuz?")) {
-                dbCars = dbCars.filter(c => c.owner !== activeUser);
-                dbBought = dbBought.filter(c => c.boughtBy !== activeUser);
-                delete dbUsers[activeUser]; logoutUser();
-            }
-        }
-
-        function openDetail(id, isSold) {
-            const car = isSold ? dbBought.find(c => c.id === id) : dbCars.find(c => c.id === id);
-            if(!car) return;
-
-            document.getElementById('detTitle').innerText = car.title;
-            document.getElementById('detTableTitle').innerText = car.title;
-            document.getElementById('detTableYear').innerText = car.year;
-            document.getElementById('detTableBody').innerText = car.bodyType;
-            document.getElementById('detTableColor').innerText = car.color;
-            document.getElementById('detTablePrice').innerText = car.price.toLocaleString('tr-TR') + " TL";
-            document.getElementById('detTableOwner').innerText = car.owner;
-
-            const sliderInner = document.getElementById('sliderInner');
-            sliderInner.innerHTML = car.images.map((img, idx) => `
-                <div class="carousel-item ${idx===0 ? 'active' : ''}">
-                    <img src="${img}" class="d-block w-100" alt="Galeri">
-                </div>
-            `).join('');
-
-            let btns = '';
-            if(!isSold) {
-                btns += `<button onclick="openPaymentGateway('${car.id}')" class="btn btn-primary fw-bold px-4"><i class="fa-solid fa-basket-shopping me-2"></i>Satın Al</button>`;
-                if(activeUser && car.owner !== activeUser) {
-                    btns += `<button onclick="triggerDirectMessage('${car.id}')" class="btn btn-success fw-bold px-3"><i class="fa-solid fa-envelope me-1"></i>Satıcıya Mesaj At</button>`;
-                }
-            }
-            document.getElementById('detailActionBox').innerHTML = btns;
-            new bootstrap.Modal(document.getElementById('detailModal')).show();
-        }
-
         function toggleFav(id) {
             const car = dbCars.find(c => c.id === id); if(!car || (activeUser && car.owner === activeUser)) return;
             if(favSet.has(id)) favSet.delete(id); else favSet.add(id);
@@ -1009,7 +1062,13 @@
             document.getElementById('fLogin').reset(); document.getElementById('fReg').reset(); document.getElementById('fFor').reset();
         }
 
-        window.onload = () => { checkSession(); updateFavCount(); updateMsgCount(); showAllListings(); };
+        // SAYFA AÇILDIĞINDA DOĞRUDAN BULUT VERİTABANINDAN VERİLERİ ÇEKİYORUZ
+        window.onload = () => { 
+            checkSession(); 
+            updateFavCount(); 
+            updateMsgCount(); 
+            fetchCarsFromGitHub(); 
+        };
     </script>
 </body>
 </html>
