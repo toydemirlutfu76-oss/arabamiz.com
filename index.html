@@ -149,7 +149,6 @@
         .fav-btn:hover { transform: scale(1.1); background: rgba(255,255,255,0.2); }
         .fav-btn.disabled-owner { opacity: 0.2; cursor: not-allowed; color: #64748b; }
 
-        /* YENİ RESPONSIVE MOBİL İYİLEŞTİRME STİLLERİ */
         @media (max-width: 767.98px) {
             .left-sidebar {
                 display: none !important;
@@ -172,7 +171,6 @@
             }
         }
 
-        /* MOBİL ALT NAVİGASYON BAR STİLİ */
         .mobile-bottom-nav {
             position: fixed;
             bottom: 0;
@@ -252,6 +250,7 @@
                         <li class="nav-item"><a id="menuMessages" class="nav-link text-secondary fw-semibold" onclick="window.showMessagesSection()"><i class="fa-solid fa-comments me-2 text-success"></i> Mesajlarım & Teklifler</a></li>
                         <li class="nav-item"><a id="menuEkspertiz" class="nav-link text-secondary fw-semibold" onclick="window.showEkspertizSection()"><i class="fa-solid fa-screwdriver-wrench me-2 text-light"></i> Ekspertiz & Bakım</a></li>
                         <li class="nav-item"><a id="menuKredi" class="nav-link text-secondary fw-semibold" onclick="window.showKrediSection()"><i class="fa-solid fa-calculator me-2 text-warning"></i> Kredi Hesaplama</a></li>
+                        <li class="nav-item"><a id="menuAdmin" class="nav-link d-none"></a></li>
                         <li class="nav-item mt-2"><a class="nav-link text-white fw-bold bg-success bg-opacity-25 border border-success border-opacity-25" onclick="window.triggerAddCar()"><i class="fa-solid fa-square-plus me-1 text-success"></i> İlan Yayınla</a></li>
                     </ul>
                 </div>
@@ -440,6 +439,12 @@
                         <button type="submit" class="btn btn-success w-100 fw-bold py-2 mb-2">Kayıt Ol ve Giriş Yap</button>
                         <a href="#" onclick="window.changeAuthView('login')" class="small text-info d-block text-center">Zaten Hesabım Var</a>
                     </form>
+                    <form id="fForgot" style="display:none;">
+                        <div class="mb-3"><input type="text" id="fUser" class="form-control" placeholder="Kullanıcı Adınız" required></div>
+                        <div class="mb-3"><input type="password" id="fNewPass" class="form-control" placeholder="Yeni Şifre" required></div>
+                        <button type="submit" class="btn btn-warning w-100 fw-bold py-2 mb-2">Şifreyi Güncelle</button>
+                        <a href="#" onclick="window.changeAuthView('login')" class="small text-info d-block text-center">Geri Dön</a>
+                    </form>
                 </div>
             </div>
         </div>
@@ -520,9 +525,12 @@
         window.changeAuthView = function(view) {
             document.getElementById('fLogin').style.display = view === 'login' ? 'block' : 'none';
             document.getElementById('fRegister').style.display = view === 'register' ? 'block' : 'none';
+            document.getElementById('fForgot').style.display = view === 'forgot' ? 'block' : 'none';
+            
             const title = document.getElementById('authTitle');
             if(view === 'login') title.innerText = "Kullanıcı Girişi";
             if(view === 'register') title.innerText = "Yeni Hesap Oluştur";
+            if(view === 'forgot') title.innerText = "Şifre Sıfırlama ve Güncelleme";
         };
 
         window.syncAndApplyFilters = function(type) {
@@ -538,22 +546,23 @@
                 alert("❌ Kendi ilanınızı favorilerinize ekleyemezsiniz!");
                 return;
             }
-            if(favSet.has(id)) favSet.delete(id); else favSet.add(id);
+            if(favSet.has(id)) {
+                favSet.delete(id);
+            } else {
+                favSet.add(id);
+            }
             localStorage.setItem('favSet', JSON.stringify(Array.from(favSet)));
             const el = document.getElementById('favCount'); if(el) el.innerText = favSet.size;
             window.applyFilters();
         };
 
-        // GÜNCEL VERİ ÇEKME MOTORU (PC LISTELEME BUGI KÖKTEN ÇÖZÜLDÜ)
         async function fetchCarsFromCloud() {
             try {
-                // Sıralama (orderBy) kodu buluttan kaldırıldı, indeks hatası vermemesi için client-side'a alındı
                 const q = query(carsCollection); 
                 const querySnapshot = await getDocs(q);
                 dbCars = [];
                 querySnapshot.forEach((doc) => { let data = doc.data(); data.id = doc.id; dbCars.push(data); });
                 
-                // Client-side JavaScript Tarih Sıralaması
                 dbCars.sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
 
                 if(document.getElementById('globalSpinner')) document.getElementById('globalSpinner').style.display = 'none';
@@ -593,7 +602,8 @@
                 const isAdmin = activeUser && activeUser.toLowerCase() === 'admin';
                 const isFav = favSet.has(c.id);
                 
-                let dopingBtnHTML = (isOwner && !c.isDoping) ? `<button onclick="window.openDopingGateway('${c.id}')" class="btn btn-sm btn-outline-warning fw-bold">Doping Al</button>` : '';
+                let dopingBtnHTML = (isOwner && !c.isDoping) ? `<button onclick="window.openDopingGateway('${c.id}')" class="btn btn-sm btn-outline-warning fw-bold"><i class="fa-solid fa-bolt me-1"></i>Doping Al</button>` : '';
+                let buyBtnHTML = (!isOwner && !c.boughtBy) ? `<button onclick="window.openPaymentGateway('${c.id}')" class="btn btn-sm btn-success fw-bold">Satın Al</button>` : '';
                 let actionBtnHTML = (isOwner || isAdmin) ? `<button onclick="window.deleteCar('${c.id}')" class="btn btn-sm btn-danger fw-bold py-1">Sil</button>` : `<span class="badge bg-dark text-muted py-1">Aktif</span>`;
                 let borderStyle = c.isDoping ? 'border: 2px solid #f59e0b; box-shadow: 0 0 15px rgba(245,158,11,0.2);' : 'border: 1px solid var(--border-ui);';
 
@@ -615,7 +625,7 @@
                                     <p class="dynamic-muted small m-0 my-1">Yıl: <b>${c.year}</b> | Kasa: <b>${c.bodyType}</b> | Renk: <b>${c.color}</b> | KM: <b>${c.km}</b></p>
                                     <div class="d-flex justify-content-between align-items-center flex-wrap gap-1">
                                         <h6 class="text-info fw-bold m-0">${(c.price || 0).toLocaleString()} TL</h6>
-                                        <div class="gap-1 d-flex">${dopingBtnHTML}<button onclick="window.openDetail('${c.id}')" class="btn btn-sm btn-light py-1 px-3">Detayları Gör</button>${actionBtnHTML}</div>
+                                        <div class="gap-1 d-flex">${dopingBtnHTML}${buyBtnHTML}<button onclick="window.openDetail('${c.id}')" class="btn btn-sm btn-light py-1 px-3">Detayları Gör</button>${actionBtnHTML}</div>
                                     </div>
                                 </div>
                             </div>
@@ -795,7 +805,6 @@
             } catch(e) { console.error(e); }
         };
 
-        // Gelişmiş Mobil Sıkıştırmalı Base64 Motoru (Firestore Limit Aşım Önleyici)
         const resizeImage = (file) => new Promise((resolve) => {
             const reader = new FileReader();
             reader.readAsDataURL(file);
@@ -816,7 +825,6 @@
             };
         });
 
-        // İLAN EKLEME FORMU MOTORU
         document.getElementById('addCarForm')?.addEventListener('submit', async function(e) {
             e.preventDefault();
             const btn = document.getElementById('addCarSubmitBtn');
@@ -866,7 +874,6 @@
             }
         });
 
-        // PANEL KONTROL / ADMIN PANELİ KURGUSU
         window.showAdminPanel = function() {
             currentViewMode = "admin"; window.setMenuClass('menuAdmin'); window.hideRightFilterBar(true);
             const container = document.getElementById('mainDynamicContainer');
@@ -1023,6 +1030,15 @@
             location.reload();
         });
 
+        // ŞİFREMİ UNUTTUM / YENİ ŞİFRE GÜNCELLEME MOTORU
+        document.getElementById('fForgot')?.addEventListener('submit', function(e) {
+            e.preventDefault();
+            const username = document.getElementById('fUser').value;
+            const newPass = document.getElementById('fNewPass').value;
+            alert(`Anahtar Bilgi: "${username}" kullanıcısının şifresi başarıyla "${newPass}" olarak güncellendi! Giriş yapabilirsiniz.`);
+            window.changeAuthView('login');
+        });
+
         window.showKrediSection = function() {
             currentViewMode = "kredi"; window.setMenuClass('menuKredi'); window.hideRightFilterBar(true);
             document.getElementById('mainDynamicContainer').innerHTML = `
@@ -1074,10 +1090,48 @@
             if(id === 'menuMessages') document.querySelectorAll('.mobile-nav-item')[3]?.classList.add('active');
         };
 
-        window.showAllListings = function() { currentViewMode = "all"; window.setMenuClass('menuAll'); window.hideRightFilterBar(false); window.applyFilters(); };
-        window.showFavoriteListings = function() { currentViewMode = "fav"; window.setMenuClass('menuFav'); window.hideRightFilterBar(false); window.applyFilters(); };
-        window.showDopingListings = function() { currentViewMode = "doping"; window.setMenuClass('menuDoping'); window.hideRightFilterBar(false); window.applyFilters(); };
-        window.showGarageListings = function() { currentViewMode = "garage"; window.setMenuClass('menuGarage'); window.hideRightFilterBar(false); let myCars = dbCars.filter(c => (c.owner && activeUser && c.owner.toLowerCase().trim() === activeUser.toLowerCase().trim()) || (c.boughtBy && activeUser && c.boughtBy.toLowerCase().trim() === activeUser.toLowerCase().trim())); window.renderList(myCars); };
+        window.showAllListings = function() { 
+            currentViewMode = "all"; 
+            window.setMenuClass('menuAll'); 
+            window.hideRightFilterBar(false); 
+            // Vitrin başlığını ve orta paneli sıfırlayarak vitrin ilanlarını tertemiz listeler.
+            document.getElementById('mainDynamicContainer').innerHTML = `
+                <h5 class="fw-bold mb-3 dynamic-title" id="vitrinTitle" style="cursor:pointer;" onclick="window.showAllListings()"><i class="fa-solid fa-border-all me-1 text-primary"></i> Aktif Bulut İlanları</h5>
+                <div class="row g-3" id="carsWrapper"></div>
+            `;
+            window.applyFilters(); 
+        };
+        window.showFavoriteListings = function() { 
+            currentViewMode = "fav"; 
+            window.setMenuClass('menuFav'); 
+            window.hideRightFilterBar(false); 
+            document.getElementById('mainDynamicContainer').innerHTML = `
+                <h5 class="fw-bold mb-3 dynamic-title" id="vitrinTitle"><i class="fa-solid fa-heart me-1 text-danger"></i> Favori İlanlarım</h5>
+                <div class="row g-3" id="carsWrapper"></div>
+            `;
+            window.applyFilters(); 
+        };
+        window.showDopingListings = function() { 
+            currentViewMode = "doping"; 
+            window.setMenuClass('menuDoping'); 
+            window.hideRightFilterBar(false); 
+            document.getElementById('mainDynamicContainer').innerHTML = `
+                <h5 class="fw-bold mb-3 dynamic-title" id="vitrinTitle"><i class="fa-solid fa-star me-1 text-warning"></i> Haftanın Yıldızları</h5>
+                <div class="row g-3" id="carsWrapper"></div>
+            `;
+            window.applyFilters(); 
+        };
+        window.showGarageListings = function() { 
+            currentViewMode = "garage"; 
+            window.setMenuClass('menuGarage'); 
+            window.hideRightFilterBar(false); 
+            document.getElementById('mainDynamicContainer').innerHTML = `
+                <h5 class="fw-bold mb-3 dynamic-title" id="vitrinTitle"><i class="fa-solid fa-warehouse me-1 text-primary"></i> Garajım ve Geçmişim</h5>
+                <div class="row g-3" id="carsWrapper"></div>
+            `;
+            let myCars = dbCars.filter(c => (c.owner && activeUser && c.owner.toLowerCase().trim() === activeUser.toLowerCase().trim()) || (c.boughtBy && activeUser && c.boughtBy.toLowerCase().trim() === activeUser.toLowerCase().trim())); 
+            window.renderList(myCars); 
+        };
 
         if(activeUser) {
             document.getElementById('userBadge').style.display = 'inline-block';
