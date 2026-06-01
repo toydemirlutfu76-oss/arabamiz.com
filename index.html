@@ -165,6 +165,7 @@
         🚨 GÜVENLİK BİLDİRİMİ: Fiyat teklifiniz güncellendi! Mesajlarınızı kontrol edin.
     </div>
 
+    <!-- NAVBAR -->
     <nav class="navbar top-navbar sticky-top py-2 px-4 navbar-dark shadow" style="background: rgba(15,23,42,0.4); backdrop-filter:blur(10px); z-index: 1030;">
         <div class="container-fluid d-flex justify-content-between align-items-center flex-nowrap">
             <a class="navbar-brand fw-black text-warning fs-4 tracking-wider m-0 me-2" href="#" onclick="window.showAllListings()"><i class="fa-solid fa-car-rear me-1 text-primary"></i> OTOMARKET <span class="badge bg-danger fs-6 pb-1">PRO</span></a>
@@ -186,9 +187,11 @@
         </div>
     </nav>
 
+    <!-- ANA GÖVDE -->
     <div class="container-fluid">
         <div class="row">
             
+            <!-- SOL MENÜ -->
             <div class="col-12 col-md-3 col-lg-2 p-3 left-sidebar d-flex flex-column justify-content-between">
                 <div>
                     <div class="d-flex justify-content-between align-items-center mb-3">
@@ -212,6 +215,7 @@
                 </div>
             </div>
 
+            <!-- ORTA VİTRİN ALANI -->
             <div class="col-12 col-md-6 col-lg-7 p-3" id="mainDynamicContainer" style="overflow-y: auto; max-height: 92vh;">
                 <h5 class="fw-bold mb-3 dynamic-title" id="vitrinTitle">Aktif Bulut İlanları</h5>
                 <div class="text-center py-4" id="globalSpinner">
@@ -220,6 +224,7 @@
                 <div class="row g-3" id="carsWrapper"></div>
             </div>
 
+            <!-- SAĞ FİLTRELEME ALANI -->
             <div class="col-12 col-md-3 p-3 right-macbar" id="rightFilterBar">
                 <div class="d-flex align-items-center mb-2">
                     <span class="badge bg-danger me-1" style="width:10px;height:10px;border-radius:50%"> </span>
@@ -254,12 +259,14 @@
         </div>
     </div>
 
+    <!-- MODERN DETAY MODALI -->
     <div class="modal fade" id="detailModal" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-lg modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header border-0"><h5 class="modal-title fw-bold text-info" id="detTitle">Araç Detayı</h5><button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button></div>
                 <div class="modal-body p-4 pt-0">
                     
+                    <!-- DINAMIK SLIDER ALANI -->
                     <div id="carSlider" class="carousel slide mb-4" data-bs-ride="carousel">
                         <div class="carousel-inner" id="sliderInner"></div>
                         <button class="carousel-control-prev" type="button" data-bs-target="#carSlider" data-bs-slide="prev"><span class="carousel-control-prev-icon"></span></button>
@@ -285,12 +292,14 @@
                     </div>
                     <div class="mt-3 p-3 bg-dark bg-opacity-50 rounded-3"><h6 class="text-secondary small fw-bold">Açıklama</h6><p id="detDescription" class="small m-0"></p></div>
                     
+                    <!-- PREMIUM AKSİYON BUTONLARI -->
                     <div id="detailActionBox" class="mt-4 d-flex flex-wrap justify-content-end gap-2 border-top border-secondary pt-3"></div>
                 </div>
             </div>
         </div>
     </div>
 
+    <!-- İLAN EKLEME MODALI -->
     <div class="modal fade" id="addCarModal" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-lg modal-dialog-centered">
             <div class="modal-content">
@@ -305,6 +314,7 @@
                             <div class="col-md-4"><label class="form-label small fw-bold text-muted">Kilometre (KM)</label><input type="number" id="aKm" class="form-control" required placeholder="42000"></div>
                             <div class="col-md-4"><label class="form-label small fw-bold text-muted">Kasa Tipi</label><select id="aBody" class="form-select"><option value="Sedan">Sedan</option><option value="Hatchback">Hatchback</option><option value="SUV">SUV</option></select></div>
                             
+                            <!-- DİNAMİK LİNK GİRİŞLERİ -->
                             <div class="col-md-4"><label class="form-label small fw-bold text-info">Kapak Görsel Linki</label><input type="url" id="aCoverImage" class="form-control" required placeholder="https://..."></div>
                             <div class="col-md-4"><label class="form-label small fw-bold text-muted">Görsel Linki 2 (Opsiyonel)</label><input type="url" id="aImg2" class="form-control" placeholder="https://..."></div>
                             <div class="col-md-4"><label class="form-label small fw-bold text-muted">Görsel Linki 3 (Opsiyonel)</label><input type="url" id="aImg3" class="form-control" placeholder="https://..."></div>
@@ -318,6 +328,7 @@
         </div>
     </div>
 
+    <!-- AUTH MODAL -->
     <div class="modal fade" id="authModal" data-bs-backdrop="static" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content border-0 shadow">
@@ -333,6 +344,7 @@
         </div>
     </div>
 
+    <!-- DOPING / PAYMENT MODAL -->
     <div class="modal fade" id="paymentModal" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content border-0 shadow">
@@ -374,6 +386,7 @@
         if(localStorage.getItem('themeMode') === 'light') { document.body.classList.add('light-mode'); }
     </script>
 
+    <!-- CORE MODULE ENGINE -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { getFirestore, collection, addDoc, getDocs, deleteDoc, doc, updateDoc, query, orderBy, where } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
@@ -404,7 +417,6 @@
         window.triggerMainAuthBtn = function() { new bootstrap.Modal(document.getElementById('authModal')).show(); };
         window.triggerAddCar = function() { if (!activeUser) { alert("Önce giriş yapmalısınız."); window.triggerMainAuthBtn(); } else { new bootstrap.Modal(document.getElementById('addCarModal')).show(); } };
 
-        // DOSYA BASE YAPISI VE FAV ENGELİ
         window.toggleFav = function(id) {
             const car = dbCars.find(c => c.id === id);
             if(car && activeUser && car.owner && car.owner.toLowerCase().trim() === activeUser.toLowerCase().trim()) {
@@ -491,7 +503,6 @@
             }).join('');
         };
 
-        // Gelişmiş Dinamik Resim Kataloğu ve Detay Yönetimi
         window.openDetail = function(id) {
             const car = dbCars.find(c => c.id === id); if(!car) return;
             document.getElementById('detTitle').innerText = car.title;
@@ -504,7 +515,6 @@
             document.getElementById('detTableKm').innerText = (car.km || 0).toLocaleString() + " KM";
             document.getElementById('detDescription').innerText = car.description || "Açıklama belirtilmedi.";
 
-            // Dinamik Resim Slider Dizilimi
             const sliderInner = document.getElementById('sliderInner');
             let images = [car.coverImage];
             if(car.img2) images.push(car.img2);
@@ -517,7 +527,6 @@
                 </div>
             `).join('');
 
-            // Detay Butonları Revizyonu
             const actionBox = document.getElementById('detailActionBox');
             if(activeUser && car.owner && car.owner.toLowerCase().trim() !== activeUser.toLowerCase().trim()) {
                 actionBox.innerHTML = `
@@ -532,7 +541,6 @@
             new bootstrap.Modal(document.getElementById('detailModal')).show();
         };
 
-        // GERÇEK TEKLİF VE MESAJLAŞMA SİSTEMİ
         window.sendOfferPrompt = async function(carId, owner) {
             if(!activeUser) { alert("Önce giriş yapmalısınız."); return; }
             const offerPrice = prompt("Teklif etmek istediğiniz tutarı girin (TL):");
@@ -609,7 +617,7 @@
                         sender: activeUser,
                         receiver: buyer,
                         type: "info",
-                        message: MAALESEF! Satıcı teklifinizi uygun bulmadı ve reddetti.`,
+                        message: `MAALESEF! Satıcı teklifinizi uygun bulmadı ve reddetti.`,
                         createdAt: new Date().getTime()
                     });
                     alert("Teklifi reddettiniz.");
@@ -619,7 +627,6 @@
             } catch(e) { console.error(e); }
         };
 
-        // KURUMSAL EKSPERTİZ VE AKTİF RANDEVULAR
         window.showEkspertizSection = async function() {
             currentViewMode = "ekspertiz"; window.setMenuClass('menuEkspertiz'); window.hideRightFilterBar(true);
             document.getElementById('mainDynamicContainer').innerHTML = `
@@ -684,11 +691,9 @@
             }
         };
 
-        // HESAP SİLME METODU VE KULLANICI İLANLARINI TEMİZLEME
         window.deleteAccount = async function() {
             if(confirm("🚨 HESABINIZI SİLMEK ÜZERESİNİZ!\nHesabınız silindiğinde tüm ilanlarınız da bulut veritabanından kalıcı olarak silinecektir. Onaylıyor musunuz?")) {
                 try {
-                    // Kullanıcıya ait tüm ilanları filtrele ve sil
                     const q = query(carsCollection, where("owner", "==", activeUser));
                     const querySnapshot = await getDocs(q);
                     for (const docSnap of querySnapshot.docs) {
@@ -700,7 +705,6 @@
             }
         };
 
-        // Diger Sabit Modüller (Doping & Form Islemleri)
         window.openDopingGateway = function(id) {
             dopingSelectedCarId = id; paymentPurpose = "doping";
             document.getElementById('payModalTitle').innerHTML = `<i class="fa-solid fa-bolt me-1"></i> Vitrin Öne Çıkarma Dopingi`;
@@ -768,6 +772,35 @@
             localStorage.setItem('activeUser', activeUser);
             location.reload();
         });
+
+        window.showKrediSection = function() {
+            currentViewMode = "kredi"; window.setMenuClass('menuKredi'); window.hideRightFilterBar(true);
+            document.getElementById('mainDynamicContainer').innerHTML = `
+                <h5 class="fw-bold mb-3 text-success"><i class="fa-solid fa-calculator me-2"></i>Taşıt Kredisi Hesaplama Motoru</h5>
+                <div class="card p-4 border-0" style="border-radius:20px; background:rgba(30,41,59,0.7);">
+                    <div class="row g-2">
+                        <div class="col-6"><label class="small text-muted fw-bold">Araç Tutarı (TL)</label><input type="number" id="kPrice" class="form-control" value="1500000" oninput="window.runKrediCalc()"></div>
+                        <div class="col-3"><label class="small text-muted fw-bold">Vade (Ay)</label><select id="kVade" class="form-select" onchange="window.runKrediCalc()"><option value="12">12 Ay</option><option value="24" selected>24 Ay</option><option value="36">36 Ay</option></select></div>
+                        <div class="col-3"><label class="small text-muted fw-bold">Faiz (%)</label><input type="number" id="kFaiz" class="form-control" value="3.69" step="0.01" oninput="window.runKrediCalc()"></div>
+                    </div>
+                    <hr class="border-secondary my-3">
+                    <div class="row text-center">
+                        <div class="col-6"><small class="text-muted d-block">Aylık Taksit</small><h5 class="text-warning fw-bold" id="rAylik">0 TL</h5></div>
+                        <div class="col-6"><small class="text-muted d-block">Toplam Geri Ödeme</small><h5 class="text-success fw-bold" id="rTotal">0 TL</h5></div>
+                    </div>
+                </div>`;
+            window.runKrediCalc();
+        };
+
+        window.runKrediCalc = function() {
+            const price = parseFloat(document.getElementById('kPrice')?.value) || 0;
+            const vade = parseInt(document.getElementById('kVade')?.value) || 24;
+            const faiz = parseFloat(document.getElementById('kFaiz')?.value) || 3.69;
+            let aylikFaiz = faiz / 100;
+            let taksit = price * (aylikFaiz * Math.pow(1 + aylikFaiz, vade)) / (Math.pow(1 + aylikFaiz, vade) - 1);
+            document.getElementById('rAylik').innerText = Math.round(taksit).toLocaleString('tr-TR') + " TL";
+            document.getElementById('rTotal').innerText = Math.round(taksit * vade).toLocaleString('tr-TR') + " TL";
+        };
 
         window.logoutUser = function() { localStorage.removeItem('activeUser'); location.reload(); };
         window.hideRightFilterBar = function(s) { const f = document.getElementById('rightFilterBar'); if(f) f.style.display = s ? 'none' : 'block'; };
