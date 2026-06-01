@@ -43,23 +43,28 @@
             overflow-x: hidden;
         }
         
-        .dynamic-text { color: var(--text-main) !important; }
-        .dynamic-title { color: var(--text-title) !important; }
-        .dynamic-muted { color: var(--text-muted) !important; }
-
+        /* RESPONSIVE YÜZDELİK AYARLAMALARI */
         .left-sidebar {
             background: var(--bg-sidebar) !important;
             backdrop-filter: blur(16px) saturate(180%);
-            min-height: 92vh;
-            border-right: 1px solid var(--border-ui);
+            min-height: auto;
+            border-bottom: 1px solid var(--border-ui);
         }
+        
+        @media (min-width: 768px) {
+            .left-sidebar {
+                min-height: 92vh;
+                border-right: 1px solid var(--border-ui);
+                border-bottom: none;
+            }
+        }
+        
         .right-macbar {
             background: var(--bg-sidebar) !important;
             backdrop-filter: blur(16px) saturate(180%);
-            min-height: 92vh;
-            border-left: 1px solid var(--border-ui);
-            border-radius: 24px 0 0 24px;
-            box-shadow: -10px 0 30px rgba(0,0,0,0.1);
+            border: 1px solid var(--border-ui);
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
         }
         
         .nav-link {
@@ -89,12 +94,10 @@
             overflow: hidden;
             background: var(--bg-card) !important;
             backdrop-filter: blur(10px);
-            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
         }
         .car-card:hover {
-            transform: translateY(-8px) scale(1.01);
+            transform: translateY(-4px);
             box-shadow: 0 20px 40px rgba(59, 130, 246, 0.15);
-            border-color: var(--card-hover-border);
         }
         
         .form-control, .form-select {
@@ -104,57 +107,65 @@
             border-radius: 12px !important;
         }
 
-        .form-control:focus, .form-select:focus {
-            background-color: var(--bg-input) !important;
-            color: var(--text-main) !important;
-            box-shadow: 0 0 0 0.25rem rgba(59, 130, 246, 0.25);
-            border-color: #3b82f6 !important;
-        }
-
         .carousel-item img {
-            height: 400px;
+            height: 350px;
             object-fit: cover;
-            object-position: center;
             border-radius: 16px;
-            background-color: #000;
         }
         
-        .doping-badge { animation: pulse 1.5s infinite; background: linear-gradient(45deg, #f59e0b, #ef4444) !important; color: white !important; font-weight: bold; font-size: 11px; }
+        /* WHATSAPP WEB STYLE CHAT SİSTEMİ */
+        .chat-container {
+            display: flex;
+            height: 500px;
+            background: rgba(15, 23, 42, 0.4);
+            border-radius: 16px;
+            border: 1px solid var(--border-ui);
+            overflow: hidden;
+        }
+        .chat-users-list {
+            width: 35%;
+            border-right: 1px solid var(--border-ui);
+            overflow-y: auto;
+            background: rgba(30, 41, 59, 0.3);
+        }
+        .chat-user-item {
+            padding: 12px;
+            cursor: pointer;
+            border-bottom: 1px solid var(--border-ui);
+            transition: background 0.2s;
+        }
+        .chat-user-item:hover, .chat-user-item.active {
+            background: rgba(59, 130, 246, 0.2);
+        }
+        .chat-window {
+            width: 65%;
+            display: flex;
+            flex-column: column;
+            justify-content: space-between;
+            background: rgba(15, 23, 42, 0.2);
+        }
+        .chat-messages-box {
+            flex-grow: 1;
+            padding: 15px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        
+        .doping-badge { animation: pulse 1.5s infinite; background: linear-gradient(45deg, #f59e0b, #ef4444) !important; color: white !important; font-weight: bold; }
         @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.04); } 100% { transform: scale(1); } }
         
-        .modal-content { background-color: rgba(15, 23, 42, 0.95) !important; color: var(--text-main) !important; border: 1px solid var(--border-ui) !important; border-radius: 24px !important; backdrop-filter: blur(20px); }
-        .table { color: var(--text-main) !important; border-color: var(--border-ui) !important; }
-        th { color: var(--table-head) !important; }
-
-        .analytics-card {
-            background: rgba(15, 23, 42, 0.3);
-            border: 1px solid var(--border-ui);
-            border-radius: 14px;
-            padding: 12px;
-            margin-top: 10px;
-        }
-
-        .fav-btn {
-            background: rgba(255,255,255,0.1);
-            border: none;
-            color: #ef4444;
-            border-radius: 50%;
-            width: 32px;
-            height: 32px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.2s ease;
-        }
-        .fav-btn:hover { transform: scale(1.1); background: rgba(255,255,255,0.2); }
-        .fav-btn.disabled-owner { opacity: 0.2; cursor: not-allowed; color: #64748b; }
+        .modal-content { background-color: rgba(15, 23, 42, 0.98) !important; color: var(--text-main) !important; border: 1px solid var(--border-ui) !important; border-radius: 24px !important; backdrop-filter: blur(20px); }
+        .fav-btn { background: rgba(255,255,255,0.1); border: none; color: #ef4444; border-radius: 50%; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; }
     </style>
 </head>
 <body>
 
-    <div id="paymentAlertBar" class="text-white text-center py-2.5 fw-bold shadow-lg" style="display: none; font-size: 14px; background: linear-gradient(90deg, #ef4444, #dc2626); z-index: 9999;">
-        <i class="fa-solid fa-triangle-exclamation text-warning me-2 fs-5"></i>
-        🚨 GÜVENLİK BİLDİRİMİ: Fiyat teklifiniz güncellendi! Mesajlarınızı kontrol edin.
+    <!-- YUKARIDAN ANLIK BİLDİRİM BARBARI -->
+    <div id="topNotificationBar" class="text-white text-center py-2.5 fw-bold shadow-lg position-fixed top-0 w-100" style="display: none; font-size: 14px; background: linear-gradient(90deg, #3b82f6, #1d4ed8); z-index: 1050; transition: all 0.3s;">
+        <i class="fa-solid fa-bell animate-bounce me-2"></i> <span id="notificationText">Yeni bir mesajınız var!</span>
+        <button class="btn btn-xs btn-light ms-3 py-0 px-2 text-primary fw-bold rounded-pill" onclick="window.showMessagesSection(); document.getElementById('topNotificationBar').style.display='none';">Gör</button>
     </div>
 
     <!-- NAVBAR -->
@@ -162,18 +173,13 @@
         <div class="container-fluid d-flex justify-content-between align-items-center flex-nowrap">
             <a class="navbar-brand fw-black text-warning fs-4 tracking-wider m-0 me-2" href="#" onclick="window.showAllListings()"><i class="fa-solid fa-car-rear me-1 text-primary"></i> OTOMARKET <span class="badge bg-danger fs-6 pb-1">PRO</span></a>
             
-            <form class="d-flex flex-grow-1 mx-3" style="max-width: 50%;" onsubmit="event.preventDefault(); window.applyFilters();">
-                <input class="form-control form-control-sm me-2 border-0 bg-dark text-white" type="search" id="searchInp" placeholder="Marka, model veya anahtar kelime yazın..." oninput="window.applyFilters()">
-                <button class="btn btn-sm btn-warning px-3 fw-bold" type="button" onclick="window.applyFilters()"><i class="fa-solid fa-magnifying-glass text-dark"></i></button>
+            <form class="d-flex flex-grow-1 mx-2 mx-md-3" style="max-width: 50%;" onsubmit="event.preventDefault(); window.applyFilters();">
+                <input class="form-control form-control-sm me-2 border-0 bg-dark text-white" type="search" id="searchInp" placeholder="Marka, model..." oninput="window.applyFilters()">
             </form>
 
             <div class="d-flex align-items-center gap-2">
-                <button class="btn btn-sm btn-outline-warning rounded-circle" id="themeToggleBtn" onclick="window.toggleThemeMode()">
-                    <i class="fa-solid fa-sun" id="themeIcon"></i>
-                </button>
-                <span class="dynamic-text text-info fw-bold small text-nowrap" id="userBadge" style="display:none;">
-                    <i class="fa-solid fa-user-shield text-success"></i> <span id="userBadgeName"></span>
-                </span>
+                <button class="btn btn-sm btn-outline-warning rounded-circle" id="themeToggleBtn" onclick="window.toggleThemeMode()"><i class="fa-solid fa-sun" id="themeIcon"></i></button>
+                <span class="dynamic-text text-info fw-bold small text-nowrap" id="userBadge" style="display:none;"><span id="userBadgeName"></span></span>
                 <button class="btn btn-sm btn-primary px-3 fw-bold rounded-pill shadow-sm" id="authBtn" onclick="window.triggerMainAuthBtn()">Giriş</button>
             </div>
         </div>
@@ -187,14 +193,17 @@
             <div class="col-12 col-md-3 col-lg-2 p-3 left-sidebar d-flex flex-column justify-content-between">
                 <div>
                     <div class="d-flex justify-content-between align-items-center mb-3">
-                        <h6 class="text-uppercase fw-bold m-0 tracking-widest text-secondary" style="font-size: 11px;">Panel Kontrol</h6>
+                        <h6 class="text-uppercase fw-bold m-0 tracking-widest text-secondary" style="cursor:pointer;" ondblclick="window.triggerAdminMode()">Panel Kontrol <i class="fa-solid fa-lock small text-muted"></i></h6>
                     </div>
                     <ul class="nav flex-column gap-1" id="menuList">
                         <li class="nav-item"><a id="menuAll" class="nav-link text-white fw-semibold active-menu" onclick="window.showAllListings()"><i class="fa-solid fa-border-all me-2 text-info"></i> Vitrin İlanları</a></li>
                         <li class="nav-item"><a id="menuDoping" class="nav-link text-secondary fw-semibold" onclick="window.showDopingListings()"><i class="fa-solid fa-star me-2 text-warning"></i> Haftanın Yıldızları</a></li>
                         <li class="nav-item"><a id="menuFav" class="nav-link text-secondary fw-semibold" onclick="window.showFavoriteListings()"><i class="fa-solid fa-heart me-2 text-danger"></i> Favorilerim (<span id="favCount">0</span>)</a></li>
                         <li class="nav-item"><a id="menuGarage" class="nav-link text-secondary fw-semibold" onclick="window.showGarageListings()"><i class="fa-solid fa-warehouse me-2 text-primary"></i> Garajım / Geçmişim</a></li>
-                        <li class="nav-item"><a id="menuMessages" class="nav-link text-secondary fw-semibold" onclick="window.showMessagesSection()"><i class="fa-solid fa-comments me-2 text-success"></i> Mesajlarım & Teklifler</a></li>
+                        <li class="nav-item"><a id="menuMessages" class="nav-link text-secondary fw-semibold position-relative" onclick="window.showMessagesSection()">
+                            <i class="fa-solid fa-comments me-2 text-success"></i> Mesajlar & Teklifler
+                            <span id="msgBadgeCount" class="badge bg-danger position-absolute end-0 top-50 translate-middle-y rounded-pill" style="display:none;">0</span>
+                        </a></li>
                         <li class="nav-item"><a id="menuEkspertiz" class="nav-link text-secondary fw-semibold" onclick="window.showEkspertizSection()"><i class="fa-solid fa-screwdriver-wrench me-2 text-light"></i> Ekspertiz & Bakım</a></li>
                         <li class="nav-item"><a id="menuKredi" class="nav-link text-secondary fw-semibold" onclick="window.showKrediSection()"><i class="fa-solid fa-calculator me-2 text-warning"></i> Kredi Hesaplama</a></li>
                         <li class="nav-item mt-2"><a class="nav-link text-white fw-bold bg-success bg-opacity-25 border border-success border-opacity-25" onclick="window.triggerAddCar()"><i class="fa-solid fa-square-plus me-1 text-success"></i> İlan Yayınla</a></li>
@@ -209,42 +218,32 @@
 
             <!-- ORTA VİTRİN ALANI -->
             <div class="col-12 col-md-6 col-lg-7 p-3" id="mainDynamicContainer" style="overflow-y: auto; max-height: 92vh;">
-                <h5 class="fw-bold mb-3 dynamic-title" id="vitrinTitle" style="cursor:pointer;" onclick="window.showAllListings()"><i class="fa-solid fa-border-all me-1 text-primary"></i> Aktif Bulut İlanları</h5>
-                <div class="text-center py-4" id="globalSpinner">
-                    <div class="spinner-border text-primary" role="status"></div>
-                </div>
+                <h5 class="fw-bold mb-3 dynamic-title" id="vitrinTitle" style="cursor:pointer;" onclick="window.showAllListings()"><i class="fa-solid fa-car me-1 text-primary"></i> Aktif Vitrin İlanları</h5>
+                <div class="text-center py-4" id="globalSpinner"><div class="spinner-border text-primary"></div></div>
                 <div class="row g-3" id="carsWrapper"></div>
             </div>
 
             <!-- SAĞ FİLTRELEME ALANI -->
-            <div class="col-12 col-md-3 p-3 right-macbar" id="rightFilterBar">
-                <div class="d-flex align-items-center mb-2">
-                    <span class="badge bg-danger me-1" style="width:10px;height:10px;border-radius:50%"> </span>
-                    <span class="badge bg-warning me-1" style="width:10px;height:10px;border-radius:50%"> </span>
-                    <span class="badge bg-success me-2" style="width:10px;height:10px;border-radius:50%"> </span>
-                    <h6 class="m-0 fw-bold dynamic-title small">Gelişmiş Filtreleme</h6>
-                </div>
-                <hr class="border-secondary my-2">
-                <div class="d-flex flex-column gap-2" style="font-size: 12px;">
-                    <div>
-                        <label class="form-label small fw-bold dynamic-muted mb-1">Kasa Tipi</label>
-                        <select id="fKasa" class="form-select form-select-sm" onchange="window.applyFilters()">
-                            <option value="">Tümü</option><option value="Sedan">Sedan</option><option value="Hatchback">Hatchback</option><option value="SUV">SUV</option>
-                        </select>
+            <div class="col-12 col-md-3 p-3" id="rightFilterBar">
+                <div class="right-macbar p-3">
+                    <h6 class="m-0 fw-bold dynamic-title small mb-2">Gelişmiş Filtreleme</h6>
+                    <hr class="border-secondary my-2">
+                    <div class="d-flex flex-column gap-2" style="font-size: 12px;">
+                        <div>
+                            <label class="form-label small fw-bold dynamic-muted mb-1">Kasa Tipi</label>
+                            <select id="fKasa" class="form-select form-select-sm" onchange="window.applyFilters()">
+                                <option value="">Tümü</option><option value="Sedan">Sedan</option><option value="Hatchback">Hatchback</option><option value="SUV">SUV</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="form-label small fw-bold dynamic-muted mb-1">Renk</label>
+                            <input type="text" id="fRenk" class="form-control form-control-sm" placeholder="Örn: Beyaz" oninput="window.applyFilters()">
+                        </div>
+                        <button class="btn btn-secondary btn-sm w-100 mt-1 fw-bold py-1" style="font-size:11px;" onclick="window.clearFilters()">Temizle</button>
                     </div>
-                    <div>
-                        <label class="form-label small fw-bold dynamic-muted mb-1">Renk</label>
-                        <input type="text" id="fRenk" class="form-control form-control-sm" placeholder="Örn: Beyaz" oninput="window.applyFilters()">
+                    <div class="mt-3 pt-2 border-top border-secondary">
+                        <div class="analytics-card py-1.5 px-2"><small class="dynamic-muted d-block text-uppercase" style="font-size:8px;">Sistemdeki Aktif İlan</small><span class="fw-bold text-success small" id="statTotalCars">0 Adet</span></div>
                     </div>
-                    <div>
-                        <label class="form-label small fw-bold dynamic-muted mb-1">Minimum Model Yılı</label>
-                        <input type="number" id="fYil" class="form-control form-control-sm" placeholder="Örn: 2015" oninput="window.applyFilters()">
-                    </div>
-                    <button class="btn btn-secondary btn-sm w-100 mt-1 fw-bold py-1" style="font-size:11px;" onclick="window.clearFilters()">Filtreleri Temizle</button>
-                </div>
-
-                <div class="mt-3 pt-2 border-top border-secondary">
-                    <div class="analytics-card py-1.5 px-2"><small class="dynamic-muted d-block text-uppercase" style="font-size:8px;">Sistemdeki Aktif İlan</small><span class="fw-bold text-success small" id="statTotalCars">0 Adet</span></div>
                 </div>
             </div>
 
@@ -257,40 +256,23 @@
             <div class="modal-content">
                 <div class="modal-header border-0"><h5 class="modal-title fw-bold text-info" id="detTitle">Araç Detayı</h5><button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button></div>
                 <div class="modal-body p-4 pt-0">
-                    
-                    <!-- DINAMIK FOTOĞRAF SLIDERI -->
                     <div id="carSlider" class="carousel slide mb-4" data-bs-ride="carousel">
                         <div class="carousel-inner" id="sliderInner"></div>
                         <button class="carousel-control-prev" type="button" data-bs-target="#carSlider" data-bs-slide="prev"><span class="carousel-control-prev-icon"></span></button>
                         <button class="carousel-control-next" type="button" data-bs-target="#carSlider" data-bs-slide="next"><span class="carousel-control-next-icon"></span></button>
                     </div>
-
                     <div class="row g-3">
-                        <div class="col-md-6">
-                            <table class="table table-sm table-borderless">
-                                <tr><th>Araç Başlığı</th><td id="detTableTitle" class="fw-bold dynamic-text"></td></tr>
-                                <tr><th>Model Yılı</th><td id="detTableYear" class="dynamic-text"></td></tr>
-                                <tr><th>Kasa Tipi</th><td id="detTableBody" class="dynamic-text"></td></tr>
-                            </table>
-                        </div>
-                        <div class="col-md-6">
-                            <table class="table table-sm table-borderless">
-                                <tr><th>Renk</th><td id="detTableColor" class="dynamic-text"></td></tr>
-                                <tr><th>Kilometre</th><td id="detTableKm" class="dynamic-text"></td></tr>
-                                <tr><th>Fiyat</th><td id="detTablePrice" class="text-info fw-bold fs-5"></td></tr>
-                                <tr><th>İlan Sahibi</th><td><span id="detTableOwner" class="badge bg-primary"></span></td></tr>
-                            </table>
-                        </div>
+                        <div class="col-6"><table class="table table-sm table-borderless"><tr><th>Yıl</th><td id="detTableYear"></td></tr><tr><th>Kasa</th><td id="detTableBody"></td></tr></table></div>
+                        <div class="col-6"><table class="table table-sm table-borderless"><tr><th>KM</th><td id="detTableKm"></td></tr><tr><th>Fiyat</th><td id="detTablePrice" class="text-info fw-bold"></td></tr></table></div>
                     </div>
-                    <div class="mt-3 p-3 bg-dark bg-opacity-50 rounded-3"><h6 class="text-secondary small fw-bold">Açıklama</h6><p id="detDescription" class="small m-0"></p></div>
-                    
+                    <div class="mt-2 p-2 bg-dark bg-opacity-50 rounded"><small id="detDescription"></small></div>
                     <div id="detailActionBox" class="mt-4 d-flex flex-wrap justify-content-end gap-2 border-top border-secondary pt-3"></div>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- İLAN EKLEME MODALI (TOPLU DOSYA YÜKLEMELİ) -->
+    <!-- İLAN EKLEME MODALI -->
     <div class="modal fade" id="addCarModal" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-lg modal-dialog-centered">
             <div class="modal-content">
@@ -298,64 +280,41 @@
                 <div class="modal-body p-4">
                     <form id="addCarForm">
                         <div class="row g-3">
-                            <div class="col-md-6"><label class="form-label small fw-bold text-muted">Araç Başlığı</label><input type="text" id="aTitle" class="form-control" required placeholder="BMW 530i M Sport"></div>
-                            <div class="col-md-3"><label class="form-label small fw-bold text-muted">Model Yılı</label><input type="number" id="aYear" class="form-control" required placeholder="2021"></div>
-                            <div class="col-md-3"><label class="form-label small fw-bold text-muted">Renk</label><input type="text" id="aColor" class="form-control" required placeholder="Siyah"></div>
-                            <div class="col-md-4"><label class="form-label small fw-bold text-muted">Fiyat (TL)</label><input type="number" id="aPrice" class="form-control" required placeholder="2100000"></div>
-                            <div class="col-md-4"><label class="form-label small fw-bold text-muted">Kilometre (KM)</label><input type="number" id="aKm" class="form-control" required placeholder="42000"></div>
-                            <div class="col-md-4"><label class="form-label small fw-bold text-muted">Kasa Tipi</label><select id="aBody" class="form-select"><option value="Sedan">Sedan</option><option value="Hatchback">Hatchback</option><option value="SUV">SUV</option></select></div>
-                            
-                            <!-- MODERN GALERİ YÜKLEME ALANLARI -->
-                            <div class="col-md-6">
-                                <label class="form-label small fw-bold text-warning"><i class="fa-solid fa-image me-1"></i>Kapak Fotoğrafı Seç</label>
-                                <input type="file" id="fileCover" class="form-control" accept="image/*" required>
-                            </div>
-                            <div class="col-md-6">
-                                <label class="form-label small fw-bold text-info"><i class="fa-solid fa-images me-1"></i>Diğer Galeri Fotoğrafları (Toplu Seçebilirsin)</label>
-                                <input type="file" id="fileGallery" class="form-control" accept="image/*" multiple>
-                            </div>
-                            
-                            <div class="col-md-12"><label class="form-label small fw-bold text-danger">İlan Açıklaması</label><textarea id="aDescription" class="form-control" rows="3" required placeholder="Boyasız hatasız..."></textarea></div>
+                            <div class="col-md-6"><label class="small fw-bold">Araç Başlığı</label><input type="text" id="aTitle" class="form-control" required></div>
+                            <div class="col-md-3"><label class="small Type">Model Yılı</label><input type="number" id="aYear" class="form-control" required></div>
+                            <div class="col-md-3"><label class="small">Renk</label><input type="text" id="aColor" class="form-control" required></div>
+                            <div class="col-md-4"><label class="small">Fiyat (TL)</label><input type="number" id="aPrice" class="form-control" required></div>
+                            <div class="col-md-4"><label class="small">KM</label><input type="number" id="aKm" class="form-control" required></div>
+                            <div class="col-md-4"><label class="small">Kasa Tipi</label><select id="aBody" class="form-select"><option value="Sedan">Sedan</option><option value="Hatchback">Hatchback</option><option value="SUV">SUV</option></select></div>
+                            <div class="col-6"><label class="small text-warning">Kapak Görseli</label><input type="file" id="fileCover" class="form-control" accept="image/*" required></div>
+                            <div class="col-6"><label class="small text-info">Galeri Görselleri</label><input type="file" id="fileGallery" class="form-control" accept="image/*" multiple></div>
+                            <div class="col-12"><label class="small">Açıklama</label><textarea id="aDescription" class="form-control" rows="2" required></textarea></div>
                         </div>
-                        <button type="submit" class="btn btn-success w-100 mt-4 fw-bold py-2.5">Canlıya Al</button>
+                        <button type="submit" class="btn btn-success w-100 mt-3 fw-bold">Canlıya Al</button>
                     </form>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- GELİŞMİŞ AUTH MODAL (KAYIT VE ŞİFREMİ UNUTTUM DAHİL) -->
+    <!-- GELİŞMİŞ AUTH MODAL -->
     <div class="modal fade" id="authModal" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content border-0 shadow">
-                <div class="modal-header"><h5 class="modal-title fw-bold text-primary" id="authTitle">Kullanıcı Girişi</h5><button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button></div>
+            <div class="modal-content border-0">
                 <div class="modal-body p-4">
-                    
-                    <!-- GİRİŞ FORMU -->
                     <form id="fLogin">
+                        <h5 class="fw-bold text-primary mb-3">Giriş Yap</h5>
                         <div class="mb-3"><input type="text" id="lUser" class="form-control" placeholder="Kullanıcı Adı" required></div>
                         <div class="mb-3"><input type="password" id="lPass" class="form-control" placeholder="Şifre" required></div>
-                        <button type="submit" class="btn btn-primary w-100 fw-bold py-2 mb-2">Giriş Yap</button>
-                        <div class="d-flex justify-content-between small px-1">
-                            <a href="#" onclick="window.changeAuthView('register')" class="text-info">Hesap Oluştur</a>
-                            <a href="#" onclick="window.changeAuthView('forgot')" class="text-secondary">Şifremi Unuttum?</a>
-                        </div>
+                        <button type="submit" class="btn btn-primary w-100 fw-bold mb-2">Giriş</button>
+                        <a href="#" onclick="window.changeAuthView('register')" class="text-info small">Hesap Oluştur</a>
                     </form>
-
-                    <!-- KAYIT FORMU -->
                     <form id="fRegister" style="display:none;">
+                        <h5 class="fw-bold text-success mb-3">Yeni Kayıt</h5>
                         <div class="mb-3"><input type="text" id="rUser" class="form-control" placeholder="Kullanıcı Adı" required></div>
                         <div class="mb-3"><input type="password" id="rPass" class="form-control" placeholder="Şifre" required></div>
-                        <button type="submit" class="btn btn-success w-100 fw-bold py-2 mb-2">Kayıt Ol ve Giriş Yap</button>
-                        <a href="#" onclick="window.changeAuthView('login')" class="small text-info d-block text-center">Zaten Hesabım Var</a>
-                    </form>
-
-                    <!-- ŞİFREMİ UNUTTUM FORMU -->
-                    <form id="fForgot" style="display:none;" onsubmit="event.preventDefault(); alert('Şifre sıfırlama kodu telefonunuza iletildi.'); window.changeAuthView('login');">
-                        <p class="small text-muted mb-3">Hesabınıza ait kullanıcı adını girerek şifrenizi sıfırlayabilirsiniz.</p>
-                        <div class="mb-3"><input type="text" class="form-control" placeholder="Kullanıcı Adınız" required></div>
-                        <button type="submit" class="btn btn-warning text-dark w-100 fw-bold py-2 mb-2">Sıfırlama Linki Gönder</button>
-                        <a href="#" onclick="window.changeAuthView('login')" class="small text-info d-block text-center">Giriş Ekranına Dön</a>
+                        <button type="submit" class="btn btn-success w-100 fw-bold mb-2">Kayıt Ol</button>
+                        <a href="#" onclick="window.changeAuthView('login')" class="text-info small">Giriş Ekranına Dön</a>
                     </form>
                 </div>
             </div>
@@ -365,49 +324,23 @@
     <!-- DOPING / PAYMENT MODAL -->
     <div class="modal fade" id="paymentModal" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content border-0 shadow">
-                <div class="modal-header bg-primary text-white py-2">
-                    <h5 class="modal-title fw-bold" id="payModalTitle"><i class="fa-solid fa-shield-halved me-2"></i>Secure Ödeme</h5>
-                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
-                </div>
-                <div class="modal-body p-4">
-                    <div class="text-center mb-3">
-                        <p class="dynamic-muted small m-0" id="payPurposeText">Ödenecek Tutar</p>
-                        <h4 class="fw-bold text-warning" id="payAmountText">0 TL</h4>
-                    </div>
+            <div class="modal-content border-0">
+                <div class="modal-body p-4 text-center">
+                    <h5 id="payModalTitle" class="fw-bold">Güvenli Ödeme Gateway</h5>
+                    <h4 class="text-warning my-3" id="payAmountText">0 TL</h4>
                     <form id="paymentForm">
-                        <div class="mb-3"><label class="form-label small fw-bold dynamic-muted">Kart Sahibi İsim Soyisim</label><input type="text" class="form-control" required></div>
-                        <div class="mb-3"><label class="form-label small fw-bold dynamic-muted">Kart Numarası</label><input type="text" class="form-control" required placeholder="xxxx xxxx xxxx xxxx"></div>
-                        <button type="submit" class="btn btn-success w-100 fw-bold py-2.5 mt-3">Güvenli Ödemeyi Yap</button>
+                        <input type="text" class="form-control mb-2" placeholder="Kart Sahibi" required>
+                        <input type="text" class="form-control mb-3" placeholder="xxxx xxxx xxxx xxxx" required>
+                        <button type="submit" class="btn btn-success w-100 fw-bold">Ödemeyi Tamamla</button>
                     </form>
                 </div>
             </div>
         </div>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-
-    <script>
-        window.toggleThemeMode = function() {
-            const body = document.body;
-            const icon = document.getElementById('themeIcon');
-            if (body.classList.contains('light-mode')) {
-                body.classList.remove('light-mode');
-                if(icon) icon.className = 'fa-solid fa-sun';
-                localStorage.setItem('themeMode', 'dark');
-            } else {
-                body.classList.add('light-mode');
-                if(icon) icon.className = 'fa-solid fa-moon';
-                localStorage.setItem('themeMode', 'light');
-            }
-        };
-        if(localStorage.getItem('themeMode') === 'light') { document.body.classList.add('light-mode'); }
-    </script>
-
-    <!-- CORE MODULE ENGINE -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-        import { getFirestore, collection, addDoc, getDocs, deleteDoc, doc, updateDoc, query, orderBy, where } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+        import { getFirestore, collection, addDoc, getDocs, deleteDoc, doc, updateDoc, query, orderBy, where, onSnapshot } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyDa8k6w5FgAVK1Ai8NYForyXC8fg4k_PzE",
@@ -430,32 +363,54 @@
         let currentViewMode = "all";
         let selectedCarIdToBuy = null;
         let dopingSelectedCarId = null; 
-        let paymentPurpose = "buy"; 
+        let paymentPurpose = "buy";
+        let isAdmin = false;
+        let selectedChatUser = null;
 
-        window.triggerMainAuthBtn = function() { window.changeAuthView('login'); new bootstrap.Modal(document.getElementById('authModal')).show(); };
+        window.triggerMainAuthBtn = function() { new bootstrap.Modal(document.getElementById('authModal')).show(); };
         window.triggerAddCar = function() { if (!activeUser) { alert("Önce giriş yapmalısınız."); window.triggerMainAuthBtn(); } else { new bootstrap.Modal(document.getElementById('addCarModal')).show(); } };
+        window.changeAuthView = function(v) { document.getElementById('fLogin').style.display = v==='login'?'block':'none'; document.getElementById('fRegister').style.display = v==='register'?'block':'none'; };
 
-        window.changeAuthView = function(view) {
-            document.getElementById('fLogin').style.display = view === 'login' ? 'block' : 'none';
-            document.getElementById('fRegister').style.display = view === 'register' ? 'block' : 'none';
-            document.getElementById('fForgot').style.display = view === 'forgot' ? 'block' : 'none';
-            const title = document.getElementById('authTitle');
-            if(view === 'login') title.innerText = "Kullanıcı Girişi";
-            if(view === 'register') title.innerText = "Yeni Hesap Oluştur";
-            if(view === 'forgot') title.innerText = "Şifremi Unuttum";
-        };
-
-        window.toggleFav = function(id) {
-            const car = dbCars.find(c => c.id === id);
-            if(car && activeUser && car.owner && car.owner.toLowerCase().trim() === activeUser.toLowerCase().trim()) {
-                alert("❌ Kendi ilanınızı favorilerinize ekleyemezsiniz!");
-                return;
+        // ADMIN PANEL KONTROL TETİKLEYİCİSİ
+        window.triggerAdminMode = function() {
+            let pass = prompt("Yönetici Giriş Şifresi:");
+            if(pass === "admin123") {
+                isAdmin = true;
+                alert("Yönetici modu aktif! Artık tüm ilanları silebilirsiniz.");
+                window.applyFilters();
+            } else {
+                alert("Hatalı şifre!");
             }
-            if(favSet.has(id)) favSet.delete(id); else favSet.add(id);
-            localStorage.setItem('favSet', JSON.stringify(Array.from(favSet)));
-            const el = document.getElementById('favCount'); if(el) el.innerText = favSet.size;
-            window.applyFilters();
         };
+
+        // GERÇEK ZAMANLI BİLDİRİM VE BADGE DİNLEYİCİSİ
+        if(activeUser) {
+            const qMsg = query(messagesCollection, where("receiver", "==", activeUser));
+            onSnapshot(qMsg, (snapshot) => {
+                let unreadCount = snapshot.docs.filter(d => d.data().status === "pending" || d.data().status === "unread").length;
+                const badge = document.getElementById('msgBadgeCount');
+                if(badge) {
+                    if(unreadCount > 0) {
+                        badge.innerText = unreadCount;
+                        badge.style.display = 'inline-block';
+                    } else {
+                        badge.style.display = 'none';
+                    }
+                }
+                
+                snapshot.docChanges().forEach((change) => {
+                    if (change.type === "added") {
+                        const newMsg = change.doc.data();
+                        const bar = document.getElementById('topNotificationBar');
+                        if(bar && newMsg.sender !== activeUser) {
+                            document.getElementById('notificationText').innerText = `${newMsg.sender} kullanıcısından yeni bir mesaj/teklif var!`;
+                            bar.style.display = 'block';
+                            setTimeout(() => { bar.style.display = 'none'; }, 6000);
+                        }
+                    }
+                });
+            });
+        }
 
         async function fetchCarsFromCloud() {
             try {
@@ -475,54 +430,28 @@
             if(currentViewMode === "all") res = dbCars.filter(c => !c.boughtBy);
             else if(currentViewMode === "fav") res = dbCars.filter(c => favSet.has(c.id) && !c.boughtBy);
             else if(currentViewMode === "doping") res = dbCars.filter(c => c.isDoping && !c.boughtBy);
-
-            const kasa = document.getElementById('fKasa')?.value;
-            const renk = document.getElementById('fRenk')?.value?.toLowerCase();
-            const yil = document.getElementById('fYil')?.value;
-            const search = document.getElementById('searchInp')?.value?.toLowerCase();
-
-            if(kasa) res = res.filter(c => c.bodyType === kasa);
-            if(renk) res = res.filter(c => c.color && c.color.toLowerCase().includes(renk));
-            if(yil) res = res.filter(c => c.year >= parseInt(yil));
-            if(search) res = res.filter(c => c.title.toLowerCase().includes(search));
-
             window.renderList(res);
         };
 
         window.renderList = function(data) {
             const wrap = document.getElementById('carsWrapper'); if(!wrap) return;
             if(data.length === 0) { wrap.innerHTML = '<div class="col-12 text-center p-5 dynamic-muted"><h6>İlan bulunamadı.</h6></div>'; return; }
-            
-            const sorted = [...data].sort((a,b) => (b.isDoping ? 1 : 0) - (a.isDoping ? 1 : 0));
-
-            wrap.innerHTML = sorted.map(c => {
+            wrap.innerHTML = data.map(c => {
                 const isOwner = activeUser && c.owner && (activeUser.toLowerCase().trim() === c.owner.toLowerCase().trim());
-                const isFav = favSet.has(c.id);
-                
                 let dopingBtnHTML = (isOwner && !c.isDoping) ? `<button onclick="window.openDopingGateway('${c.id}')" class="btn btn-sm btn-outline-warning fw-bold">Doping Al</button>` : '';
-                let actionBtnHTML = isOwner ? `<button onclick="window.deleteCar('${c.id}')" class="btn btn-sm btn-danger fw-bold py-1">Sil</button>` : `<span class="badge bg-dark text-muted py-1">Aktif</span>`;
-                let borderStyle = c.isDoping ? 'border: 2px solid #f59e0b; box-shadow: 0 0 15px rgba(245,158,11,0.2);' : 'border: 1px solid var(--border-ui);';
+                let actionBtnHTML = (isOwner || isAdmin) ? `<button onclick="window.deleteCar('${c.id}')" class="btn btn-sm btn-danger fw-bold py-1">Sil</button>` : `<span class="badge bg-dark text-muted py-1">Aktif</span>`;
+                let borderStyle = c.isDoping ? 'border: 2px solid #f59e0b;' : 'border: 1px solid var(--border-ui);';
 
                 return `
                 <div class="col-12">
                     <div class="card car-card" style="${borderStyle}">
                         <div class="row g-0">
-                            <div class="col-md-4" style="background-image:url(${c.coverImage || 'https://images.unsplash.com/photo-1542282088-72c9c27ed0cd?w=500'}); background-size:cover; background-position:center; min-height:150px;"></div>
+                            <div class="col-md-4" style="background-image:url(${c.coverImage || ''}); background-size:cover; background-position:center; min-height:140px;"></div>
                             <div class="col-md-8">
-                                <div class="card-body d-flex flex-column justify-content-between h-100 p-3">
-                                    <div class="d-flex justify-content-between align-items-center">
-                                        <h6 class="fw-bold m-0" onclick="window.openDetail('${c.id}')" style="cursor:pointer; font-size:15px;">
-                                            ${c.isDoping ? '<span class="badge doping-badge me-1"><i class="fa-solid fa-star"></i> Yıldız</span>' : ''}${c.title}
-                                        </h6>
-                                        <button onclick="window.toggleFav('${c.id}')" class="fav-btn ${isOwner ? 'disabled-owner' : ''}">
-                                            <i class="${isFav ? 'fa-solid' : 'fa-regular'} fa-heart"></i>
-                                        </button>
-                                    </div>
-                                    <p class="dynamic-muted small m-0 my-1">Yıl: <b>${c.year}</b> | Kasa: <b>${c.bodyType}</b> | Renk: <b>${c.color}</b> | KM: <b>${c.km}</b></p>
-                                    <div class="d-flex justify-content-between align-items-center flex-wrap gap-1">
-                                        <h6 class="text-info fw-bold m-0">${(c.price || 0).toLocaleString()} TL</h6>
-                                        <div class="gap-1 d-flex">${dopingBtnHTML}<button onclick="window.openDetail('${c.id}')" class="btn btn-sm btn-light py-1 px-3">Detayları Gör</button>${actionBtnHTML}</div>
-                                    </div>
+                                <div class="card-body p-3">
+                                    <h6 class="fw-bold" onclick="window.openDetail('${c.id}')" style="cursor:pointer;">${c.isDoping ? '<span class="badge doping-badge me-1">Yıldız</span>' : ''}${c.title}</h6>
+                                    <p class="small text-muted m-0">Fiyat: <b>${(c.price || 0).toLocaleString()} TL</b> | KM: <b>${c.km}</b></p>
+                                    <div class="d-flex justify-content-between align-items-center mt-2">${dopingBtnHTML} <button onclick="window.openDetail('${c.id}')" class="btn btn-sm btn-light">İncele</button>${actionBtnHTML}</div>
                                 </div>
                             </div>
                         </div>
@@ -531,213 +460,149 @@
             }).join('');
         };
 
-        // Gelişmiş Dinamik Resim Kataloğu ve Detay Yönetimi
         window.openDetail = function(id) {
             const car = dbCars.find(c => c.id === id); if(!car) return;
             document.getElementById('detTitle').innerText = car.title;
-            document.getElementById('detTableTitle').innerText = car.title;
             document.getElementById('detTableYear').innerText = car.year;
             document.getElementById('detTableBody').innerText = car.bodyType || 'Sedan';
-            document.getElementById('detTableColor').innerText = car.color;
             document.getElementById('detTablePrice').innerText = (car.price || 0).toLocaleString() + " TL";
-            document.getElementById('detTableOwner').innerText = car.owner || 'Anonim';
             document.getElementById('detTableKm').innerText = (car.km || 0).toLocaleString() + " KM";
-            document.getElementById('detDescription').innerText = car.description || "Açıklama belirtilmedi.";
+            document.getElementById('detDescription').innerText = car.description || "";
 
-            // Dinamik Resim Slider Dizilimi (Fix)
             const sliderInner = document.getElementById('sliderInner');
-            let images = [];
-            if(car.coverImage) images.push(car.coverImage);
-            if(car.gallery && Array.isArray(car.gallery)) {
-                images = images.concat(car.gallery);
-            }
-            images = images.filter(img => img && img.trim() !== "");
-
-            if(images.length === 0) images.push('https://images.unsplash.com/photo-1542282088-72c9c27ed0cd?w=500');
-
-            sliderInner.innerHTML = images.map((img, idx) => `
-                <div class="carousel-item ${idx === 0 ? 'active' : ''}">
-                    <img src="${img}" class="d-block w-100">
-                </div>
+            let images = [car.coverImage];
+            if(car.gallery && Array.isArray(car.gallery)) images = images.concat(car.gallery);
+            sliderInner.innerHTML = images.filter(Boolean).map((img, idx) => `
+                <div class="carousel-item ${idx === 0 ? 'active' : ''}"><img src="${img}" class="d-block w-100"></div>
             `).join('');
 
-            // Bootstrap Carousel Manuel Yeniden Başlatma Tetikleyicisi
-            const carouselEl = document.getElementById('carSlider');
-            const carouselInstance = bootstrap.Carousel.getInstance(carouselEl) || new bootstrap.Carousel(carouselEl);
-            carouselInstance.to(0);
-
             const actionBox = document.getElementById('detailActionBox');
-            if(activeUser && car.owner && car.owner.toLowerCase().trim() !== activeUser.toLowerCase().trim()) {
+            if(activeUser && car.owner !== activeUser) {
                 actionBox.innerHTML = `
-                    <button onclick="window.askQuestionPrompt('${car.id}', '${car.owner}')" class="btn btn-outline-info fw-bold"><i class="fa-solid fa-circle-question me-1"></i> Soru Sor</button>
-                    <button onclick="window.sendOfferPrompt('${car.id}', '${car.owner}', ${car.price})" class="btn btn-warning fw-bold text-dark"><i class="fa-solid fa-handshake me-1"></i> Teklif Ver</button>
-                    <button onclick="window.openPaymentGateway('${car.id}')" class="btn btn-primary fw-bold">Satın Al</button>
+                    <button onclick="window.sendDirectMessage('${car.owner}')" class="btn btn-sm btn-outline-info"><i class="fa-solid fa-comments"></i> Soru Sor</button>
+                    <button onclick="window.sendOfferPrompt('${car.id}', '${car.owner}', ${car.price})" class="btn btn-sm btn-warning">Teklif Ver</button>
                 `;
-            } else if(!activeUser) {
-                actionBox.innerHTML = `<button onclick="bootstrap.Modal.getInstance(document.getElementById('detailModal')).hide(); window.triggerMainAuthBtn();" class="btn btn-sm btn-primary">İşlem Yapmak İçin Giriş Yapın</button>`;
             } else {
-                actionBox.innerHTML = `<span class="text-muted small">Kendi ilanınız üzerinde işlem yapamazsınız.</span>`;
+                actionBox.innerHTML = `<span class="text-muted small">İşlem kısıtlı.</span>`;
             }
-
             new bootstrap.Modal(document.getElementById('detailModal')).show();
         };
 
-        // ÖLÜCÜ ENGELLEYİCİ TEKLİF SİSTEMİ
+        // Gelişmiş Ölücü Filtreli Teklif Gönderimi
         window.sendOfferPrompt = async function(carId, owner, originalPrice) {
-            if(!activeUser) { alert("Önce giriş yapmalısınız."); return; }
-            const offerPrice = prompt(`Teklif etmek istediğiniz tutarı girin (TL):\nNot: Bu araç için minimum kabul edilebilir taban teklif sınırı: ${(originalPrice * 0.7).toLocaleString()} TL'dir.`);
+            const offerPrice = prompt(`Teklifinizi girin (Minimum limit: ${(originalPrice * 0.7).toLocaleString()} TL):`);
             if(!offerPrice || isNaN(offerPrice)) return;
-
-            const numericOffer = parseInt(offerPrice);
-            // Ölü fiyat filtresi kontrol mekanizması (%70 sınırı)
-            if(numericOffer < (originalPrice * 0.7)) {
-                alert("❌ Sistem Engeli: Girdiğiniz teklif araç değerinin çok altında (ölü fiyat). Teklifiniz otomatik olarak iptal edildi ve satıcıya gönderilmedi!");
+            if(parseInt(offerPrice) < (originalPrice * 0.7)) {
+                alert("❌ Teklifiniz çok düşük (ölücü fiyat) olduğu için otomatik olarak reddedildi.");
                 return;
             }
-
-            await addDoc(messagesCollection, {
-                sender: activeUser,
-                receiver: owner,
-                carId: carId,
-                type: "offer",
-                status: "pending",
-                message: `💼 [FİYAT TEKLİFİ]: ${activeUser} kullanıcısı ilanınıza ${numericOffer.toLocaleString()} TL teklif verdi.`,
-                offerValue: numericOffer,
-                createdAt: new Date().getTime()
-            });
-            alert("Teklifiniz satıcıya başarıyla iletildi!");
+            await addDoc(messagesCollection, { sender: activeUser, receiver: owner, carId: carId, type: "offer", status: "pending", message: `💼 TEKLİF: ${offerPrice} TL`, createdAt: new Date().getTime() });
+            alert("Teklifiniz iletildi.");
         };
 
-        // UYGULAMA İÇİ NORMAL SORU SORMA SİSTEMİ
-        window.askQuestionPrompt = async function(carId, owner) {
-            if(!activeUser) { alert("Önce giriş yapmalısınız."); return; }
-            const question = prompt("İlan sahibine iletmek istediğiniz soruyu yazın:");
-            if(!question || question.trim() === "") return;
-
-            await addDoc(messagesCollection, {
-                sender: activeUser,
-                receiver: owner,
-                carId: carId,
-                type: "chat",
-                status: "read",
-                message: `💬 [İLAN SORUSU - ${activeUser}]: ${question}`,
-                createdAt: new Date().getTime()
-            });
-            alert("Sorunuz satıcının Mesajlar kutusuna gönderildi!");
+        window.sendDirectMessage = async function(owner) {
+            const txt = prompt("Sorunuzu yazın:");
+            if(!txt) return;
+            await addDoc(messagesCollection, { sender: activeUser, receiver: owner, type: "chat", status: "unread", message: txt, createdAt: new Date().getTime() });
+            alert("Mesajınız gönderildi, Mesajlarım sekmesinden takip edebilirsiniz.");
         };
 
+        // WHATSAPP WEB TARZI İKİYE BÖLÜNMÜŞ GELİŞMİŞ SOHBET ODASI SİSTEMİ
         window.showMessagesSection = async function() {
             currentViewMode = "messages"; window.setMenuClass('menuMessages'); window.hideRightFilterBar(true);
-            if(!activeUser) {
-                document.getElementById('mainDynamicContainer').innerHTML = `<h6>Mesajları görmek için giriş yapmalısınız.</h6>`;
-                return;
-            }
+            if(!activeUser) { document.getElementById('mainDynamicContainer').innerHTML = `<h6>Giriş yapmalısınız.</h6>`; return; }
 
             document.getElementById('mainDynamicContainer').innerHTML = `
-                <h5 class="fw-bold mb-3 text-warning"><i class="fa-solid fa-comments me-2"></i>Gelen Teklifler ve Sorular</h5>
-                <div class="d-flex flex-column gap-2" id="msgListWrapper">Yükleniyor...</div>`;
+                <h5 class="fw-bold mb-3 text-warning"><i class="fa-solid fa-comments me-2"></i>Mesajlaşma Merkezi</h5>
+                <div class="chat-container">
+                    <div class="chat-users-list" id="chatUsersList"></div>
+                    <div class="chat-window">
+                        <div class="chat-messages-box" id="chatMessagesBox"><p class="text-muted text-center m-auto">Konuşmak için soldan bir kullanıcı seçin</p></div>
+                        <div class="p-2 border-top border-secondary d-flex gap-1 bg-dark bg-opacity-25" id="chatInputArea" style="display:none !important;">
+                            <input type="text" id="chatMsgInp" class="form-control form-control-sm" placeholder="Mesajınızı yazın...">
+                            <button class="btn btn-sm btn-warning" onclick="window.submitChatMessage()"><i class="fa-solid fa-paper-plane"></i></button>
+                        </div>
+                    </div>
+                </div>`;
 
-            const q = query(messagesCollection, where("receiver", "==", activeUser));
+            // Kullanıcıyla ilişkili benzersiz sohbet kişilerini bul ve listele
+            const q = query(messagesCollection, orderBy("createdAt", "desc"));
             const querySnapshot = await getDocs(q);
-            const wrap = document.getElementById('msgListWrapper');
-            wrap.innerHTML = "";
-
-            if(querySnapshot.empty) { wrap.innerHTML = "<p class='text-muted'>Henüz mesajınız veya gelen sorunuz yok.</p>"; return; }
-
-            querySnapshot.forEach((docSnap) => {
-                const msg = docSnap.data();
-                let actionsHTML = "";
-                if(msg.type === "offer" && msg.status === "pending") {
-                    actionsHTML = `
-                        <div class="mt-2 d-flex gap-2">
-                            <button class="btn btn-xs btn-success fw-bold py-1 px-2" style="font-size:11px" onclick="window.handleOffer('${docSnap.id}', 'approved', '${msg.carId}', '${msg.sender}')">Onayla</button>
-                            <button class="btn btn-xs btn-danger fw-bold py-1 px-2" style="font-size:11px" onclick="window.handleOffer('${docSnap.id}', 'rejected', '${msg.carId}', '${msg.sender}')">Reddet</button>
-                        </div>`;
-                } else if (msg.type === "offer" && msg.status !== "pending") {
-                    actionsHTML = `<span class="badge bg-secondary mt-2 d-inline-block">Teklif ${msg.status === 'approved' ? 'Onaylandı' : 'Reddedildi'}</span>`;
-                } else if (msg.type === "chat") {
-                    // Soru-Cevap için hızlı uygulama içi yanıt mekanizması
-                    actionsHTML = `<button class="btn btn-xs btn-outline-warning fw-bold py-0.5 px-2 mt-2" style="font-size:11px" onclick="window.replyMessagePrompt('${msg.sender}')">Cevap Yaz</button>`;
-                }
-
-                wrap.innerHTML += `
-                    <div class="card p-3 border-0 shadow-sm mb-2" style="background:rgba(30,41,59,0.7); border-radius:14px;">
-                        <p class="small m-0 text-white">${msg.message}</p>
-                        ${actionsHTML}
-                    </div>`;
+            let uniqueUsers = new Set();
+            querySnapshot.forEach(d => {
+                const m = d.data();
+                if(m.receiver === activeUser) uniqueUsers.add(m.sender);
+                if(m.sender === activeUser) uniqueUsers.add(m.receiver);
             });
+
+            const uList = document.getElementById('chatUsersList');
+            if(uniqueUsers.size === 0) { uList.innerHTML = `<small class="p-3 d-block text-muted">Sohbet yok.</small>`; return; }
+            
+            uList.innerHTML = Array.from(uniqueUsers).map(user => `
+                <div class="chat-user-item text-truncate text-white" id="cu-${user}" onclick="window.loadActiveChatRoom('${user}')">
+                    <i class="fa-solid fa-user text-info me-2"></i><b>${user}</b>
+                </div>
+            `).join('');
         };
 
-        window.replyMessagePrompt = async function(buyerName) {
-            const reply = prompt(`${buyerName} kullanıcısına iletilecek cevabınız:`);
-            if(!reply || reply.trim() === "") return;
+        window.loadActiveChatRoom = function(username) {
+            selectedChatUser = username;
+            document.querySelectorAll('.chat-user-item').forEach(e => e.classList.remove('active'));
+            document.getElementById(`cu-${username}`)?.classList.add('active');
+            document.getElementById('chatInputArea').style.setProperty('display', 'flex', 'important');
 
-            await addDoc(messagesCollection, {
-                sender: activeUser,
-                receiver: buyerName,
-                type: "chat",
-                status: "read",
-                message: `✉️ [${activeUser} Yanıtladı]: ${reply}`,
-                createdAt: new Date().getTime()
-            });
-            alert("Cevabınız başarıyla gönderildi!");
-        };
-
-        window.handleOffer = async function(msgId, status, carId, buyer) {
-            try {
-                await updateDoc(doc(db, "messages", msgId), { status: status });
+            const q = query(messagesCollection, orderBy("createdAt", "asc"));
+            onSnapshot(q, (snapshot) => {
+                if(selectedChatUser !== username) return;
+                const box = document.getElementById('chatMessagesBox');
+                if(!box) return;
                 
-                if(status === "approved") {
-                    await updateDoc(doc(db, "cars", carId), { boughtBy: buyer });
-                    await addDoc(messagesCollection, {
-                        sender: activeUser,
-                        receiver: buyer,
-                        type: "info",
-                        message: `TEBRİKLER! ${activeUser} verdiğiniz fiyat teklifini onayladı. Aracı 'Garajım' sekmesinden görüntüleyebilirsiniz.`,
-                        createdAt: new Date().getTime()
-                    });
-                    alert("Teklifi onayladınız, araç satıldı ve ilan yayından kaldırıldı!");
-                } else {
-                    await addDoc(messagesCollection, {
-                        sender: activeUser,
-                        receiver: buyer,
-                        type: "info",
-                        message: `MAALESEF! Satıcı teklifinizi uygun bulmadı ve reddetti.`,
-                        createdAt: new Date().getTime()
-                    });
-                    alert("Teklifi reddettiniz.");
-                }
-                fetchCarsFromCloud();
-                window.showMessagesSection();
-            } catch(e) { console.error(e); }
+                let chats = [];
+                snapshot.forEach(d => {
+                    const m = d.data();
+                    if((m.sender === activeUser && m.receiver === username) || (m.sender === username && m.receiver === activeUser)) {
+                        chats.push(m);
+                    }
+                });
+
+                // Sadece son 25 mesajı kutuda göster
+                let lastChats = chats.slice(-25);
+
+                box.innerHTML = lastChats.map(m => {
+                    let isMe = m.sender === activeUser;
+                    let bg = isMe ? 'linear-gradient(135deg, #2563eb, #1d4ed8)' : 'rgba(255,255,255,0.1)';
+                    let align = isMe ? 'align-self-end' : 'align-self-start';
+                    return `<div class="p-2 rounded-3 text-white small shadow-sm ${align}" style="background:${bg}; max-width:75%; word-break:break-word;"><b>${m.sender}:</b> ${m.message}</div>`;
+                }).join('');
+                box.scrollTop = box.scrollHeight;
+            });
         };
 
-        // Helper: Fotoğrafları Base64 formatına dönüştürücü fonksiyon
+        window.submitChatMessage = async function() {
+            const inp = document.getElementById('chatMsgInp');
+            if(!inp || inp.value.trim() === "" || !selectedChatUser) return;
+            await addDoc(messagesCollection, { sender: activeUser, receiver: selectedChatUser, type: "chat", status: "unread", message: inp.value.trim(), createdAt: new Date().getTime() });
+            inp.value = "";
+        };
+
         const toBase64 = file => new Promise((resolve, reject) => {
-            const reader = new FileReader();
-            reader.readAsDataURL(file);
-            reader.onload = () => resolve(reader.result);
-            reader.onerror = error => reject(error);
+            const reader = new FileReader(); reader.readAsDataURL(file);
+            reader.onload = () => resolve(reader.result); reader.onerror = e => reject(e);
         });
 
-        // İLAN EKLEME FORMU - TOPLU DOSYA YÜKLEME SİSTEMİ
+        // MOBİL UYUMLU DOĞRUDAN DOSYA SEÇİM MOTORU
         document.getElementById('addCarForm')?.addEventListener('submit', async function(e) {
             e.preventDefault();
-            
-            const coverInput = document.getElementById('fileCover').files[0];
-            const galleryInput = document.getElementById('fileGallery').files;
-            
-            if(!coverInput) { alert("Lütfen kapak fotoğrafı seçin."); return; }
+            const coverFile = document.getElementById('fileCover').files[0];
+            const galleryFiles = document.getElementById('fileGallery').files;
+            if(!coverFile) return;
             
             try {
-                // Kapak resmini çevir
-                const coverBase64 = await toBase64(coverInput);
-                
-                // Toplu yüklenen galeri resimlerini çevir
-                const galleryPromises = Array.from(galleryInput).map(file => toBase64(file));
-                const galleryBase64Array = await Promise.all(galleryPromises);
-                
-                const car = {
+                let coverBase64 = await toBase64(coverFile);
+                let galleryArray = [];
+                for(let file of galleryFiles) { galleryArray.push(await toBase64(file)); }
+
+                await addDoc(carsCollection, {
                     title: document.getElementById('aTitle').value,
                     year: parseInt(document.getElementById('aYear').value),
                     color: document.getElementById('aColor').value,
@@ -746,197 +611,47 @@
                     bodyType: document.getElementById('aBody').value,
                     description: document.getElementById('aDescription').value,
                     coverImage: coverBase64,
-                    gallery: galleryBase64Array, // Array olarak toplu saklama alanı
-                    owner: activeUser || 'demo',
+                    gallery: galleryArray,
+                    owner: activeUser,
                     isDoping: false,
                     createdAt: new Date().getTime()
-                };
-                
-                await addDoc(carsCollection, car);
-                alert("Harika! İlanınız fotoğraflarıyla birlikte bulut veritabanına eklendi. 🚀");
-                bootstrap.Modal.getInstance(document.getElementById('addCarModal')).hide();
-                document.getElementById('addCarForm').reset();
-                fetchCarsFromCloud();
-            } catch(err) {
-                console.error(err);
-                alert("Görsel işleme hatası oluştu.");
-            }
+                });
+                alert("İlanınız başarıyla yayına alındı! 🚀");
+                location.reload();
+            } catch(err) { alert("Resim yükleme boyut limiti aşıldı veya mobil uyumsuzluk algılandı."); }
         });
 
         window.showEkspertizSection = async function() {
             currentViewMode = "ekspertiz"; window.setMenuClass('menuEkspertiz'); window.hideRightFilterBar(true);
             document.getElementById('mainDynamicContainer').innerHTML = `
-                <h5 class="fw-bold mb-3 text-info"><i class="fa-solid fa-screwdriver-wrench me-2"></i>TSE Onaylı Kurumsal Ekspertiz</h5>
-                <div class="row g-3">
-                    <div class="col-md-6">
-                        <div class="card p-3 border-0 h-100" style="background:rgba(30,41,59,0.7); border-radius:20px;">
-                            <h6 class="fw-bold text-info">Randevu Oluştur</h6>
-                            <form id="expForm">
-                                <div class="mb-2"><label class="small text-muted">İstasyon Seçimi</label><select id="eStation" class="form-select form-select-sm" required><option value="Maslak Premium">İstanbul - Maslak Premium</option><option value="Çankaya Merkez">Ankara - Çankaya Merkez</option></select></div>
-                                <div class="mb-2"><label class="small text-muted">Tarih</label><input type="date" id="eDate" class="form-control form-control-sm" required></div>
-                                <button type="submit" class="btn btn-info btn-sm w-100 fw-bold mt-2">Rezervasyon Yap</button>
-                            </form>
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="card p-3 border-0 h-100" style="background:rgba(30,41,59,0.7); border-radius:20px;">
-                            <h6 class="fw-bold text-warning">Aktif Randevularım</h6>
-                            <div id="activeAppointments" class="d-flex flex-column gap-2 mt-2">Yükleniyor...</div>
-                        </div>
-                    </div>
-                </div>`;
-
+                <h5 class="fw-bold mb-3 text-info"><i class="fa-solid fa-screwdriver-wrench me-2"></i>Ekspertiz İstasyonu</h5>
+                <form id="expForm" class="card p-3 bg-dark bg-opacity-25 border-0"><div class="mb-2"><label class="small">Tarih Seçin</label><input type="date" id="eDate" class="form-control" required></div><button type="submit" class="btn btn-info btn-sm fw-bold">Randevu Al</button></form>
+                <div class="mt-3 card p-3 bg-dark bg-opacity-25 border-0"><h6>Aktif Randevularım</h6><div id="activeAppointments"></div></div>`;
             window.loadAppointments();
-
             document.getElementById('expForm').addEventListener('submit', async function(e) {
                 e.preventDefault();
-                if(!activeUser) { alert("Lütfen giriş yapın."); return; }
-                await addDoc(appointmentsCollection, {
-                    user: activeUser,
-                    station: document.getElementById('eStation').value,
-                    date: document.getElementById('eDate').value
-                });
-                alert('Randevunuz başarıyla kaydedildi.');
+                await addDoc(appointmentsCollection, { user: activeUser, station: "Maslak Merkez", date: document.getElementById('eDate').value });
                 window.loadAppointments();
             });
         };
 
         window.loadAppointments = async function() {
-            const wrap = document.getElementById('activeAppointments'); if(!wrap) return;
-            if(!activeUser) { wrap.innerHTML = "<small class='text-muted'>Randevuları görmek için giriş yapın.</small>"; return; }
-            
+            const wrap = document.getElementById('activeAppointments'); if(!wrap || !activeUser) return;
             const q = query(appointmentsCollection, where("user", "==", activeUser));
-            const querySnapshot = await getDocs(q);
-            wrap.innerHTML = "";
-            
-            if(querySnapshot.empty) { wrap.innerHTML = "<small class='text-muted'>Aktif randevunuz bulunmuyor.</small>"; return; }
-            querySnapshot.forEach((docSnap) => {
-                const appo = docSnap.data();
-                wrap.innerHTML += `
-                    <div class="p-2 bg-dark bg-opacity-50 rounded d-flex justify-content-between align-items-center">
-                        <div><small class="d-block fw-bold text-white">${appo.station}</small><small class="text-info">${appo.date}</small></div>
-                        <button class="btn btn-xs btn-danger py-0 px-2 small" style="font-size:10px;" onclick="window.cancelAppointment('${docSnap.id}')">İptal Et</button>
-                    </div>`;
-            });
+            const snap = await getDocs(q); wrap.innerHTML = "";
+            snap.forEach(d => { wrap.innerHTML += `<div class="p-2 mb-1 bg-dark bg-opacity-50 rounded d-flex justify-content-between"><span>${d.data().date}</span><button class="btn btn-xs btn-danger" onclick="window.cancelAppointment('${d.id}')">İptal</button></div>`; });
         };
 
-        window.cancelAppointment = async function(id) {
-            if(confirm("Randevuyu iptal etmek istediğinize emin misiniz?")) {
-                await deleteDoc(doc(db, "appointments", id));
-                window.loadAppointments();
-            }
-        };
-
-        window.deleteAccount = async function() {
-            if(confirm("🚨 HESABINIZI SİLMEK ÜZERESİNİZ!\nHesabınız silindiğinde tüm ilanlarınız da bulut veritabanından kalıcı olarak silinecektir. Onaylıyor musunuz?")) {
-                try {
-                    const q = query(carsCollection, where("owner", "==", activeUser));
-                    const querySnapshot = await getDocs(q);
-                    for (const docSnap of querySnapshot.docs) {
-                        await deleteDoc(doc(db, "cars", docSnap.id));
-                    }
-                    alert("Hesabınız ve tüm ilanlarınız başarıyla silindi.");
-                    window.logoutUser();
-                } catch(e) { console.error(e); }
-            }
-        };
-
-        window.openDopingGateway = function(id) {
-            dopingSelectedCarId = id; paymentPurpose = "doping";
-            document.getElementById('payModalTitle').innerHTML = `<i class="fa-solid fa-bolt me-1"></i> Vitrin Öne Çıkarma Dopingi`;
-            document.getElementById('payPurposeText').innerText = "Haftanın Yıldızları Doping Bedeli";
-            document.getElementById('payAmountText').innerText = "750 TL";
-            new bootstrap.Modal(document.getElementById('paymentModal')).show();
-        };
-
-        window.openPaymentGateway = function(id) {
-            const car = dbCars.find(c => c.id === id); if(!car) return;
-            selectedCarIdToBuy = id; paymentPurpose = "buy";
-            document.getElementById('payModalTitle').innerHTML = `<i class="fa-solid fa-shield-halved me-1"></i> Secure Güvenli Ödeme`;
-            document.getElementById('payPurposeText').innerText = "Araç Alım Bedeli";
-            document.getElementById('payAmountText').innerText = (car.price || 0).toLocaleString() + " TL";
-            new bootstrap.Modal(document.getElementById('paymentModal')).show();
-        };
-
-        document.getElementById('paymentForm')?.addEventListener('submit', async function(e) {
-            e.preventDefault();
-            if(paymentPurpose === "doping" && dopingSelectedCarId) {
-                await updateDoc(doc(db, "cars", dopingSelectedCarId), { isDoping: true });
-                alert("Harika! Doping başarıyla satın alındı, ilanınız sarı çerçeve ile öne çıkarıldı! 🌟");
-            } else if(paymentPurpose === "buy" && selectedCarIdToBuy) {
-                await updateDoc(doc(db, "cars", selectedCarIdToBuy), { boughtBy: activeUser });
-                alert("Tebrikler! Güvenli ödeme alındı, araç başarıyla satın alındı.");
-            }
-            bootstrap.Modal.getInstance(document.getElementById('paymentModal')).hide();
-            fetchCarsFromCloud();
-        });
-
-        window.deleteCar = async function(id) {
-            if(confirm("Bu ilanı sistemden kaldırmak istediğinize emin misiniz?")) {
-                await deleteDoc(doc(db, "cars", id));
-                fetchCarsFromCloud();
-            }
-        };
-
-        // GİRİŞ VE KAYIT FORMLARININ TETİKLENMESİ
-        document.getElementById('fLogin')?.addEventListener('submit', function(e) {
-            e.preventDefault();
-            activeUser = document.getElementById('lUser').value;
-            localStorage.setItem('activeUser', activeUser);
-            location.reload();
-        });
-
-        document.getElementById('fRegister')?.addEventListener('submit', function(e) {
-            e.preventDefault();
-            activeUser = document.getElementById('rUser').value;
-            localStorage.setItem('activeUser', activeUser);
-            alert("Hesabınız oluşturuldu ve giriş yapıldı! 🎉");
-            location.reload();
-        });
-
-        window.showKrediSection = function() {
-            currentViewMode = "kredi"; window.setMenuClass('menuKredi'); window.hideRightFilterBar(true);
-            document.getElementById('mainDynamicContainer').innerHTML = `
-                <h5 class="fw-bold mb-3 text-success"><i class="fa-solid fa-calculator me-2"></i>Taşıt Kredisi Hesaplama Motoru</h5>
-                <div class="card p-4 border-0" style="border-radius:20px; background:rgba(30,41,59,0.7);">
-                    <div class="row g-2">
-                        <div class="col-6"><label class="small text-muted fw-bold">Araç Tutarı (TL)</label><input type="number" id="kPrice" class="form-control" value="1500000" oninput="window.runKrediCalc()"></div>
-                        <div class="col-3"><label class="small text-muted fw-bold">Vade (Ay)</label><select id="kVade" class="form-select" onchange="window.runKrediCalc()"><option value="12">12 Ay</option><option value="24" selected>24 Ay</option><option value="36">36 Ay</option></select></div>
-                        <div class="col-3"><label class="small text-muted fw-bold">Faiz (%)</label><input type="number" id="kFaiz" class="form-control" value="3.69" step="0.01" oninput="window.runKrediCalc()"></div>
-                    </div>
-                    <hr class="border-secondary my-3">
-                    <div class="row text-center">
-                        <div class="col-6"><small class="text-muted d-block">Aylık Taksit</small><h5 class="text-warning fw-bold" id="rAylik">0 TL</h5></div>
-                        <div class="col-6"><small class="text-muted d-block">Toplam Geri Ödeme</small><h5 class="text-success fw-bold" id="rTotal">0 TL</h5></div>
-                    </div>
-                </div>`;
-            window.runKrediCalc();
-        };
-
-        window.runKrediCalc = function() {
-            const price = parseFloat(document.getElementById('kPrice')?.value) || 0;
-            const vade = parseInt(document.getElementById('kVade')?.value) || 24;
-            const faiz = parseFloat(document.getElementById('kFaiz')?.value) || 3.69;
-            let aylikFaiz = faiz / 100;
-            let taksit = price * (aylikFaiz * Math.pow(1 + aylikFaiz, vade)) / (Math.pow(1 + aylikFaiz, vade) - 1);
-            document.getElementById('rAylik').innerText = Math.round(taksit).toLocaleString('tr-TR') + " TL";
-            document.getElementById('rTotal').innerText = Math.round(taksit * vade).toLocaleString('tr-TR') + " TL";
-        };
-
+        window.cancelAppointment = async function(id) { await deleteDoc(doc(db, "appointments", id)); window.loadAppointments(); };
+        window.deleteCar = async function(id) { if(confirm("Silmek istediğinize emin misiniz?")) { await deleteDoc(doc(db, "cars", id)); fetchCarsFromCloud(); } };
+        document.getElementById('fLogin')?.addEventListener('submit', function(e) { e.preventDefault(); activeUser = document.getElementById('lUser').value; localStorage.setItem('activeUser', activeUser); location.reload(); });
+        document.getElementById('fRegister')?.addEventListener('submit', function(e) { e.preventDefault(); activeUser = document.getElementById('rUser').value; localStorage.setItem('activeUser', activeUser); location.reload(); });
         window.logoutUser = function() { localStorage.removeItem('activeUser'); location.reload(); };
         window.hideRightFilterBar = function(s) { const f = document.getElementById('rightFilterBar'); if(f) f.style.display = s ? 'none' : 'block'; };
-        window.clearFilters = function() { document.getElementById('fKasa').value = ""; document.getElementById('fRenk').value = ""; document.getElementById('fYil').value = ""; window.applyFilters(); };
-        
-        window.setMenuClass = function(id) {
-            ['menuAll', 'menuFav', 'menuGarage', 'menuMessages', 'menuEkspertiz', 'menuKredi', 'menuDoping'].forEach(m => {
-                const el = document.getElementById(m); if(el) el.className = m === id ? "nav-link text-white fw-bold active-menu" : "nav-link text-secondary fw-semibold";
-            });
-        };
-
+        window.setMenuClass = function(id) { document.querySelectorAll('.nav-link').forEach(m => m.classList.remove('active-menu')); document.getElementById(id)?.classList.add('active-menu'); };
         window.showAllListings = function() { currentViewMode = "all"; window.setMenuClass('menuAll'); window.hideRightFilterBar(false); window.applyFilters(); };
-        window.showFavoriteListings = function() { currentViewMode = "fav"; window.setMenuClass('menuFav'); window.hideRightFilterBar(false); window.applyFilters(); };
         window.showDopingListings = function() { currentViewMode = "doping"; window.setMenuClass('menuDoping'); window.hideRightFilterBar(false); window.applyFilters(); };
-        window.showGarageListings = function() { currentViewMode = "garage"; window.setMenuClass('menuGarage'); window.hideRightFilterBar(false); let myCars = dbCars.filter(c => (c.owner && activeUser && c.owner.toLowerCase().trim() === activeUser.toLowerCase().trim()) || (c.boughtBy && activeUser && c.boughtBy.toLowerCase().trim() === activeUser.toLowerCase().trim())); window.renderList(myCars); };
+        window.showFavoriteListings = function() { currentViewMode = "fav"; window.setMenuClass('menuFav'); window.hideRightFilterBar(false); window.applyFilters(); };
 
         if(activeUser) {
             document.getElementById('userBadge').style.display = 'inline-block';
@@ -944,7 +659,6 @@
             document.getElementById('authBtn').style.display = 'none';
             document.getElementById('userActionPanel').style.display = 'block';
         }
-
         fetchCarsFromCloud();
     </script>
 </body>
