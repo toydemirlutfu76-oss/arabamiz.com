@@ -147,7 +147,10 @@
             padding: 12px;
             margin-top: 10px;
         }
-    </style>
+    
+        .car-title-text,.form-label,.nav-link{color:var(--text-main)!important;}
+
+</style>
 </head>
 <body>
 
@@ -817,6 +820,7 @@
             let btns = `
                 <a href="${wpLink}" target="_blank" class="btn btn-success fw-bold px-3 rounded-pill"><i class="fa-brands fa-whatsapp me-1"></i> WP Görüşme</a>
                 <button onclick="openOfferModal('${car.id}')" class="btn btn-warning fw-bold px-3 text-dark rounded-pill">Teklif Ver</button>
+                <button onclick="openPaymentGateway('${car.id}')" class="btn btn-primary fw-bold px-3 rounded-pill">Satın Al</button>
             `;
             document.getElementById('detailActionBox').innerHTML = btns;
             new bootstrap.Modal(document.getElementById('detailModal')).show();
@@ -866,11 +870,17 @@
             const kasa = document.getElementById('fKasa').value;
             const renk = document.getElementById('fRenk').value.toLowerCase();
             const yil = document.getElementById('fYil').value;
+            const arama=(document.getElementById('searchInp')?.value||'').toLowerCase();
+            const minP=parseFloat(document.getElementById('fMinPrice')?.value||0);
+            const maxP=parseFloat(document.getElementById('fMaxPrice')?.value||0);
             if(currentViewMode === "fav") res = dbCars.filter(c => favSet.has(c.id) && !c.boughtBy);
             else if(currentViewMode === "doping") res = dbCars.filter(c => c.isDoping && !c.boughtBy);
             if(kasa) res = res.filter(c => c.bodyType === kasa);
             if(renk) res = res.filter(c => c.color.toLowerCase().includes(renk));
             if(yil) res = res.filter(c => c.year >= parseInt(yil));
+            if(arama) res = res.filter(c => (c.title||'').toLowerCase().includes(arama) || (c.description||'').toLowerCase().includes(arama));
+            if(minP) res = res.filter(c => c.price >= minP);
+            if(maxP) res = res.filter(c => c.price <= maxP);
             renderList(res);
         }
 
@@ -920,8 +930,8 @@
         window.formatCardNumber = function(el) {}
         window.formatCardDate = function(el) {}
         window.showMessagesSection = function() { currentViewMode = "messages"; setMenuClass('menuMessages'); hideRightFilterBar(true); document.getElementById('mainDynamicContainer').innerHTML = `<h4 class="fw-bold mb-4 text-white">Mesajlaşma Odası</h4><div class="card p-4 border-0 shadow-sm" style="border-radius:20px; background:rgba(30,41,59,0.7);"><p class="dynamic-muted">Şifreli anlık kanal simülasyonu çalışıyor.</p></div>`; }
-        window.showEkspertizSection = function() { currentViewMode = "ekspertiz"; setMenuClass('menuEkspertiz'); hideRightFilterBar(true); document.getElementById('mainDynamicContainer').innerHTML = `<h4 class="fw-bold mb-4 text-white">Ekspertiz & Servis Kayıtları</h4><div class="card p-4 border-0 shadow-sm" style="border-radius:20px; background:rgba(30,41,59,0.7);"><p class="dynamic-muted">İstasyon doluluk oranı kontrol ediliyor.</p></div>`; }
-        window.showKrediSection = function() { currentViewMode = "kredi"; setMenuClass('menuKredi'); hideRightFilterBar(true); document.getElementById('mainDynamicContainer').innerHTML = `<h4 class="fw-bold mb-4 text-white">Kredi Hesaplama Sistemi</h4><div class="card p-4 border-0 shadow-sm" style="border-radius:20px; background:rgba(30,41,59,0.7);"><p class="dynamic-muted">BDDK faiz simülasyon motoru aktif.</p></div>`; }
+        window.showEkspertizSection = function() { currentViewMode = "ekspertiz"; setMenuClass('menuEkspertiz'); hideRightFilterBar(true); document.getElementById('mainDynamicContainer').innerHTML = `<h4 class="fw-bold mb-4 text-white">Ekspertiz & Servis Kayıtları</h4><div class="card p-4 border-0 shadow-sm" style="border-radius:20px; background:rgba(30,41,59,0.7);"><p class="dynamic-muted">Online ekspertiz randevuları, bakım geçmişi sorgulama ve servis kayıtları ekranı.</p></div>`; }
+        window.showKrediSection = function() { currentViewMode = "kredi"; setMenuClass('menuKredi'); hideRightFilterBar(true); document.getElementById('mainDynamicContainer').innerHTML = `<h4 class="fw-bold mb-4 text-white">Kredi Hesaplama Sistemi</h4><div class="card p-4 border-0 shadow-sm" style="border-radius:20px; background:rgba(30,41,59,0.7);"><p class="dynamic-muted">Araç fiyatı, peşinat ve vade bilgilerine göre örnek kredi hesaplamaları burada gösterilir.</p></div>`; }
         window.toggleFav = function(id) { if(favSet.has(id)) favSet.delete(id); else favSet.add(id); window.updateLocalStorage(); updateFavCount(); applyFilters(); }
         window.updateFavCount = function() { document.getElementById('favCount').innerText = favSet.size; }
         window.showAllListings = function() { currentViewMode = "all"; setMenuClass('menuAll'); hideRightFilterBar(false); applyFilters(); }
@@ -929,7 +939,13 @@
         window.showDopingListings = function() { currentViewMode = "doping"; setMenuClass('menuDoping'); hideRightFilterBar(false); applyFilters(); }
         window.clearFilters = function() { document.getElementById('fKasa').value = ""; document.getElementById('fRenk').value = ""; document.getElementById('fYil').value = ""; applyFilters(); }
         window.hideRightFilterBar = function(s) { const f = document.getElementById('rightFilterBar'); if(f) f.style.display = s ? 'none' : 'block'; const m = document.getElementById('mainDynamicContainer'); if(m) m.className = s ? "col-md-10 p-4" : "col-md-7 p-4"; }
-        window.checkSession = function() { if(activeUser) { document.getElementById('userBadge').style.display = 'block'; document.getElementById('userBadgeName').innerText = activeUser; document.getElementById('authBtn').style.display = 'none'; document.getElementById('userActionPanel').style.display = 'block'; } checkAcceptedOffersForAlert(); }
+        
+        window.triggerMainAuthBtn = function(){
+            new bootstrap.Modal(document.getElementById('authModal')).show();
+            toggleAuthMode('login');
+        }
+
+window.checkSession = function() { if(activeUser) { document.getElementById('userBadge').style.display = 'block'; document.getElementById('userBadgeName').innerText = activeUser; document.getElementById('authBtn').style.display = 'none'; document.getElementById('userActionPanel').style.display = 'block'; } checkAcceptedOffersForAlert(); }
         window.setMenuClass = function(id) { ['menuAll', 'menuFav', 'menuGarage', 'menuMessages', 'menuEkspertiz', 'menuKredi', 'menuDoping', 'menuAbout'].forEach(m => { const el = document.getElementById(m); if(el) el.className = m === id ? "nav-link text-white fw-bold active-menu" : "nav-link text-secondary fw-semibold"; }); }
 
         checkSession(); updateFavCount(); fetchCarsFromCloud();
