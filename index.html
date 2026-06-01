@@ -212,7 +212,7 @@
 
     <nav class="navbar top-navbar sticky-top py-2 px-4 navbar-dark shadow" style="background: rgba(15,23,42,0.4); backdrop-filter:blur(10px); z-index: 1030;">
         <div class="container-fluid d-flex justify-content-between align-items-center flex-wrap flex-md-nowrap">
-            <a class="navbar-brand fw-black text-warning fs-4 tracking-wider m-0 me-2" href="#" onclick="window.showAllListings()"><i class="fa-solid fa-car-rear me-1 text-primary"></i> OTOMARKET <span class="badge bg-danger fs-6 pb-1">PRO</span></a>
+            <a class="navbar-brand fw-black text-warning fs-4 tracking-wider m-0 me-2" href="#" onclick="window.showAllListings()"><i class="fa-solid fa-car-rear me-1 text-primary"></i> ARABAMIZ <span class="badge bg-danger fs-6 pb-1">.COM</span></a>
             
             <form class="d-flex flex-grow-1 mx-md-3 order-3 order-md-2 w-100 w-md-auto" onsubmit="event.preventDefault(); window.applyFilters();">
                 <input class="form-control form-control-sm me-2 border-0 bg-dark text-white" type="search" id="searchInp" placeholder="Marka, model veya anahtar kelime yazın..." oninput="window.applyFilters()">
@@ -229,7 +229,7 @@
                 <span class="dynamic-text text-info fw-bold small text-nowrap" id="userBadge" style="display:none;">
                     <i class="fa-solid fa-user-shield text-success"></i> <span id="userBadgeName"></span>
                 </span>
-                <button class="btn btn-sm btn-primary px-3 fw-bold rounded-pill shadow-sm" id="authBtn" onclick="window.triggerMainAuthBtn()">Giriş</button>
+                <button class="btn btn-sm btn-primary px-3 fw-bold rounded-pill shadow-sm" id="authBtn" onclick="window.triggerMainAuthBtn()">GİRİŞ YAP/KAYIT OL</button>
             </div>
         </div>
     </nav>
@@ -240,7 +240,7 @@
             <div class="col-12 col-md-3 col-lg-2 p-3 left-sidebar d-flex flex-column justify-content-between">
                 <div>
                     <div class="d-flex justify-content-between align-items-center mb-3">
-                        <h6 class="text-uppercase fw-bold m-0 tracking-widest text-secondary" style="font-size: 11px; cursor: pointer;" onclick="window.showAdminPanel()"><i class="fa-solid fa-gauge me-1 text-danger"></i> Panel Kontrol</h6>
+                        <h6 class="text-uppercase fw-bold m-0 tracking-widest text-secondary" style="font-size: 11px; cursor: pointer;" onclick="window.showAdminPanel()"><i class="fa-solid fa-gauge me-1 text-danger"></i> yönetim paneli</h6>
                     </div>
                     <ul class="nav flex-column gap-1" id="menuList">
                         <li class="nav-item"><a id="menuAll" class="nav-link text-white fw-semibold active-menu" onclick="window.showAllListings()"><i class="fa-solid fa-border-all me-2 text-info"></i> Vitrin İlanları</a></li>
@@ -262,7 +262,7 @@
             </div>
 
             <div class="col-12 col-md-6 col-lg-7 p-3" id="mainDynamicContainer" style="overflow-y: auto; max-height: 92vh;">
-                <h5 class="fw-bold mb-3 dynamic-title" id="vitrinTitle" style="cursor:pointer;" onclick="window.showAllListings()"><i class="fa-solid fa-border-all me-1 text-primary"></i> Aktif Bulut İlanları</h5>
+                <h5 class="fw-bold mb-3 dynamic-title" id="vitrinTitle" style="cursor:pointer;" onclick="window.showAllListings()"><i class="fa-solid fa-border-all me-1 text-primary"></i> yayındaki ilanlar</h5>
                 <div class="text-center py-4" id="globalSpinner">
                     <div class="spinner-border text-primary" role="status"></div>
                 </div>
@@ -345,7 +345,7 @@
         </div>
         <div class="offcanvas-body d-flex flex-column justify-content-between">
             <ul class="nav flex-column gap-2">
-                <li class="nav-item"><a class="nav-link text-white" data-bs-dismiss="offcanvas" onclick="window.showDopingListings()"><i class="fa-solid fa-star me-2 text-warning"></i> Haftanın Yıldızları</a></li>
+                <li class="nav-item"><a class="nav-link text-white" data-bs-dismiss="offcanvas" onclick="window.showDopingListings()"><i class="fa-solid fa-star me-2 text-warning"></i> Öne Çıkanlar</a></li>
                 <li class="nav-item"><a class="nav-link text-white" data-bs-dismiss="offcanvas" onclick="window.showGarageListings()"><i class="fa-solid fa-warehouse me-2 text-primary"></i> Garajım / Geçmişim</a></li>
                 <li class="nav-item"><a class="nav-link text-white" data-bs-dismiss="offcanvas" onclick="window.showEkspertizSection()"><i class="fa-solid fa-screwdriver-wrench me-2 text-light"></i> Ekspertiz Hizmeti</a></li>
                 <li class="nav-item"><a class="nav-link text-white" data-bs-dismiss="offcanvas" onclick="window.showKrediSection()"><i class="fa-solid fa-calculator me-2 text-warning"></i> Kredi Hesaplama</a></li>
@@ -407,12 +407,12 @@
                                 <input type="file" id="fileCover" class="form-control" accept="image/*" required>
                             </div>
                             <div class="col-md-6">
-                                <label class="form-label small fw-bold text-info"><i class="fa-solid fa-images me-1"></i>Diğer Galeri Fotoğrafları</label>
+                                <label class="form-label small fw-bold text-info"><i class="fa-solid fa-images me-1"></i>İlan Fotoğrafları</label>
                                 <input type="file" id="fileGallery" class="form-control" accept="image/*" multiple>
                             </div>
                             <div class="col-md-12"><label class="form-label small fw-bold text-danger">İlan Açıklaması</label><textarea id="aDescription" class="form-control" rows="3" required placeholder="Boyasız hatasız..."></textarea></div>
                         </div>
-                        <button type="submit" id="addCarSubmitBtn" class="btn btn-success w-100 mt-4 fw-bold py-2.5">Canlıya Al</button>
+                        <button type="submit" id="addCarSubmitBtn" class="btn btn-success w-100 mt-4 fw-bold py-2.5">ilanı yayınla</button>
                     </form>
                 </div>
             </div>
@@ -465,7 +465,7 @@
                     <form id="paymentForm">
                         <div class="mb-3"><label class="form-label small fw-bold dynamic-muted">Kart Sahibi İsim Soyisim</label><input type="text" class="form-control" required></div>
                         <div class="mb-3"><label class="form-label small fw-bold dynamic-muted">Kart Numarası</label><input type="text" class="form-control" required placeholder="xxxx xxxx xxxx xxxx"></div>
-                        <button type="submit" class="btn btn-success w-100 fw-bold py-2.5 mt-3">Güvenli Ödemeyi Yap</button>
+                        <button type="submit" class="btn btn-success w-100 fw-bold py-2.5 mt-3"> Ödeme Yap</button>
                     </form>
                 </div>
             </div>
@@ -687,7 +687,7 @@
 
             const numericOffer = parseInt(offerPrice);
             if(numericOffer < (originalPrice * 0.7)) {
-                alert("❌ Sistem Engeli: Girdiğiniz teklif ölü fiyat olduğundan otomatik engellendi!");
+                alert("❌ Sistem Engeli: Girdiğiniz teklif fiyatı düşük olduğundan otomatik engellendi!");
                 return;
             }
 
@@ -861,7 +861,7 @@
                 };
                 
                 await addDoc(carsCollection, car);
-                alert("Harika! İlanınız optimize edilerek bulut veritabanına eklendi. 🚀");
+                alert(" İlanınız yayına alındı. 🚀");
                 bootstrap.Modal.getInstance(document.getElementById('addCarModal')).hide();
                 document.getElementById('addCarForm').reset();
                 fetchCarsFromCloud();
@@ -870,7 +870,7 @@
                 alert("Görsel işleme veya veri tabanı hatası oluştu.");
             } finally {
                 btn.disabled = false;
-                btn.innerText = "Canlıya Al";
+                btn.innerText = "ilanı yayınla";
             }
         });
 
@@ -980,7 +980,7 @@
         window.openDopingGateway = function(id) {
             dopingSelectedCarId = id; paymentPurpose = "doping";
             document.getElementById('payModalTitle').innerHTML = `<i class="fa-solid fa-bolt me-1"></i> Vitrin Öne Çıkarma Dopingi`;
-            document.getElementById('payPurposeText').innerText = "Haftanın Yıldızları Doping Bedeli";
+            document.getElementById('payPurposeText').innerText = "Doping hizmet Bedeli";
             document.getElementById('payAmountText').innerText = "750 TL";
             new bootstrap.Modal(document.getElementById('paymentModal')).show();
         };
@@ -1116,7 +1116,7 @@
             window.setMenuClass('menuDoping'); 
             window.hideRightFilterBar(false); 
             document.getElementById('mainDynamicContainer').innerHTML = `
-                <h5 class="fw-bold mb-3 dynamic-title" id="vitrinTitle"><i class="fa-solid fa-star me-1 text-warning"></i> Haftanın Yıldızları</h5>
+                <h5 class="fw-bold mb-3 dynamic-title" id="vitrinTitle"><i class="fa-solid fa-star me-1 text-warning"></i> öne çıkan ilanlar</h5>
                 <div class="row g-3" id="carsWrapper"></div>
             `;
             window.applyFilters(); 
