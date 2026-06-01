@@ -152,13 +152,13 @@
         /* YENİ RESPONSIVE MOBİL İYİLEŞTİRME STİLLERİ */
         @media (max-width: 767.98px) {
             .left-sidebar {
-                display: none !important; /* Mobilde sol menüyü gizle, alta taşı */
+                display: none !important;
             }
             .right-macbar {
-                display: none !important; /* Mobilde sağ filtreyi gizle, offcanvas'a taşı */
+                display: none !important;
             }
             body {
-                padding-bottom: 75px; /* Alt bar için boşluk */
+                padding-bottom: 75px;
             }
             .carousel-item img {
                 height: 250px;
@@ -352,8 +352,7 @@
                 <li class="nav-item"><a class="nav-link text-white" data-bs-dismiss="offcanvas" onclick="window.showKrediSection()"><i class="fa-solid fa-calculator me-2 text-warning"></i> Kredi Hesaplama</a></li>
                 <li class="nav-item"><a class="nav-link text-danger fw-bold" data-bs-dismiss="offcanvas" onclick="window.showAdminPanel()"><i class="fa-solid fa-gauge me-2"></i> Yönetim Paneli</a></li>
             </ul>
-            <div id="mobileUserActionWrapper" class="border-top border-secondary pt-3">
-                </div>
+            <div id="mobileUserActionWrapper" class="border-top border-secondary pt-3"></div>
         </div>
     </div>
 
@@ -362,13 +361,11 @@
             <div class="modal-content">
                 <div class="modal-header border-0"><h5 class="modal-title fw-bold text-info" id="detTitle">Araç Detayı</h5><button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button></div>
                 <div class="modal-body p-4 pt-0">
-                    
                     <div id="carSlider" class="carousel slide mb-4" data-bs-ride="carousel">
                         <div class="carousel-inner" id="sliderInner"></div>
                         <button class="carousel-control-prev" type="button" data-bs-target="#carSlider" data-bs-slide="prev"><span class="carousel-control-prev-icon"></span></button>
                         <button class="carousel-control-next" type="button" data-bs-target="#carSlider" data-bs-slide="next"><span class="carousel-control-next-icon"></span></button>
                     </div>
-
                     <div class="row g-3">
                         <div class="col-md-6">
                             <table class="table table-sm table-borderless">
@@ -387,7 +384,6 @@
                         </div>
                     </div>
                     <div class="mt-3 p-3 bg-dark bg-opacity-50 rounded-3"><h6 class="text-secondary small fw-bold">Açıklama</h6><p id="detDescription" class="small m-0"></p></div>
-                    
                     <div id="detailActionBox" class="mt-4 d-flex flex-wrap justify-content-end gap-2 border-top border-secondary pt-3"></div>
                 </div>
             </div>
@@ -407,7 +403,6 @@
                             <div class="col-md-4"><label class="form-label small fw-bold text-muted">Fiyat (TL)</label><input type="number" id="aPrice" class="form-control" required placeholder="2100000"></div>
                             <div class="col-md-4"><label class="form-label small fw-bold text-muted">Kilometre (KM)</label><input type="number" id="aKm" class="form-control" required placeholder="42000"></div>
                             <div class="col-md-4"><label class="form-label small fw-bold text-muted">Kasa Tipi</label><select id="aBody" class="form-select"><option value="Sedan">Sedan</option><option value="Hatchback">Hatchback</option><option value="SUV">SUV</option></select></div>
-                            
                             <div class="col-md-6">
                                 <label class="form-label small fw-bold text-warning"><i class="fa-solid fa-image me-1"></i>Kapak Fotoğrafı Seç</label>
                                 <input type="file" id="fileCover" class="form-control" accept="image/*" required>
@@ -416,7 +411,6 @@
                                 <label class="form-label small fw-bold text-info"><i class="fa-solid fa-images me-1"></i>Diğer Galeri Fotoğrafları</label>
                                 <input type="file" id="fileGallery" class="form-control" accept="image/*" multiple>
                             </div>
-                            
                             <div class="col-md-12"><label class="form-label small fw-bold text-danger">İlan Açıklaması</label><textarea id="aDescription" class="form-control" rows="3" required placeholder="Boyasız hatasız..."></textarea></div>
                         </div>
                         <button type="submit" id="addCarSubmitBtn" class="btn btn-success w-100 mt-4 fw-bold py-2.5">Canlıya Al</button>
@@ -440,19 +434,11 @@
                             <a href="#" onclick="window.changeAuthView('forgot')" class="text-secondary">Şifremi Unuttum?</a>
                         </div>
                     </form>
-
                     <form id="fRegister" style="display:none;">
                         <div class="mb-3"><input type="text" id="rUser" class="form-control" placeholder="Kullanıcı Adı" required></div>
                         <div class="mb-3"><input type="password" id="rPass" class="form-control" placeholder="Şifre" required></div>
                         <button type="submit" class="btn btn-success w-100 fw-bold py-2 mb-2">Kayıt Ol ve Giriş Yap</button>
                         <a href="#" onclick="window.changeAuthView('login')" class="small text-info d-block text-center">Zaten Hesabım Var</a>
-                    </form>
-
-                    <form id="fForgot" style="display:none;" onsubmit="event.preventDefault(); alert('Şifre sıfırlama kodu iletildi.'); window.changeAuthView('login');">
-                        <p class="small text-muted mb-3">Kullanıcı adınızı girerek şifrenizi sıfırlayabilirsiniz.</p>
-                        <div class="mb-3"><input type="text" class="form-control" placeholder="Kullanıcı Adınız" required></div>
-                        <button type="submit" class="btn btn-warning text-dark w-100 fw-bold py-2 mb-2">Sıfırlama Kodu Gönder</button>
-                        <a href="#" onclick="window.changeAuthView('login')" class="small text-info d-block text-center">Giriş Ekranına Dön</a>
                     </form>
                 </div>
             </div>
@@ -498,15 +484,12 @@
             }
         };
         if(localStorage.getItem('themeMode') === 'light') { document.body.classList.add('light-mode'); }
-        
-        window.showMobileMenuDrawer = function() {
-            new bootstrap.Offcanvas(document.getElementById('mobileMenuDrawer')).show();
-        };
+        window.showMobileMenuDrawer = function() { new bootstrap.Offcanvas(document.getElementById('mobileMenuDrawer')).show(); };
     </script>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-        import { getFirestore, collection, addDoc, getDocs, deleteDoc, doc, updateDoc, query, orderBy, where } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+        import { getFirestore, collection, addDoc, getDocs, deleteDoc, doc, updateDoc, query, where } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyDa8k6w5FgAVK1Ai8NYForyXC8fg4k_PzE",
@@ -537,14 +520,11 @@
         window.changeAuthView = function(view) {
             document.getElementById('fLogin').style.display = view === 'login' ? 'block' : 'none';
             document.getElementById('fRegister').style.display = view === 'register' ? 'block' : 'none';
-            document.getElementById('fForgot').style.display = view === 'forgot' ? 'block' : 'none';
             const title = document.getElementById('authTitle');
             if(view === 'login') title.innerText = "Kullanıcı Girişi";
             if(view === 'register') title.innerText = "Yeni Hesap Oluştur";
-            if(view === 'forgot') title.innerText = "Şifremi Unuttum";
         };
 
-        // Mobil ve Masaüstü filtre senkronizasyonu
         window.syncAndApplyFilters = function(type) {
             if(type === 'kasa') document.getElementById('fKasa').value = document.getElementById('mKasa').value;
             if(type === 'renk') document.getElementById('fRenk').value = document.getElementById('mRenk').value;
@@ -564,16 +544,22 @@
             window.applyFilters();
         };
 
+        // GÜNCEL VERİ ÇEKME MOTORU (PC LISTELEME BUGI KÖKTEN ÇÖZÜLDÜ)
         async function fetchCarsFromCloud() {
             try {
-                const q = query(carsCollection, orderBy("createdAt", "desc"));
+                // Sıralama (orderBy) kodu buluttan kaldırıldı, indeks hatası vermemesi için client-side'a alındı
+                const q = query(carsCollection); 
                 const querySnapshot = await getDocs(q);
                 dbCars = [];
                 querySnapshot.forEach((doc) => { let data = doc.data(); data.id = doc.id; dbCars.push(data); });
+                
+                // Client-side JavaScript Tarih Sıralaması
+                dbCars.sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
+
                 if(document.getElementById('globalSpinner')) document.getElementById('globalSpinner').style.display = 'none';
                 if(document.getElementById('statTotalCars')) document.getElementById('statTotalCars').innerText = dbCars.filter(c => !c.boughtBy).length + " Adet";
                 window.applyFilters();
-            } catch (error) { console.error(error); }
+            } catch (error) { console.error("Firebase Veri Çekme Hatası: ", error); }
         }
         window.fetchCarsFromCloud = fetchCarsFromCloud;
 
@@ -684,7 +670,6 @@
             new bootstrap.Modal(document.getElementById('detailModal')).show();
         };
 
-        // ÖLÜCÜ ENGELLEYİCİ TEKLİF SİSTEMİ
         window.sendOfferPrompt = async function(carId, owner, originalPrice) {
             if(!activeUser) { alert("Önce giriş yapmalısınız."); return; }
             const offerPrice = prompt(`Teklif etmek istediğiniz tutarı girin (TL):\nNot: Taban teklif sınırı: ${(originalPrice * 0.7).toLocaleString()} TL'dir.`);
@@ -810,20 +795,33 @@
             } catch(e) { console.error(e); }
         };
 
-        // Mobil uyumlu Base64 dönüştürücü
-        const toBase64 = file => new Promise((resolve, reject) => {
+        // Gelişmiş Mobil Sıkıştırmalı Base64 Motoru (Firestore Limit Aşım Önleyici)
+        const resizeImage = (file) => new Promise((resolve) => {
             const reader = new FileReader();
             reader.readAsDataURL(file);
-            reader.onload = () => resolve(reader.result);
-            reader.onerror = error => reject(error);
+            reader.onload = (event) => {
+                const img = new Image();
+                img.src = event.target.result;
+                img.onload = () => {
+                    const canvas = document.createElement('canvas');
+                    const MAX_WIDTH = 800;
+                    let width = img.width;
+                    let height = img.height;
+                    if (width > MAX_WIDTH) { height *= MAX_WIDTH / width; width = MAX_WIDTH; }
+                    canvas.width = width; canvas.height = height;
+                    const ctx = canvas.getContext('2d');
+                    ctx.drawImage(img, 0, 0, width, height);
+                    resolve(canvas.toDataURL('image/jpeg', 0.7));
+                };
+            };
         });
 
-        // İLAN EKLEME FORMU MOTORU (MOBİL BUG DÜZELTİLDİ)
+        // İLAN EKLEME FORMU MOTORU
         document.getElementById('addCarForm')?.addEventListener('submit', async function(e) {
             e.preventDefault();
             const btn = document.getElementById('addCarSubmitBtn');
             btn.disabled = true;
-            btn.innerText = "Yükleniyor, lütfen bekleyin...";
+            btn.innerText = "Görseller Optimize Ediliyor...";
             
             const coverInput = document.getElementById('fileCover').files[0];
             const galleryInput = document.getElementById('fileGallery').files;
@@ -831,10 +829,11 @@
             if(!coverInput) { alert("Lütfen kapak fotoğrafı seçin."); btn.disabled = false; btn.innerText = "Canlıya Al"; return; }
             
             try {
-                const coverBase64 = await toBase64(coverInput);
+                const coverBase64 = await resizeImage(coverInput);
                 const galleryBase64Array = [];
-                for(let i=0; i<galleryInput.length; i++) {
-                    const b64 = await toBase64(galleryInput[i]);
+                const maxGalleryFiles = Math.min(galleryInput.length, 3);
+                for(let i=0; i<maxGalleryFiles; i++) {
+                    const b64 = await resizeImage(galleryInput[i]);
                     galleryBase64Array.push(b64);
                 }
                 
@@ -854,20 +853,20 @@
                 };
                 
                 await addDoc(carsCollection, car);
-                alert("Harika! İlanınız başarıyla bulut veritabanına eklendi. 🚀");
+                alert("Harika! İlanınız optimize edilerek bulut veritabanına eklendi. 🚀");
                 bootstrap.Modal.getInstance(document.getElementById('addCarModal')).hide();
                 document.getElementById('addCarForm').reset();
                 fetchCarsFromCloud();
             } catch(err) {
                 console.error(err);
-                alert("Görsel işleme veya veritabanı hatası oluştu.");
+                alert("Görsel işleme veya veri tabanı hatası oluştu.");
             } finally {
                 btn.disabled = false;
                 btn.innerText = "Canlıya Al";
             }
         });
 
-        // ÇALIŞIR DURUMDAKİ PANEL KONTROL / ADMIN PANELİ KURGUSU
+        // PANEL KONTROL / ADMIN PANELİ KURGUSU
         window.showAdminPanel = function() {
             currentViewMode = "admin"; window.setMenuClass('menuAdmin'); window.hideRightFilterBar(true);
             const container = document.getElementById('mainDynamicContainer');
@@ -876,13 +875,13 @@
                 container.innerHTML = `
                     <div class="card p-4 text-center border-0" style="background:rgba(239,68,68,0.1); border-radius:20px;">
                         <h5 class="text-danger fw-bold"><i class="fa-solid fa-lock me-2"></i>Erişim Engellendi</h5>
-                        <p class="small text-muted m-0">Panel Kontrol (Yönetim Paneli) alanına sadece yetkili "admin" kullanıcısı erişebilir. Lütfen kullanıcı adını 'admin' yaparak giriş yapın.</p>
+                        <p class="small text-muted m-0">Panel Kontrol alanına sadece yetkili "admin" kullanıcısı erişebilir. Kullanıcı adınızı 'admin' yaparak giriş yapabilirsiniz.</p>
                     </div>`;
                 return;
             }
 
             container.innerHTML = `
-                <h5 class="fw-bold mb-3 text-danger"><i class="fa-solid fa-gauge me-2"></i>Sistem Yönetim Paneli (Master Kontrol)</h5>
+                <h5 class="fw-bold mb-3 text-danger"><i class="fa-solid fa-gauge me-2"></i>Sistem Yönetim Paneli</h5>
                 <div class="row g-3 mb-4">
                     <div class="col-6 col-md-4"><div class="analytics-card text-center"><small class="text-muted d-block">Toplam İlan</small><h4 class="text-info fw-bold m-0">${dbCars.length}</h4></div></div>
                     <div class="col-6 col-md-4"><div class="analytics-card text-center"><small class="text-muted d-block">Dopingli Yıldızlar</small><h4 class="text-warning fw-bold m-0">${dbCars.filter(c=>c.isDoping).length}</h4></div></div>
@@ -899,9 +898,7 @@
                                     <td><span class="badge bg-secondary">${c.owner}</span></td>
                                     <td>${(c.price || 0).toLocaleString()} TL</td>
                                     <td>${c.boughtBy ? '<span class="badge bg-success">Satıldı</span>' : '<span class="badge bg-info">Aktif</span>'}</td>
-                                    <td>
-                                        <button class="btn btn-xs btn-danger p-1 py-0 fw-bold" onclick="window.deleteCar('${c.id}')">Sistemden Sil</button>
-                                    </td>
+                                    <td><button class="btn btn-xs btn-danger p-1 py-0 fw-bold" onclick="window.deleteCar('${c.id}')">Sistemden Sil</button></td>
                                 </tr>
                             `).join('')}
                         </tbody>
@@ -931,17 +928,11 @@
                         </div>
                     </div>
                 </div>`;
-
             window.loadAppointments();
-
             document.getElementById('expForm').addEventListener('submit', async function(e) {
                 e.preventDefault();
                 if(!activeUser) { alert("Lütfen giriş yapın."); return; }
-                await addDoc(appointmentsCollection, {
-                    user: activeUser,
-                    station: document.getElementById('eStation').value,
-                    date: document.getElementById('eDate').value
-                });
+                await addDoc(appointmentsCollection, { user: activeUser, station: document.getElementById('eStation').value, date: document.getElementById('eDate').value });
                 alert('Randevunuz başarıyla kaydedildi.');
                 window.loadAppointments();
             });
@@ -950,11 +941,9 @@
         window.loadAppointments = async function() {
             const wrap = document.getElementById('activeAppointments'); if(!wrap) return;
             if(!activeUser) { wrap.innerHTML = "<small class='text-muted'>Randevuları görmek için giriş yapın.</small>"; return; }
-            
             const q = query(appointmentsCollection, where("user", "==", activeUser));
             const querySnapshot = await getDocs(q);
             wrap.innerHTML = "";
-            
             if(querySnapshot.empty) { wrap.innerHTML = "<small class='text-muted'>Aktif randevunuz bulunmuyor.</small>"; return; }
             querySnapshot.forEach((docSnap) => {
                 const appo = docSnap.data();
@@ -967,20 +956,16 @@
         };
 
         window.cancelAppointment = async function(id) {
-            if(confirm("Randevuyu iptal etmek istediğinize emin misiniz?")) {
-                await deleteDoc(doc(db, "appointments", id));
-                window.loadAppointments();
-            }
+            if(confirm("Randevuyu iptal etmek istediğinize emin misiniz?")) { await deleteDoc(doc(db, "appointments", id)); window.loadAppointments(); }
         };
 
         window.deleteAccount = async function() {
-            if(confirm("🚨 HESABINIZI SİLMEK ÜZERESİNİZ!\nTüm ilanlarınız bulut veritabanından kalıcı olarak silinecektir.")) {
+            if(confirm("🚨 HESABINIZI SİLMEK ÜZERESİNİZ! Tüm ilanlarınız silinecektir.")) {
                 try {
                     const q = query(carsCollection, where("owner", "==", activeUser));
                     const querySnapshot = await getDocs(q);
                     for (const docSnap of querySnapshot.docs) { await deleteDoc(doc(db, "cars", docSnap.id)); }
-                    alert("Hesabınız silindi.");
-                    window.logoutUser();
+                    alert("Hesabınız silindi."); window.logoutUser();
                 } catch(e) { console.error(e); }
             }
         };
@@ -1009,7 +994,7 @@
                 alert("Harika! Doping satın alındı! 🌟");
             } else if(paymentPurpose === "buy" && selectedCarIdToBuy) {
                 await updateDoc(doc(db, "cars", selectedCarIdToBuy), { boughtBy: activeUser });
-                alert("Tebrikler! Güvenli ödeme alındı, araç başarıyla satın alındı.");
+                alert("Tebrikler! Güvenli ödeme alındı, araç satın alındı.");
             }
             bootstrap.Modal.getInstance(document.getElementById('paymentModal')).hide();
             fetchCarsFromCloud();
@@ -1083,7 +1068,6 @@
             ['menuAll', 'menuFav', 'menuGarage', 'menuMessages', 'menuEkspertiz', 'menuKredi', 'menuDoping', 'menuAdmin'].forEach(m => {
                 const el = document.getElementById(m); if(el) el.className = m === id ? "nav-link text-white fw-bold active-menu" : "nav-link text-secondary fw-semibold";
             });
-            // Mobil bottom nav aktiflik senkronizasyonu
             document.querySelectorAll('.mobile-nav-item').forEach(el => el.classList.remove('active'));
             if(id === 'menuAll') document.querySelectorAll('.mobile-nav-item')[0]?.classList.add('active');
             if(id === 'menuFav') document.querySelectorAll('.mobile-nav-item')[1]?.classList.add('active');
@@ -1101,7 +1085,6 @@
             document.getElementById('authBtn').style.display = 'none';
             document.getElementById('userActionPanel').style.display = 'block';
             
-            // Mobil menü içi oturum kapatma ve hesap silme panel kurgusu
             document.getElementById('mobileUserActionWrapper').innerHTML = `
                 <div class="fw-bold text-info mb-2 small"><i class="fa-solid fa-user me-1"></i> Aktif: ${activeUser}</div>
                 <button class="btn btn-sm btn-danger w-100 mb-2 py-1.5 fw-semibold" onclick="window.deleteAccount()">Hesabımı Sil</button>
