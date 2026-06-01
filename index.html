@@ -25,7 +25,7 @@
             --bg-body: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 50%, #f1f5f9 100%);
             --bg-sidebar: rgba(255, 255, 255, 0.85);
             --bg-card: rgba(255, 255, 255, 0.95);
-            --text-main: #0f172a;
+            --text-main: #000000;
             --text-muted: #475569;
             --border-ui: rgba(0, 0, 0, 0.08);
             --bg-input: rgba(255, 255, 255, 0.9);
@@ -157,12 +157,15 @@
         🚨 GÜVENLİK BİLDİRİMİ: Fiyat teklifiniz güncellendi! Mesajlarınızı kontrol edin.
     </div>
 
-    <!-- NAVBAR -->
     <nav class="navbar top-navbar sticky-top py-2 px-4 navbar-dark shadow" style="background: rgba(15,23,42,0.4); backdrop-filter:blur(10px); z-index: 1030;">
         <div class="container-fluid d-flex justify-content-between align-items-center flex-nowrap">
+            <button class="btn btn-sm btn-outline-secondary d-md-none me-2" type="button" data-bs-toggle="collapse" data-bs-target="#leftSidebarCollapse" aria-controls="leftSidebarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+                <i class="fa-solid fa-bars text-white"></i> Menü
+            </button>
+
             <a class="navbar-brand fw-black text-warning fs-4 tracking-wider m-0 me-2" href="#" onclick="window.showAllListings()"><i class="fa-solid fa-car-rear me-1 text-primary"></i> OTOMARKET <span class="badge bg-danger fs-6 pb-1">PRO</span></a>
             
-            <form class="d-flex flex-grow-1 mx-3" style="max-width: 50%;" onsubmit="event.preventDefault(); window.applyFilters();">
+            <form class="d-flex flex-grow-1 mx-3 d-none d-sm-flex" style="max-width: 50%;" onsubmit="event.preventDefault(); window.applyFilters();">
                 <input class="form-control form-control-sm me-2 border-0 bg-dark text-white" type="search" id="searchInp" placeholder="Marka, model veya anahtar kelime yazın..." oninput="window.applyFilters()">
                 <button class="btn btn-sm btn-warning px-3 fw-bold" type="button" onclick="window.applyFilters()"><i class="fa-solid fa-magnifying-glass text-dark"></i></button>
             </form>
@@ -179,25 +182,32 @@
         </div>
     </nav>
 
-    <!-- ANA GÖVDE -->
     <div class="container-fluid">
+        <div class="row d-sm-none p-2 bg-dark bg-opacity-25">
+            <div class="col-12">
+                <div class="input-group input-group-sm">
+                    <input class="form-control border-0 bg-dark text-white" type="search" id="searchInpMobile" placeholder="Marka, model ara..." oninput="document.getElementById('searchInp').value = this.value; window.applyFilters()">
+                    <button class="btn btn-warning fw-bold" type="button" onclick="window.applyFilters()"><i class="fa-solid fa-magnifying-glass text-dark"></i></button>
+                </div>
+            </div>
+        </div>
+
         <div class="row">
             
-            <!-- SOL MENÜ -->
-            <div class="col-12 col-md-3 col-lg-2 p-3 left-sidebar d-flex flex-column justify-content-between">
+            <div class="col-12 col-md-3 col-lg-2 p-3 left-sidebar d-md-flex flex-column justify-content-between collapse d-md-block" id="leftSidebarCollapse">
                 <div>
                     <div class="d-flex justify-content-between align-items-center mb-3">
                         <h6 class="text-uppercase fw-bold m-0 tracking-widest text-secondary" style="font-size: 11px;">Panel Kontrol</h6>
                     </div>
                     <ul class="nav flex-column gap-1" id="menuList">
-                        <li class="nav-item"><a id="menuAll" class="nav-link text-white fw-semibold active-menu" onclick="window.showAllListings()"><i class="fa-solid fa-border-all me-2 text-info"></i> Vitrin İlanları</a></li>
-                        <li class="nav-item"><a id="menuDoping" class="nav-link text-secondary fw-semibold" onclick="window.showDopingListings()"><i class="fa-solid fa-star me-2 text-warning"></i> Haftanın Yıldızları</a></li>
-                        <li class="nav-item"><a id="menuFav" class="nav-link text-secondary fw-semibold" onclick="window.showFavoriteListings()"><i class="fa-solid fa-heart me-2 text-danger"></i> Favorilerim (<span id="favCount">0</span>)</a></li>
-                        <li class="nav-item"><a id="menuGarage" class="nav-link text-secondary fw-semibold" onclick="window.showGarageListings()"><i class="fa-solid fa-warehouse me-2 text-primary"></i> Garajım / Geçmişim</a></li>
-                        <li class="nav-item"><a id="menuMessages" class="nav-link text-secondary fw-semibold" onclick="window.showMessagesSection()"><i class="fa-solid fa-comments me-2 text-success"></i> Mesajlarım & Teklifler</a></li>
-                        <li class="nav-item"><a id="menuEkspertiz" class="nav-link text-secondary fw-semibold" onclick="window.showEkspertizSection()"><i class="fa-solid fa-screwdriver-wrench me-2 text-light"></i> Ekspertiz & Bakım</a></li>
-                        <li class="nav-item"><a id="menuKredi" class="nav-link text-secondary fw-semibold" onclick="window.showKrediSection()"><i class="fa-solid fa-calculator me-2 text-warning"></i> Kredi Hesaplama</a></li>
-                        <li class="nav-item mt-2"><a class="nav-link text-white fw-bold bg-success bg-opacity-25 border border-success border-opacity-25" onclick="window.triggerAddCar()"><i class="fa-solid fa-square-plus me-1 text-success"></i> İlan Yayınla</a></li>
+                        <li class="nav-item"><a id="menuAll" class="nav-link text-white fw-semibold active-menu" onclick="window.showAllListings(); if(window.innerWidth < 768) new bootstrap.Collapse(document.getElementById('leftSidebarCollapse')).hide();"><i class="fa-solid fa-border-all me-2 text-info"></i> Vitrin İlanları</a></li>
+                        <li class="nav-item"><a id="menuDoping" class="nav-link text-secondary fw-semibold" onclick="window.showDopingListings(); if(window.innerWidth < 768) new bootstrap.Collapse(document.getElementById('leftSidebarCollapse')).hide();"><i class="fa-solid fa-star me-2 text-warning"></i> Haftanın Yıldızları</a></li>
+                        <li class="nav-item"><a id="menuFav" class="nav-link text-secondary fw-semibold" onclick="window.showFavoriteListings(); if(window.innerWidth < 768) new bootstrap.Collapse(document.getElementById('leftSidebarCollapse')).hide();"><i class="fa-solid fa-heart me-2 text-danger"></i> Favorilerim (<span id="favCount">0</span>)</a></li>
+                        <li class="nav-item"><a id="menuGarage" class="nav-link text-secondary fw-semibold" onclick="window.showGarageListings(); if(window.innerWidth < 768) new bootstrap.Collapse(document.getElementById('leftSidebarCollapse')).hide();"><i class="fa-solid fa-warehouse me-2 text-primary"></i> Garajım / Geçmişim</a></li>
+                        <li class="nav-item"><a id="menuMessages" class="nav-link text-secondary fw-semibold" onclick="window.showMessagesSection(); if(window.innerWidth < 768) new bootstrap.Collapse(document.getElementById('leftSidebarCollapse')).hide();"><i class="fa-solid fa-comments me-2 text-success"></i> Mesajlarım & Teklifler</a></li>
+                        <li class="nav-item"><a id="menuEkspertiz" class="nav-link text-secondary fw-semibold" onclick="window.showEkspertizSection(); if(window.innerWidth < 768) new bootstrap.Collapse(document.getElementById('leftSidebarCollapse')).hide();"><i class="fa-solid fa-screwdriver-wrench me-2 text-light"></i> Ekspertiz & Bakım</a></li>
+                        <li class="nav-item"><a id="menuKredi" class="nav-link text-secondary fw-semibold" onclick="window.showKrediSection(); if(window.innerWidth < 768) new bootstrap.Collapse(document.getElementById('leftSidebarCollapse')).hide();"><i class="fa-solid fa-calculator me-2 text-warning"></i> Kredi Hesaplama</a></li>
+                        <li class="nav-item mt-2"><a class="nav-link text-white fw-bold bg-success bg-opacity-25 border border-success border-opacity-25" onclick="window.triggerAddCar(); if(window.innerWidth < 768) new bootstrap.Collapse(document.getElementById('leftSidebarCollapse')).hide();"><i class="fa-solid fa-square-plus me-1 text-success"></i> İlan Yayınla</a></li>
                     </ul>
                 </div>
 
@@ -207,7 +217,6 @@
                 </div>
             </div>
 
-            <!-- ORTA VİTRİN ALANI -->
             <div class="col-12 col-md-6 col-lg-7 p-3" id="mainDynamicContainer" style="overflow-y: auto; max-height: 92vh;">
                 <h5 class="fw-bold mb-3 dynamic-title" id="vitrinTitle" style="cursor:pointer;" onclick="window.showAllListings()"><i class="fa-solid fa-border-all me-1 text-primary"></i> Aktif Bulut İlanları</h5>
                 <div class="text-center py-4" id="globalSpinner">
@@ -216,7 +225,6 @@
                 <div class="row g-3" id="carsWrapper"></div>
             </div>
 
-            <!-- SAĞ FİLTRELEME ALANI -->
             <div class="col-12 col-md-3 p-3 right-macbar" id="rightFilterBar">
                 <div class="d-flex align-items-center mb-2">
                     <span class="badge bg-danger me-1" style="width:10px;height:10px;border-radius:50%"> </span>
@@ -251,14 +259,12 @@
         </div>
     </div>
 
-    <!-- MODERN DETAY MODALI -->
     <div class="modal fade" id="detailModal" data-bs-backdrop="static" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-lg modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header border-0"><h5 class="modal-title fw-bold text-info" id="detTitle">Araç Detayı</h5><button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button></div>
                 <div class="modal-body p-4 pt-0">
                     
-                    <!-- DINAMIK FOTOĞRAF SLIDERI -->
                     <div id="carSlider" class="carousel slide mb-4" data-bs-ride="carousel">
                         <div class="carousel-inner" id="sliderInner"></div>
                         <button class="carousel-control-prev" type="button" data-bs-target="#carSlider" data-bs-slide="prev"><span class="carousel-control-prev-icon"></span></button>
@@ -290,7 +296,6 @@
         </div>
     </div>
 
-    <!-- İLAN EKLEME MODALI (TOPLU DOSYA YÜKLEMELİ) -->
     <div class="modal fade" id="addCarModal" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-lg modal-dialog-centered">
             <div class="modal-content">
@@ -305,7 +310,6 @@
                             <div class="col-md-4"><label class="form-label small fw-bold text-muted">Kilometre (KM)</label><input type="number" id="aKm" class="form-control" required placeholder="42000"></div>
                             <div class="col-md-4"><label class="form-label small fw-bold text-muted">Kasa Tipi</label><select id="aBody" class="form-select"><option value="Sedan">Sedan</option><option value="Hatchback">Hatchback</option><option value="SUV">SUV</option></select></div>
                             
-                            <!-- MODERN GALERİ YÜKLEME ALANLARI -->
                             <div class="col-md-6">
                                 <label class="form-label small fw-bold text-warning"><i class="fa-solid fa-image me-1"></i>Kapak Fotoğrafı Seç</label>
                                 <input type="file" id="fileCover" class="form-control" accept="image/*" required>
@@ -324,14 +328,12 @@
         </div>
     </div>
 
-    <!-- GELİŞMİŞ AUTH MODAL (KAYIT VE ŞİFREMİ UNUTTUM DAHİL) -->
     <div class="modal fade" id="authModal" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content border-0 shadow">
                 <div class="modal-header"><h5 class="modal-title fw-bold text-primary" id="authTitle">Kullanıcı Girişi</h5><button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button></div>
                 <div class="modal-body p-4">
                     
-                    <!-- GİRİŞ FORMU -->
                     <form id="fLogin">
                         <div class="mb-3"><input type="text" id="lUser" class="form-control" placeholder="Kullanıcı Adı" required></div>
                         <div class="mb-3"><input type="password" id="lPass" class="form-control" placeholder="Şifre" required></div>
@@ -342,7 +344,6 @@
                         </div>
                     </form>
 
-                    <!-- KAYIT FORMU -->
                     <form id="fRegister" style="display:none;">
                         <div class="mb-3"><input type="text" id="rUser" class="form-control" placeholder="Kullanıcı Adı" required></div>
                         <div class="mb-3"><input type="password" id="rPass" class="form-control" placeholder="Şifre" required></div>
@@ -350,7 +351,6 @@
                         <a href="#" onclick="window.changeAuthView('login')" class="small text-info d-block text-center">Zaten Hesabım Var</a>
                     </form>
 
-                    <!-- ŞİFREMİ UNUTTUM FORMU -->
                     <form id="fForgot" style="display:none;" onsubmit="event.preventDefault(); alert('Şifre sıfırlama kodu telefonunuza iletildi.'); window.changeAuthView('login');">
                         <p class="small text-muted mb-3">Hesabınıza ait kullanıcı adını girerek şifrenizi sıfırlayabilirsiniz.</p>
                         <div class="mb-3"><input type="text" class="form-control" placeholder="Kullanıcı Adınız" required></div>
@@ -362,7 +362,6 @@
         </div>
     </div>
 
-    <!-- DOPING / PAYMENT MODAL -->
     <div class="modal fade" id="paymentModal" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content border-0 shadow">
@@ -404,7 +403,6 @@
         if(localStorage.getItem('themeMode') === 'light') { document.body.classList.add('light-mode'); }
     </script>
 
-    <!-- CORE MODULE ENGINE -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { getFirestore, collection, addDoc, getDocs, deleteDoc, doc, updateDoc, query, orderBy, where } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
@@ -815,137 +813,4 @@
                 wrap.innerHTML += `
                     <div class="p-2 bg-dark bg-opacity-50 rounded d-flex justify-content-between align-items-center">
                         <div><small class="d-block fw-bold text-white">${appo.station}</small><small class="text-info">${appo.date}</small></div>
-                        <button class="btn btn-xs btn-danger py-0 px-2 small" style="font-size:10px;" onclick="window.cancelAppointment('${docSnap.id}')">İptal Et</button>
-                    </div>`;
-            });
-        };
-
-        window.cancelAppointment = async function(id) {
-            if(confirm("Randevuyu iptal etmek istediğinize emin misiniz?")) {
-                await deleteDoc(doc(db, "appointments", id));
-                window.loadAppointments();
-            }
-        };
-
-        window.deleteAccount = async function() {
-            if(confirm("🚨 HESABINIZI SİLMEK ÜZERESİNİZ!\nHesabınız silindiğinde tüm ilanlarınız da bulut veritabanından kalıcı olarak silinecektir. Onaylıyor musunuz?")) {
-                try {
-                    const q = query(carsCollection, where("owner", "==", activeUser));
-                    const querySnapshot = await getDocs(q);
-                    for (const docSnap of querySnapshot.docs) {
-                        await deleteDoc(doc(db, "cars", docSnap.id));
-                    }
-                    alert("Hesabınız ve tüm ilanlarınız başarıyla silindi.");
-                    window.logoutUser();
-                } catch(e) { console.error(e); }
-            }
-        };
-
-        window.openDopingGateway = function(id) {
-            dopingSelectedCarId = id; paymentPurpose = "doping";
-            document.getElementById('payModalTitle').innerHTML = `<i class="fa-solid fa-bolt me-1"></i> Vitrin Öne Çıkarma Dopingi`;
-            document.getElementById('payPurposeText').innerText = "Haftanın Yıldızları Doping Bedeli";
-            document.getElementById('payAmountText').innerText = "750 TL";
-            new bootstrap.Modal(document.getElementById('paymentModal')).show();
-        };
-
-        window.openPaymentGateway = function(id) {
-            const car = dbCars.find(c => c.id === id); if(!car) return;
-            selectedCarIdToBuy = id; paymentPurpose = "buy";
-            document.getElementById('payModalTitle').innerHTML = `<i class="fa-solid fa-shield-halved me-1"></i> Secure Güvenli Ödeme`;
-            document.getElementById('payPurposeText').innerText = "Araç Alım Bedeli";
-            document.getElementById('payAmountText').innerText = (car.price || 0).toLocaleString() + " TL";
-            new bootstrap.Modal(document.getElementById('paymentModal')).show();
-        };
-
-        document.getElementById('paymentForm')?.addEventListener('submit', async function(e) {
-            e.preventDefault();
-            if(paymentPurpose === "doping" && dopingSelectedCarId) {
-                await updateDoc(doc(db, "cars", dopingSelectedCarId), { isDoping: true });
-                alert("Harika! Doping başarıyla satın alındı, ilanınız sarı çerçeve ile öne çıkarıldı! 🌟");
-            } else if(paymentPurpose === "buy" && selectedCarIdToBuy) {
-                await updateDoc(doc(db, "cars", selectedCarIdToBuy), { boughtBy: activeUser });
-                alert("Tebrikler! Güvenli ödeme alındı, araç başarıyla satın alındı.");
-            }
-            bootstrap.Modal.getInstance(document.getElementById('paymentModal')).hide();
-            fetchCarsFromCloud();
-        });
-
-        window.deleteCar = async function(id) {
-            if(confirm("Bu ilanı sistemden kaldırmak istediğinize emin misiniz?")) {
-                await deleteDoc(doc(db, "cars", id));
-                fetchCarsFromCloud();
-            }
-        };
-
-        // GİRİŞ VE KAYIT FORMLARININ TETİKLENMESİ
-        document.getElementById('fLogin')?.addEventListener('submit', function(e) {
-            e.preventDefault();
-            activeUser = document.getElementById('lUser').value;
-            localStorage.setItem('activeUser', activeUser);
-            location.reload();
-        });
-
-        document.getElementById('fRegister')?.addEventListener('submit', function(e) {
-            e.preventDefault();
-            activeUser = document.getElementById('rUser').value;
-            localStorage.setItem('activeUser', activeUser);
-            alert("Hesabınız oluşturuldu ve giriş yapıldı! 🎉");
-            location.reload();
-        });
-
-        window.showKrediSection = function() {
-            currentViewMode = "kredi"; window.setMenuClass('menuKredi'); window.hideRightFilterBar(true);
-            document.getElementById('mainDynamicContainer').innerHTML = `
-                <h5 class="fw-bold mb-3 text-success"><i class="fa-solid fa-calculator me-2"></i>Taşıt Kredisi Hesaplama Motoru</h5>
-                <div class="card p-4 border-0" style="border-radius:20px; background:rgba(30,41,59,0.7);">
-                    <div class="row g-2">
-                        <div class="col-6"><label class="small text-muted fw-bold">Araç Tutarı (TL)</label><input type="number" id="kPrice" class="form-control" value="1500000" oninput="window.runKrediCalc()"></div>
-                        <div class="col-3"><label class="small text-muted fw-bold">Vade (Ay)</label><select id="kVade" class="form-select" onchange="window.runKrediCalc()"><option value="12">12 Ay</option><option value="24" selected>24 Ay</option><option value="36">36 Ay</option></select></div>
-                        <div class="col-3"><label class="small text-muted fw-bold">Faiz (%)</label><input type="number" id="kFaiz" class="form-control" value="3.69" step="0.01" oninput="window.runKrediCalc()"></div>
-                    </div>
-                    <hr class="border-secondary my-3">
-                    <div class="row text-center">
-                        <div class="col-6"><small class="text-muted d-block">Aylık Taksit</small><h5 class="text-warning fw-bold" id="rAylik">0 TL</h5></div>
-                        <div class="col-6"><small class="text-muted d-block">Toplam Geri Ödeme</small><h5 class="text-success fw-bold" id="rTotal">0 TL</h5></div>
-                    </div>
-                </div>`;
-            window.runKrediCalc();
-        };
-
-        window.runKrediCalc = function() {
-            const price = parseFloat(document.getElementById('kPrice')?.value) || 0;
-            const vade = parseInt(document.getElementById('kVade')?.value) || 24;
-            const faiz = parseFloat(document.getElementById('kFaiz')?.value) || 3.69;
-            let aylikFaiz = faiz / 100;
-            let taksit = price * (aylikFaiz * Math.pow(1 + aylikFaiz, vade)) / (Math.pow(1 + aylikFaiz, vade) - 1);
-            document.getElementById('rAylik').innerText = Math.round(taksit).toLocaleString('tr-TR') + " TL";
-            document.getElementById('rTotal').innerText = Math.round(taksit * vade).toLocaleString('tr-TR') + " TL";
-        };
-
-        window.logoutUser = function() { localStorage.removeItem('activeUser'); location.reload(); };
-        window.hideRightFilterBar = function(s) { const f = document.getElementById('rightFilterBar'); if(f) f.style.display = s ? 'none' : 'block'; };
-        window.clearFilters = function() { document.getElementById('fKasa').value = ""; document.getElementById('fRenk').value = ""; document.getElementById('fYil').value = ""; window.applyFilters(); };
-        
-        window.setMenuClass = function(id) {
-            ['menuAll', 'menuFav', 'menuGarage', 'menuMessages', 'menuEkspertiz', 'menuKredi', 'menuDoping'].forEach(m => {
-                const el = document.getElementById(m); if(el) el.className = m === id ? "nav-link text-white fw-bold active-menu" : "nav-link text-secondary fw-semibold";
-            });
-        };
-
-        window.showAllListings = function() { currentViewMode = "all"; window.setMenuClass('menuAll'); window.hideRightFilterBar(false); window.applyFilters(); };
-        window.showFavoriteListings = function() { currentViewMode = "fav"; window.setMenuClass('menuFav'); window.hideRightFilterBar(false); window.applyFilters(); };
-        window.showDopingListings = function() { currentViewMode = "doping"; window.setMenuClass('menuDoping'); window.hideRightFilterBar(false); window.applyFilters(); };
-        window.showGarageListings = function() { currentViewMode = "garage"; window.setMenuClass('menuGarage'); window.hideRightFilterBar(false); let myCars = dbCars.filter(c => (c.owner && activeUser && c.owner.toLowerCase().trim() === activeUser.toLowerCase().trim()) || (c.boughtBy && activeUser && c.boughtBy.toLowerCase().trim() === activeUser.toLowerCase().trim())); window.renderList(myCars); };
-
-        if(activeUser) {
-            document.getElementById('userBadge').style.display = 'inline-block';
-            document.getElementById('userBadgeName').innerText = activeUser;
-            document.getElementById('authBtn').style.display = 'none';
-            document.getElementById('userActionPanel').style.display = 'block';
-        }
-
-        fetchCarsFromCloud();
-    </script>
-</body>
-</html>
+                        <button class="btn btn-xs btn-danger py-0 px-2 small" style="font-size:10px;" onclick="window.cancelAppointment
