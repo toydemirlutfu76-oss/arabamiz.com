@@ -151,6 +151,16 @@
         .car-title-text,.form-label,.nav-link{color:var(--text-main)!important;}
 
 </style>
+
+<style id="v3_patch_styles">
+@media (max-width:768px){
+ .navbar,.topbar,.header{flex-wrap:wrap!important}
+ .car-card,.listing-card{width:100%!important}
+}
+.dark-mode .car-title,.dark-mode .listing-title,.dark-mode .filter-label,
+.dark-mode label,.dark-mode .form-label{color:#fff!important}
+</style>
+
 </head>
 <body>
 
@@ -950,5 +960,23 @@ window.checkSession = function() { if(activeUser) { document.getElementById('use
 
         checkSession(); updateFavCount(); fetchCarsFromCloud();
     </script>
+
+<script id="v3_patch_js">
+document.addEventListener('DOMContentLoaded',()=>{
+ const search=document.querySelector('input[type="search"],#searchInp,#searchInput');
+ if(search){
+   search.addEventListener('input',()=>{
+     document.querySelectorAll('.car-card,.listing-card').forEach(card=>{
+       const t=card.innerText.toLowerCase();
+       card.style.display=t.includes(search.value.toLowerCase())?'':'none';
+     });
+   });
+ }
+});
+function showMessagesV3(){ alert('Mesajlar modülü V3 yaması yüklendi.'); }
+function showEkspertizSection(){ console.log('Ekspertiz V3'); }
+function showKrediSection(){ console.log('Kredi V3'); }
+</script>
+
 </body>
 </html>
