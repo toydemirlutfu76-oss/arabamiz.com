@@ -188,14 +188,14 @@
         <a href="#" onclick="event.preventDefault(); window.showGarageListings();" class="btn btn-sm btn-light text-danger fw-bold ms-3 px-3 rounded-pill shadow-sm" style="font-size: 12px; border: none;">Ödemeye Git <i class="fa-solid fa-arrow-right ms-1"></i></a>
     </div>
 
-    <!-- NAVBAR (image_3.png Düzenine Tam Uyumlu) -->
+    <!-- NAVBAR -->
     <nav class="navbar top-navbar sticky-top py-2 px-4 navbar-dark shadow" style="background: rgba(15,23,42,0.4); backdrop-filter:blur(10px); z-index: 1030;">
         <div class="container-fluid d-flex justify-content-between align-items-center flex-nowrap">
-            <a class="navbar-brand fw-black text-warning fs-4 tracking-wider m-0 me-2" href="#" onclick="showAllListings()"><i class="fa-solid fa-car-rear me-1 text-primary"></i> OTOMARKET <span class="badge bg-danger fs-6 pb-1">PRO</span></a>
+            <a class="navbar-brand fw-black text-warning fs-4 tracking-wider m-0 me-2" href="#" onclick="window.showAllListings()"><i class="fa-solid fa-car-rear me-1 text-primary"></i> OTOMARKET <span class="badge bg-danger fs-6 pb-1">PRO</span></a>
             
-            <form class="d-flex flex-grow-1 mx-3" style="max-width: 50%;" onsubmit="event.preventDefault(); applyFilters();">
-                <input class="form-control form-control-sm me-2 border-0 bg-dark text-white" type="search" id="searchInp" placeholder="Marka, model veya anahtar kelime yazın..." oninput="applyFilters()">
-                <button class="btn btn-sm btn-warning px-3 fw-bold" type="button" onclick="applyFilters()"><i class="fa-solid fa-magnifying-glass text-dark"></i></button>
+            <form class="d-flex flex-grow-1 mx-3" style="max-width: 50%;" onsubmit="event.preventDefault(); window.applyFilters();">
+                <input class="form-control form-control-sm me-2 border-0 bg-dark text-white" type="search" id="searchInp" placeholder="Marka, model veya anahtar kelime yazın..." oninput="window.applyFilters()">
+                <button class="btn btn-sm btn-warning px-3 fw-bold" type="button" onclick="window.applyFilters()"><i class="fa-solid fa-magnifying-glass text-dark"></i></button>
             </form>
 
             <div class="d-flex align-items-center gap-2">
@@ -205,12 +205,12 @@
                 <span class="dynamic-text text-info fw-bold small text-nowrap" id="userBadge" style="display:none;">
                     <i class="fa-solid fa-user-shield text-success"></i> <span id="userBadgeName"></span>
                 </span>
-                <button class="btn btn-sm btn-primary px-3 fw-bold rounded-pill shadow-sm" id="authBtn" onclick="triggerMainAuthBtn()">Giriş</button>
+                <button class="btn btn-sm btn-primary px-3 fw-bold rounded-pill shadow-sm" id="authBtn" onclick="window.triggerMainAuthBtn()">Giriş</button>
             </div>
         </div>
     </nav>
 
-    <!-- ANA GÖVDE (image_3.png formatında 3 Sütunlu Sabit Yapı) -->
+    <!-- ANA GÖVDE (image_4.png Formatı) -->
     <div class="container-fluid">
         <div class="row flex-nowrap">
             
@@ -218,25 +218,25 @@
             <div class="col-3 col-lg-2 p-3 left-sidebar d-flex flex-column justify-content-between">
                 <div>
                     <div class="d-flex justify-content-between align-items-center mb-3">
-                        <h6 class="text-uppercase fw-bold m-0 tracking-widest text-secondary style-title" id="panelTitleHeader" ondblclick="triggerAdminLogin()" style="cursor: pointer; font-size: 11px;">Panel Kontrol</h6>
-                        <button id="adminLogoutBtn" class="btn btn-xs btn-danger py-0 px-2 fw-bold" style="display: none; font-size: 10px;" onclick="logoutAdminMode()">Çıkış</button>
+                        <h6 class="text-uppercase fw-bold m-0 tracking-widest text-secondary style-title" id="panelTitleHeader" ondblclick="window.triggerAdminLogin()" style="cursor: pointer; font-size: 11px;">Panel Kontrol</h6>
+                        <button id="adminLogoutBtn" class="btn btn-xs btn-danger py-0 px-2 fw-bold" style="display: none; font-size: 10px;" onclick="window.logoutAdminMode()">Çıkış</button>
                     </div>
                     <ul class="nav flex-column gap-1" id="menuList">
-                        <li class="nav-item"><a id="menuAll" class="nav-link text-white fw-semibold active-menu" onclick="showAllListings()"><i class="fa-solid fa-border-all me-2 text-info"></i> Vitrin İlanları</a></li>
-                        <li class="nav-item"><a id="menuDoping" class="nav-link text-secondary fw-semibold" onclick="showDopingListings()"><i class="fa-solid fa-star me-2 text-warning"></i> Haftanın Yıldızları</a></li>
-                        <li class="nav-item"><a id="menuFav" class="nav-link text-secondary fw-semibold" onclick="showFavoriteListings()"><i class="fa-solid fa-heart me-2 text-danger"></i> Favorilerim (<span id="favCount">0</span>)</a></li>
-                        <li class="nav-item"><a id="menuGarage" class="nav-link text-secondary fw-semibold" onclick="showGarageListings()"><i class="fa-solid fa-warehouse me-2 text-primary"></i> Garajım / Geçmişim</a></li>
-                        <li class="nav-item"><a id="menuMessages" class="nav-link text-secondary fw-semibold" onclick="showMessagesSection()"><i class="fa-solid fa-comments me-2 text-success"></i> Mesajlarım (<span id="msgCount">0</span>)</a></li>
-                        <li class="nav-item"><a id="menuEkspertiz" class="nav-link text-secondary fw-semibold" onclick="showEkspertizSection()"><i class="fa-solid fa-screwdriver-wrench me-2 text-light"></i> Ekspertiz & Bakım</a></li>
-                        <li class="nav-item"><a id="menuKredi" class="nav-link text-secondary fw-semibold" onclick="showKrediSection()"><i class="fa-solid fa-calculator me-2 text-warning"></i> Kredi Hesaplama</a></li>
-                        <li class="nav-item"><a id="menuAbout" class="nav-link text-secondary fw-semibold" onclick="showAboutSection()"><i class="fa-solid fa-circle-info me-2 text-muted"></i> Hakkımızda</a></li>
-                        <li class="nav-item mt-2"><a class="nav-link text-white fw-bold bg-success bg-opacity-25 border border-success border-opacity-25" onclick="triggerAddCar()"><i class="fa-solid fa-square-plus me-1 text-success"></i> İlan Yayınla</a></li>
+                        <li class="nav-item"><a id="menuAll" class="nav-link text-white fw-semibold active-menu" onclick="window.showAllListings()"><i class="fa-solid fa-border-all me-2 text-info"></i> Vitrin İlanları</a></li>
+                        <li class="nav-item"><a id="menuDoping" class="nav-link text-secondary fw-semibold" onclick="window.showDopingListings()"><i class="fa-solid fa-star me-2 text-warning"></i> Haftanın Yıldızları</a></li>
+                        <li class="nav-item"><a id="menuFav" class="nav-link text-secondary fw-semibold" onclick="window.showFavoriteListings()"><i class="fa-solid fa-heart me-2 text-danger"></i> Favorilerim (<span id="favCount">0</span>)</a></li>
+                        <li class="nav-item"><a id="menuGarage" class="nav-link text-secondary fw-semibold" onclick="window.showGarageListings()"><i class="fa-solid fa-warehouse me-2 text-primary"></i> Garajım / Geçmişim</a></li>
+                        <li class="nav-item"><a id="menuMessages" class="nav-link text-secondary fw-semibold" onclick="window.showMessagesSection()"><i class="fa-solid fa-comments me-2 text-success"></i> Mesajlarım (<span id="msgCount">0</span>)</a></li>
+                        <li class="nav-item"><a id="menuEkspertiz" class="nav-link text-secondary fw-semibold" onclick="window.showEkspertizSection()"><i class="fa-solid fa-screwdriver-wrench me-2 text-light"></i> Ekspertiz & Bakım</a></li>
+                        <li class="nav-item"><a id="menuKredi" class="nav-link text-secondary fw-semibold" onclick="window.showKrediSection()"><i class="fa-solid fa-calculator me-2 text-warning"></i> Kredi Hesaplama</a></li>
+                        <li class="nav-item"><a id="menuAbout" class="nav-link text-secondary fw-semibold" onclick="window.showAboutSection()"><i class="fa-solid fa-circle-info me-2 text-muted"></i> Hakkımızda</a></li>
+                        <li class="nav-item mt-2"><a class="nav-link text-white fw-bold bg-success bg-opacity-25 border border-success border-opacity-25" onclick="window.triggerAddCar()"><i class="fa-solid fa-square-plus me-1 text-success"></i> İlan Yayınla</a></li>
                     </ul>
                 </div>
 
                 <div id="userActionPanel" style="display: none;" class="border-top border-secondary pt-2 mt-2">
-                    <button class="btn btn-sm btn-outline-light w-100 mb-1 fw-semibold py-1" style="font-size: 11px;" onclick="logoutUser()">Oturumu Kapat</button>
-                    <button class="btn btn-sm btn-outline-danger w-100 fw-semibold py-1" style="font-size: 10px;" onclick="deleteUserAccount()">Hesabımı Sil</button>
+                    <button class="btn btn-sm btn-outline-light w-100 mb-1 fw-semibold py-1" style="font-size: 11px;" onclick="window.logoutUser()">Oturumu Kapat</button>
+                    <button class="btn btn-sm btn-outline-danger w-100 fw-semibold py-1" style="font-size: 10px;" onclick="window.deleteUserAccount()">Hesabımı Sil</button>
                 </div>
             </div>
 
@@ -261,26 +261,26 @@
                 <div class="d-flex flex-column gap-2" style="font-size: 12px;">
                     <div>
                         <label class="form-label small fw-bold dynamic-muted mb-1">Kasa Tipi</label>
-                        <select id="fKasa" class="form-select form-select-sm" onchange="applyFilters()">
+                        <select id="fKasa" class="form-select form-select-sm" onchange="window.applyFilters()">
                             <option value="">Tümü</option><option value="Sedan">Sedan</option><option value="Hatchback">Hatchback</option><option value="SUV">SUV</option>
                         </select>
                     </div>
                     <div>
                         <label class="form-label small fw-bold dynamic-muted mb-1">Renk</label>
-                        <input type="text" id="fRenk" class="form-control form-control-sm" placeholder="Örn: Beyaz" oninput="applyFilters()">
+                        <input type="text" id="fRenk" class="form-control form-control-sm" placeholder="Örn: Beyaz" oninput="window.applyFilters()">
                     </div>
                     <div>
                         <label class="form-label small fw-bold dynamic-muted mb-1">Minimum Model Yılı</label>
-                        <input type="number" id="fYil" class="form-control form-control-sm" placeholder="Örn: 2015" oninput="applyFilters()">
+                        <input type="number" id="fYil" class="form-control form-control-sm" placeholder="Örn: 2015" oninput="window.applyFilters()">
                     </div>
                     <div>
                         <label class="form-label small fw-bold dynamic-muted mb-1">Fiyat Aralığı (TL)</label>
                         <div class="d-flex gap-1">
-                            <input type="number" id="fMinPrice" class="form-control form-control-sm" placeholder="Minimum" oninput="applyFilters()">
-                            <input type="number" id="fMaxPrice" class="form-control form-control-sm" placeholder="Maksimum" oninput="applyFilters()">
+                            <input type="number" id="fMinPrice" class="form-control form-control-sm" placeholder="Minimum" oninput="window.applyFilters()">
+                            <input type="number" id="fMaxPrice" class="form-control form-control-sm" placeholder="Maksimum" oninput="window.applyFilters()">
                         </div>
                     </div>
-                    <button class="btn btn-secondary btn-sm w-100 mt-1 fw-bold py-1" style="font-size:11px;" onclick="clearFilters()">Filtreleri Temizle</button>
+                    <button class="btn btn-secondary btn-sm w-100 mt-1 fw-bold py-1" style="font-size:11px;" onclick="window.clearFilters()">Filtreleri Temizle</button>
                 </div>
 
                 <div class="mt-3 pt-2 border-top border-secondary">
@@ -293,7 +293,7 @@
         </div>
     </div>
 
-    <!-- TÜM MODAL YAPILARI -->
+    <!-- MODAL YAPILARI -->
     <div class="modal fade" id="offerModal" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered modal-sm">
             <div class="modal-content border-0 shadow">
@@ -375,13 +375,13 @@
     <div class="modal fade" id="authModal" data-bs-backdrop="static" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content border-0 shadow">
-                <div class="modal-header"><h5 class="modal-title fw-bold text-primary" id="authTitle">Kullanıcı Girişi</h5><button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" onclick="clearAuthForm()"></button></div>
+                <div class="modal-header"><h5 class="modal-title fw-bold text-primary" id="authTitle">Kullanıcı Girişi</h5><button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" onclick="window.clearAuthForm()"></button></div>
                 <div class="modal-body p-4">
                     <form id="fLogin">
                         <div class="mb-3"><input type="text" id="lUser" class="form-control" placeholder="Kullanıcı Adı" required></div>
                         <div class="mb-3"><input type="password" id="lPass" class="form-control" placeholder="Şifre" required></div>
                         <button type="submit" class="btn btn-primary w-100 fw-bold py-2">Giriş Yap</button>
-                        <div class="mt-3"><a href="#" onclick="toggleAuthMode('reg')" class="text-info">Hesap Oluştur</a></div>
+                        <div class="mt-3"><a href="#" onclick="window.toggleAuthMode('reg')" class="text-info">Hesap Oluştur</a></div>
                     </form>
                     <form id="fReg" style="display:none;">
                         <div class="mb-3"><input type="text" id="rUser" class="form-control" placeholder="Yeni Kullanıcı Adı" required></div>
@@ -396,6 +396,27 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
+    <!-- KOYU MOD ÇEKİRDEK KODU -->
+    <script>
+        window.toggleThemeMode = function() {
+            const body = document.body;
+            const icon = document.getElementById('themeIcon');
+            if (body.classList.contains('light-mode')) {
+                body.classList.remove('light-mode');
+                if(icon) icon.className = 'fa-solid fa-sun';
+                localStorage.setItem('themeMode', 'dark');
+            } else {
+                body.classList.add('light-mode');
+                if(icon) icon.className = 'fa-solid fa-moon';
+                localStorage.setItem('themeMode', 'light');
+            }
+        };
+        if(localStorage.getItem('themeMode') === 'light') {
+            document.body.classList.add('light-mode');
+        }
+    </script>
+
+    <!-- FIREBASE VE GLOBAL EVENT ENGINE -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { getFirestore, collection, addDoc, getDocs, deleteDoc, doc, updateDoc, query, orderBy } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
@@ -419,7 +440,6 @@
         let dbOffers = [];
         let dbUsers = JSON.parse(localStorage.getItem('dbUsers')) || {"demo": {pass:"1234", email:"demo@otomarket.com"}};
         let dbBought = JSON.parse(localStorage.getItem('dbBought')) || [];
-        let dbMessages = JSON.parse(localStorage.getItem('dbMessages')) || [];
         let activeUser = localStorage.getItem('activeUser') || null;
         let favSet = new Set(JSON.parse(localStorage.getItem('favSet')) || []);
         
@@ -427,10 +447,10 @@
         let isAdminLoggedIn = false;
         let uploadedImagesBase64 = [];
 
+        // Kapsam Hatasını Çözen Global Tanımlamalar
         window.triggerMainAuthBtn = function() { window.toggleAuthMode('login'); new bootstrap.Modal(document.getElementById('authModal')).show(); };
         window.triggerAddCar = function() { if (!activeUser) { alert("Önce giriş yapmalısınız."); window.triggerMainAuthBtn(); } else { new bootstrap.Modal(document.getElementById('addCarModal')).show(); } };
 
-        // FAVORİ GÜVENLİK KONTROLÜ (Kendi ilanını favorileyemez)
         window.toggleFav = function(id) {
             const car = dbCars.find(c => c.id === id);
             if(car && activeUser && car.owner && car.owner.toLowerCase().trim() === activeUser.toLowerCase().trim()) {
@@ -445,7 +465,6 @@
 
         window.updateFavCount = function() { const el = document.getElementById('favCount'); if(el) el.innerText = favSet.size; };
 
-        // DETAYLI BULUT ENTEGRASYONU VE HATA FİXLERİ (PC Sürüm Sorunları Çözüldü)
         async function fetchCarsFromCloud() {
             try {
                 const q = query(carsCollection, orderBy("createdAt", "desc"));
@@ -457,6 +476,7 @@
                 window.applyFilters();
             } catch (error) { console.error(error); }
         }
+        window.fetchCarsFromCloud = fetchCarsFromCloud;
 
         window.applyFilters = function() {
             let res = [...dbCars];
@@ -464,7 +484,6 @@
             else if(currentViewMode === "fav") res = dbCars.filter(c => favSet.has(c.id) && !c.boughtBy);
             else if(currentViewMode === "doping") res = dbCars.filter(c => c.isDoping && !c.boughtBy);
 
-            // Opsiyonel Element Kontrolü (PC'deki çökme düzeltildi)
             const kasa = document.getElementById('fKasa')?.value;
             const renk = document.getElementById('fRenk')?.value?.toLowerCase();
             const yil = document.getElementById('fYil')?.value;
@@ -482,34 +501,33 @@
             window.renderList(res);
         };
 
-        // RENDER MOTORU (image_3.png Kart Tasarımına Göre Optimize Edildi)
         window.renderList = function(data) {
             const wrap = document.getElementById('carsWrapper'); if(!wrap) return;
-            if(data.length === 0) { wrap.innerHTML = '<div class="col-12 text-center p-5 dynamic-muted"><h5>İlan bulunamadı.</h5></div>'; return; }
+            if(data.length === 0) { wrap.innerHTML = '<div class="col-12 text-center p-5 dynamic-muted"><h6>İlan bulunamadı.</h6></div>'; return; }
             
             wrap.innerHTML = data.map(c => {
                 const isOwner = activeUser && c.owner && (activeUser.toLowerCase().trim() === c.owner.toLowerCase().trim());
                 const isFav = favSet.has(c.id);
-                let actionBtnHTML = isOwner || isAdminLoggedIn ? `<button onclick="deleteCar('${c.id}')" class="btn btn-sm btn-danger fw-bold shadow-sm py-1">Sil</button>` : `<span class="badge bg-dark text-muted py-1">Aktif</span>`;
-                let buyBtnHTML = isOwner ? '' : `<button onclick="openPaymentGateway('${c.id}')" class="btn btn-sm btn-primary px-2 fw-bold">Satın Al</button>`;
+                let actionBtnHTML = isOwner || isAdminLoggedIn ? `<button onclick="window.deleteCar('${c.id}')" class="btn btn-sm btn-danger fw-bold shadow-sm py-1">Sil</button>` : `<span class="badge bg-dark text-muted py-1">Aktif</span>`;
+                let buyBtnHTML = isOwner ? '' : `<button onclick="window.openPaymentGateway('${c.id}')" class="btn btn-sm btn-primary px-2 fw-bold">Satın Al</button>`;
 
                 return `
                 <div class="col-12">
                     <div class="card car-card" style="border: 1px solid var(--border-ui);">
                         <div class="row g-0">
-                            <div class="col-md-4" style="background-image:url(${c.coverImage}); background-size:cover; background-position:center; min-height:150px;"></div>
+                            <div class="col-md-4" style="background-image:url(${c.coverImage || 'https://images.unsplash.com/photo-1542282088-72c9c27ed0cd?w=500'}); background-size:cover; background-position:center; min-height:150px;"></div>
                             <div class="col-md-8">
                                 <div class="card-body d-flex flex-column justify-content-between h-100 p-2.5">
                                     <div class="d-flex justify-content-between align-items-center">
-                                        <h6 class="fw-bold m-0" onclick="openDetail('${c.id}')" style="cursor:pointer; font-size:14px;">${c.title}</h6>
-                                        <button onclick="toggleFav('${c.id}')" class="fav-btn ${isOwner ? 'disabled-owner' : ''}">
+                                        <h6 class="fw-bold m-0" onclick="window.openDetail('${c.id}')" style="cursor:pointer; font-size:14px;">${c.title}</h6>
+                                        <button onclick="window.toggleFav('${c.id}')" class="fav-btn ${isOwner ? 'disabled-owner' : ''}">
                                             <i class="${isFav ? 'fa-solid' : 'fa-regular'} fa-heart"></i>
                                         </button>
                                     </div>
                                     <p class="dynamic-muted small m-0 my-1" style="font-size:11px;">Yıl: <b>${c.year}</b> | Kasa: <b>${c.bodyType}</b> | Renk: <b>${c.color}</b> | KM: <b>${c.km}</b></p>
                                     <div class="d-flex justify-content-between align-items-center flex-wrap gap-1">
-                                        <h6 class="text-info fw-bold m-0" style="font-size:14px;">${c.price.toLocaleString()} TL</h6>
-                                        <div class="gap-1 d-flex">${buyBtnHTML}<button onclick="openDetail('${c.id}')" class="btn btn-sm btn-light py-0.5 px-2 small">Galeri</button>${actionBtnHTML}</div>
+                                        <h6 class="text-info fw-bold m-0" style="font-size:14px;">${(c.price || 0).toLocaleString()} TL</h6>
+                                        <div class="gap-1 d-flex">${buyBtnHTML}<button onclick="window.openDetail('${c.id}')" class="btn btn-sm btn-light py-0.5 px-2 small">Galeri</button>${actionBtnHTML}</div>
                                     </div>
                                 </div>
                             </div>
@@ -527,15 +545,47 @@
             }
         };
 
+        // Yeni İlan Ekleme Altyapı Düzeltmesi
+        const addCarForm = document.getElementById('addCarForm');
+        if(addCarForm) {
+            addCarForm.addEventListener('submit', async function(e) {
+                e.preventDefault();
+                if(uploadedImagesBase64.length === 0) {
+                    uploadedImagesBase64.push("https://images.unsplash.com/photo-1542282088-72c9c27ed0cd?w=500");
+                }
+                const car = {
+                    title: document.getElementById('aTitle').value,
+                    year: parseInt(document.getElementById('aYear').value),
+                    color: document.getElementById('aColor').value,
+                    price: parseFloat(document.getElementById('aPrice').value),
+                    km: parseFloat(document.getElementById('aKm').value) || 0,
+                    bodyType: document.getElementById('aBody').value,
+                    description: document.getElementById('aDescription').value,
+                    owner: activeUser || 'demo',
+                    coverImage: uploadedImagesBase64[0],
+                    images: uploadedImagesBase64,
+                    createdAt: new Date().getTime()
+                };
+                try {
+                    await addDoc(carsCollection, car);
+                    alert("Harika! İlanınız bulut veritabanına eklendi. 🚀");
+                    bootstrap.Modal.getInstance(document.getElementById('addCarModal')).hide();
+                    addCarForm.reset();
+                    uploadedImagesBase64 = [];
+                    fetchCarsFromCloud();
+                } catch(err) { console.error(err); }
+            });
+        }
+
         function calculateMarketAnalytics() {
             const activeCars = dbCars.filter(c => !c.boughtBy);
             if(document.getElementById('statTotalCars')) document.getElementById('statTotalCars').innerText = activeCars.length + " Adet";
         }
 
-        window.showMessagesSection = function() { currentViewMode = "messages"; window.hideRightFilterBar(true); document.getElementById('mainDynamicContainer').innerHTML = `<h5 class="text-white fw-bold">Mesaj odası simülasyonu aktif.</h5>`; };
-        window.showEkspertizSection = function() { currentViewMode = "ekspertiz"; window.hideRightFilterBar(true); document.getElementById('mainDynamicContainer').innerHTML = `<h5 class="text-white fw-bold">Ekspertiz servis planlaması.</h5>`; };
-        window.showKrediSection = function() { currentViewMode = "kredi"; window.hideRightFilterBar(true); document.getElementById('mainDynamicContainer').innerHTML = `<h5 class="text-white fw-bold">Kredi faiz hesaplama paneli.</h5>`; };
-        window.showAboutSection = function() { currentViewMode = "about"; window.hideRightFilterBar(true); document.getElementById('mainDynamicContainer').innerHTML = `<h5 class="text-white fw-bold">OtoMarket Pro Kurumsal Vizyon.</h5>`; };
+        window.showMessagesSection = function() { currentViewMode = "messages"; window.setMenuClass('menuMessages'); window.hideRightFilterBar(true); document.getElementById('mainDynamicContainer').innerHTML = `<h5 class="text-white fw-bold">Mesaj odası simülasyonu aktif.</h5>`; };
+        window.showEkspertizSection = function() { currentViewMode = "ekspertiz"; window.setMenuClass('menuEkspertiz'); window.hideRightFilterBar(true); document.getElementById('mainDynamicContainer').innerHTML = `<h5 class="text-white fw-bold">Ekspertiz servis planlaması.</h5>`; };
+        window.showKrediSection = function() { currentViewMode = "kredi"; window.setMenuClass('menuKredi'); window.hideRightFilterBar(true); document.getElementById('mainDynamicContainer').innerHTML = `<h5 class="text-white fw-bold">Kredi faiz hesaplama paneli.</h5>`; };
+        window.showAboutSection = function() { currentViewMode = "about"; window.setMenuClass('menuAbout'); window.hideRightFilterBar(true); document.getElementById('mainDynamicContainer').innerHTML = `<h5 class="text-white fw-bold">OtoMarket Pro Kurumsal Vizyon.</h5>`; };
 
         window.updateLocalStorage = function() {
             localStorage.setItem('dbUsers', JSON.stringify(dbUsers));
@@ -570,9 +620,15 @@
             window.applyFilters();
         };
 
-        window.showAllListings = function() { currentViewMode = "all"; window.hideRightFilterBar(false); window.applyFilters(); };
-        window.showFavoriteListings = function() { currentViewMode = "fav"; window.hideRightFilterBar(false); window.applyFilters(); };
-        window.showDopingListings = function() { currentViewMode = "doping"; window.hideRightFilterBar(false); window.applyFilters(); };
+        window.setMenuClass = function(id) {
+            ['menuAll', 'menuFav', 'menuGarage', 'menuMessages', 'menuEkspertiz', 'menuKredi', 'menuDoping', 'menuAbout'].forEach(m => {
+                const el = document.getElementById(m); if(el) el.className = m === id ? "nav-link text-white fw-bold active-menu" : "nav-link text-secondary fw-semibold";
+            });
+        };
+
+        window.showAllListings = function() { currentViewMode = "all"; window.setMenuClass('menuAll'); window.hideRightFilterBar(false); window.applyFilters(); };
+        window.showFavoriteListings = function() { currentViewMode = "fav"; window.setMenuClass('menuFav'); window.hideRightFilterBar(false); window.applyFilters(); };
+        window.showDopingListings = function() { currentViewMode = "doping"; window.setMenuClass('menuDoping'); window.hideRightFilterBar(false); window.applyFilters(); };
 
         if(activeUser) {
             document.getElementById('userBadge').style.display = 'inline-block';
@@ -581,7 +637,9 @@
             document.getElementById('userActionPanel').style.display = 'block';
         }
 
+        // Başlatma
         fetchCarsFromCloud();
+        window.updateFavCount();
     </script>
 </body>
 </html>
