@@ -167,6 +167,7 @@
 </head>
 <body>
 
+    <!-- GÜVENLİK BİLDİRİM ALANI -->
     <div id="paymentAlertBar" class="text-white text-center py-2.5 fw-bold shadow-lg" style="display: none; font-size: 14px; background: linear-gradient(90deg, #ef4444, #dc2626); box-shadow: 0 4px 20px rgba(239, 68, 68, 0.45); z-index: 9999;">
         <i class="fa-solid fa-triangle-exclamation text-warning me-2 animate-bounce fs-5"></i> 
         🚨 GÜVENLİK BİLDİRİMİ: Verdiğiniz bir fiyat teklifi kabul edildi! 
@@ -278,6 +279,7 @@
         </div>
     </div>
 
+    <!-- MODAL PENCERELERI -->
     <div class="modal fade" id="offerModal" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered modal-sm">
             <div class="modal-content border-0 shadow">
@@ -357,6 +359,27 @@
                         <p class="text-muted small m-0" id="payPurposeText">Ödenecek Tutar</p>
                         <h4 class="fw-bold text-warning" id="payAmountText">0 TL</h4>
                     </div>
+
+                    <!-- 3D KREDİ KARTI GÖRSEL ÖNİZLEME ALANI -->
+                    <div class="card-container">
+                        <div class="credit-card-preview" id="cardFlipObject">
+                            <div class="card-front">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div class="card-brand"></div><i class="fa-brands fa-cc-visa fa-2x text-white-50"></i>
+                                </div>
+                                <div class="fs-4 my-3 text-center" id="cardNoView" style="letter-spacing: 2px;">•••• •••• •••• ••••</div>
+                                <div class="d-flex justify-content-between align-items-center small">
+                                    <div><div class="text-white-50" style="font-size:9px">KART SAHİBİ</div><div id="cardNameView" class="fw-bold text-uppercase">İSİM SOYİSİM</div></div>
+                                    <div class="text-end"><div class="text-white-50" style="font-size:9px">AA/YY</div><div id="cardDateView" class="fw-bold">00/00</div></div>
+                                </div>
+                            </div>
+                            <div class="card-back">
+                                <div class="black-strip"></div>
+                                <div class="ccv-strip" id="cardCvvView">***</div>
+                            </div>
+                        </div>
+                    </div>
+
                     <form id="paymentForm" onsubmit="processPayment(event)">
                         <div class="mb-3">
                             <label class="form-label small fw-bold text-secondary">Kart Sahibi İsim Soyisim</label>
@@ -474,7 +497,7 @@
                     <form id="fReg" style="display:none;" onsubmit="authReg(event)">
                         <div class="mb-3"><input type="text" id="rUser" class="form-control" placeholder="Yeni Kullanıcı Adı" required></div>
                         <div class="mb-3"><input type="email" id="rEmail" class="form-control" placeholder="E-Posta Adresiniz" required></div>
-                        <div class="mb-3"><input type="password" id="rPass" class="form-control" placeholder="Güçlü Şifre" required></div>
+                        <div class="mb-3"><input type="password" id="rPass" class="form-control" placeholder="Şifre" required></div>
                         <button type="submit" class="btn btn-success w-100 fw-bold py-2 rounded-3">Kayıt Ol ve Hesap Aç</button>
                         <a href="#" class="d-block text-center mt-3 small text-info" onclick="toggleAuthMode('login')">Giriş Ekranına Dön</a>
                     </form>
@@ -544,7 +567,7 @@
         let selectedCarIdToOffer = null; 
         let isAdminLoggedIn = false; 
 
-        // MOBİL VE MASAÜSTÜ İLAN VERME DOĞRULAMASI
+        // GÜVENLİ İLAN VERME DOĞRULAMASI
         window.triggerAddCar = function() {
             if (!activeUser || activeUser === "") {
                 alert("DİKKAT: Giriş yapmayan kullanıcılar ilan veremez! Lütfen önce kayıt olun.");
@@ -812,7 +835,6 @@
                 isAdminLoggedIn = true;
                 document.getElementById('panelTitleHeader').innerHTML = `<i class="fa-solid fa-user-gear text-danger me-1"></i> Panel (ADMIN)`;
                 document.getElementById('adminLogoutBtn').style.display = 'block'; 
-                alert("Yönetici modu başarıyla açıldı.");
                 applyFilters();
             } else if (pass !== null) {
                 alert("Hatalı şifre!");
@@ -903,7 +925,7 @@
                     });
                     
                     window.updateLocalStorage();
-                    alert("Teklif reddedildi ve bilgilendirme mesajı gönderildi.");
+                    alert("Teklif reddedildi.");
                     fetchCarsFromCloud();
                 } catch (err) {
                     console.error("Teklif reddetme hatası: ", err);
@@ -934,11 +956,21 @@
 
             selectedCarIdToBuy = id;
             paymentPurpose = "buy";
-            document.getElementById('payModalTitle').innerHTML = `<i class="fa-solid fa-shield-halved me-2"></i>Araç Satın Alım Güvenli Ödeme`;
-            document.getElementById('payPurposeText').innerText = "Araç Bedeli";
-            document.getElementById('payAmountText').innerText = car.price.toLocaleString('tr-TR') + " TL";
-            document.getElementById('paymentForm').reset();
-            flipCard(false); updateCardUI();
+            
+            const modalTitle = document.getElementById('payModalTitle');
+            if (modalTitle) modalTitle.innerHTML = `<i class="fa-solid fa-shield-halved me-2"></i>Araç Satın Alım Güvenli Ödeme`;
+            
+            const purposeText = document.getElementById('payPurposeText');
+            if (purposeText) purposeText.innerText = "Araç Bedeli";
+            
+            const amountText = document.getElementById('payAmountText');
+            if (amountText) amountText.innerText = car.price.toLocaleString('tr-TR') + " TL";
+            
+            const form = document.getElementById('paymentForm');
+            if (form) form.reset();
+            
+            flipCard(false); 
+            updateCardUI();
             
             let dInst = bootstrap.Modal.getInstance(document.getElementById('detailModal')); if(dInst) dInst.hide();
             new bootstrap.Modal(document.getElementById('paymentModal')).show();
@@ -947,11 +979,21 @@
         window.openDopingPayment = function(id) {
             selectedCarIdToBuy = id;
             paymentPurpose = "doping";
-            document.getElementById('payModalTitle').innerHTML = `<i class="fa-solid fa-bolt me-2"></i>Vitrin Öne Çıkarma Dopingi`;
-            document.getElementById('payPurposeText').innerText = "Doping Hizmet Bedeli";
-            document.getElementById('payAmountText').innerText = "750 TL";
-            document.getElementById('paymentForm').reset();
-            flipCard(false); updateCardUI();
+            
+            const modalTitle = document.getElementById('payModalTitle');
+            if (modalTitle) modalTitle.innerHTML = `<i class="fa-solid fa-bolt me-2"></i>Vitrin Öne Çıkarma Dopingi`;
+            
+            const purposeText = document.getElementById('payPurposeText');
+            if (purposeText) purposeText.innerText = "Doping Hizmet Bedeli";
+            
+            const amountText = document.getElementById('payAmountText');
+            if (amountText) amountText.innerText = "750 TL";
+            
+            const form = document.getElementById('paymentForm');
+            if (form) form.reset();
+            
+            flipCard(false); 
+            updateCardUI();
             new bootstrap.Modal(document.getElementById('paymentModal')).show();
         }
 
@@ -960,15 +1002,22 @@
             if(card) { if(isBack) card.classList.add('flipped'); else card.classList.remove('flipped'); }
         }
 
+        // KART GÖRSEL ALANINDAKI NULL REFERANS HATASI KORUMASI (GÜVENLİ HALE GETİRİLDİ)
         window.updateCardUI = function() {
-            const name = document.getElementById('cName').value;
-            const no = document.getElementById('cNo').value;
-            const date = document.getElementById('cDate').value;
-            const cvv = document.getElementById('cCvv').value;
-            document.getElementById('cardNameView').innerText = name ? name.toUpperCase() : "İSİM SOYİSİM";
-            document.getElementById('cardNoView').innerText = no ? no : "•••• •••• •••• ••••";
-            document.getElementById('cardDateView').innerText = date ? date : "00/00";
-            document.getElementById('cardCvvView').innerText = cvv ? cvv : "***";
+            const nameInp = document.getElementById('cName');
+            const noInp = document.getElementById('cNo');
+            const dateInp = document.getElementById('cDate');
+            const cvvInp = document.getElementById('cCvv');
+
+            const nameView = document.getElementById('cardNameView');
+            const noView = document.getElementById('cardNoView');
+            const dateView = document.getElementById('cardDateView');
+            const cvvView = document.getElementById('cardCvvView');
+
+            if (nameView && nameInp) nameView.innerText = nameInp.value ? nameInp.value.toUpperCase() : "İSİM SOYİSİM";
+            if (noView && noInp) noView.innerText = noInp.value ? noInp.value : "•••• •••• •••• ••••";
+            if (dateView && dateInp) dateView.innerText = dateInp.value ? dateInp.value : "00/00";
+            if (cvvView && cvvInp) cvvView.innerText = cvvInp.value ? cvvInp.value : "***";
         }
 
         window.formatCardNumber = function(el) {
@@ -1126,7 +1175,7 @@
                                     <select id="apType" class="form-select" required>
                                         <option value="Full Profesyonel Ekspertiz">Full Profesyonel Ekspertiz</option>
                                         <option value="Periyodik Ağır Bakım">Periyodik Ağır Bakım</option>
-                                        <option value="10.000 KM Rutin Yağ Bakımı">10.000 KM Rutin Yağ Bakımı</option>
+                                        <option value="10.000 KM Rutin Yağ Bakımı">10.000 KM Rutid Yağ Bakımı</option>
                                     </select>
                                 </div>
                                 <div class="mb-3">
@@ -1264,6 +1313,7 @@
             }
         }
 
+        // ESKİ VE BOŞ VERİLERİ (IMAGES EXCEPTION) ES GEÇEN GÜVENLİ DETAY MOTORU
         window.openDetail = function(id, isSold) {
             const car = dbCars.find(c => c.id === id);
             if(!car) return;
@@ -1279,7 +1329,9 @@
 
             const sliderInner = document.getElementById('sliderInner');
             if(sliderInner) {
-                sliderInner.innerHTML = car.images.map((img, idx) => `
+                // VERİTABANINDAKİ ESKİ İLANLAR İÇİN DİZİ KORUMASI TANIMLANDI (|| [])
+                const carImagesArray = car.images || [car.coverImage || "https://images.unsplash.com/photo-1542282088-72c9c27ed0cd?w=500"];
+                sliderInner.innerHTML = carImagesArray.map((img, idx) => `
                     <div class="carousel-item ${idx===0 ? 'active' : ''}">
                         <img src="${img}" class="d-block w-100" alt="Galeri" onerror="this.src='https://images.unsplash.com/photo-1542282088-72c9c27ed0cd?w=500'">
                     </div>
@@ -1421,7 +1473,7 @@
             checkAcceptedOffersForAlert();
         }
 
-        // PREMIUM GİRİŞ MOTORU VE BENZERSİZ TOKEN KAYDI
+        // AKILLI TARAYICI TESPİTİ VE GİRİŞ TOKEN SİSTEMİ
         window.authLogin = function(e) {
             e.preventDefault();
             const u = document.getElementById('lUser').value;
@@ -1435,7 +1487,7 @@
                 else if (ua.includes("Edg")) deviceDetails = "Microsoft Edge";
                 else if (ua.includes("Safari") && !ua.includes("Chrome")) deviceDetails = "Apple Safari";
                 else if (ua.includes("Firefox")) deviceDetails = "Mozilla Firefox";
-                else if (ua.includes("Mobile") || ua.includes("Android") || ua.includes("iPhone")) deviceDetails = "Mobil Akıllı Telefon";
+                else if (ua.includes("Mobile") || ua.includes("Android") || ua.includes("iPhone")) deviceDetails = "Mobil Cihaz";
                 
                 const currentSessionToken = "session_" + new Date().getTime();
                 localStorage.setItem('activeSessionToken', currentSessionToken);
@@ -1501,7 +1553,7 @@
             if (lf) lf.reset(); if (rf) rf.reset(); if (ff) ff.reset();
         }
 
-        // BAŞLANGIÇ ÇALIŞTIRMA SİSTEMLERİ
+        // BAŞLANGIÇ SİSTEMLERİ
         checkSession(); 
         startSecuritySessionCheck();
         fetchCarsFromCloud();
