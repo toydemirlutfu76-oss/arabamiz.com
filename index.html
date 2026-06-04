@@ -6,39 +6,68 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
-        /* LUXURY MODERN ARKA PLAN VE GRADIENT KATMANLARI */
+        /* LUXURY MODERN TEMA DEĞİŞKENLERİ */
+        :root {
+            --bg-body: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0f172a 100%);
+            --bg-sidebar: rgba(30, 41, 59, 0.7);
+            --bg-card: rgba(30, 41, 59, 0.65);
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --border-ui: rgba(255, 255, 255, 0.08);
+            --bg-input: rgba(15, 23, 42, 0.6);
+            --table-head: #94a3b8;
+            --text-title: #ffffff;
+            --card-hover-border: rgba(59, 130, 246, 0.3);
+        }
+
+        body.light-mode {
+            --bg-body: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 50%, #f1f5f9 100%);
+            --bg-sidebar: rgba(255, 255, 255, 0.85);
+            --bg-card: rgba(255, 255, 255, 0.95);
+            --text-main: #0f172a;
+            --text-muted: #475569;
+            --border-ui: rgba(0, 0, 0, 0.08);
+            --bg-input: rgba(255, 255, 255, 0.9);
+            --table-head: #334155;
+            --text-title: #0f172a;
+            --card-hover-border: rgba(37, 99, 235, 0.3);
+        }
+
         body { 
-            background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0f172a 100%);
-            background-attachment: fixed;
+            background: var(--bg-body) !important;
+            background-attachment: fixed !important;
             font-family: 'Inter', system-ui, -apple-system, sans-serif; 
-            color: #f8fafc;
+            color: var(--text-main) !important;
+            transition: background 0.3s ease, color 0.3s ease;
         }
         
-        /* CAM EFEKTİ (GLASSMORPHISM) SİDEBARLAR */
+        .dynamic-text { color: var(--text-main) !important; }
+        .dynamic-title { color: var(--text-title) !important; }
+        .dynamic-muted { color: var(--text-muted) !important; }
+
+        /* SİDEBARLAR */
         .left-sidebar { 
-            background: rgba(30, 41, 59, 0.7) !important; 
+            background: var(--bg-sidebar) !important; 
             backdrop-filter: blur(16px) saturate(180%); 
-            -webkit-backdrop-filter: blur(16px) saturate(180%);
             min-height: 92vh; 
-            border-right: 1px solid rgba(255, 255, 255, 0.08); 
+            border-right: 1px solid var(--border-ui); 
         }
         .right-macbar { 
-            background: rgba(30, 41, 59, 0.7) !important; 
+            background: var(--bg-sidebar) !important; 
             backdrop-filter: blur(16px) saturate(180%); 
-            -webkit-backdrop-filter: blur(16px) saturate(180%);
             min-height: 92vh; 
-            border-left: 1px solid rgba(255, 255, 255, 0.08); 
+            border-left: 1px solid var(--border-ui); 
             border-radius: 24px 0 0 24px; 
-            box-shadow: -10px 0 30px rgba(0,0,0,0.2); 
+            box-shadow: -10px 0 30px rgba(0,0,0,0.1); 
         }
         
-        /* PREMIUM NAV-LINK STİLLERİ */
         .nav-link { 
             cursor: pointer; 
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); 
+            transition: all 0.3s ease; 
             border-radius: 12px;
             padding: 10px 14px !important;
             margin-bottom: 4px;
+            color: var(--text-muted) !important;
         }
         .nav-link:hover { 
             background-color: rgba(59, 130, 246, 0.15) !important; 
@@ -51,130 +80,61 @@
             box-shadow: 0 4px 15px rgba(37, 99, 235, 0.4);
         }
 
-        /* PREMIUM İLAN KARTLARI */
+        /* İLAN KARTLARI */
         .car-card { 
             transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1); 
-            border: 1px solid rgba(255, 255, 255, 0.05); 
+            border: 1px solid var(--border-ui); 
             border-radius: 20px; 
             overflow: hidden; 
-            background: rgba(30, 41, 59, 0.65) !important;
+            background: var(--bg-card) !important;
             backdrop-filter: blur(10px);
-            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
         }
         .car-card:hover { 
             transform: translateY(-8px) scale(1.01); 
-            box-shadow: 0 20px 40px rgba(59, 130, 246, 0.2); 
-            border-color: rgba(59, 130, 246, 0.3);
+            box-shadow: 0 20px 40px rgba(59, 130, 246, 0.15); 
+            border-color: var(--card-hover-border);
         }
         
-        /* MODERN FORM VE INPUT ELEMENTLERİ */
         .form-control, .form-select {
-            background-color: rgba(15, 23, 42, 0.6) !important;
-            border: 1px solid rgba(255, 255, 255, 0.1) !important;
-            color: #f8fafc !important;
+            background-color: var(--bg-input) !important;
+            border: 1px solid var(--border-ui) !important;
+            color: var(--text-main) !important;
             border-radius: 12px !important;
-            transition: all 0.25s ease;
         }
-        .form-control:focus, .form-select:focus {
-            border-color: #3b82f6 !important;
-            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.25) !important;
-            background-color: rgba(15, 23, 42, 0.8) !important;
-        }
-        .form-control::placeholder { color: #94a3b8 !important; }
 
-        /* DETAY BUTONLARI VE BADGELER */
-        .fav-btn { cursor: pointer; transition: transform 0.2s; }
-        .fav-btn:hover { transform: scale(1.2); }
-        .img-preview-box { height: 110px; background-color: rgba(15, 23, 42, 0.5); border: 2px dashed rgba(255,255,255,0.2); border-radius: 12px; display: flex; align-items: center; justify-content: center; cursor: pointer; position: relative; background-size: cover; background-position: center; }
-        .carousel-item img { height: 420px; object-fit: cover; border-radius: 16px; }
-
-        /* 3D KREDİ KARTI DÖNME ANİMASYONU */
-        .card-container { perspective: 1000px; margin-bottom: 25px; }
-        .credit-card-preview {
-            width: 100%; min-height: 190px;
-            position: relative;
-            transform-style: preserve-3d;
-            transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
-            border-radius: 16px;
-            color: white;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.3);
+        .carousel-item img { 
+            height: 420px; 
+            object-fit: cover;
+            border-radius: 16px; 
         }
-        .credit-card-preview.flipped { transform: rotateY(180deg); }
-        .card-front, .card-back {
-            width: 100%; height: 100%;
-            position: absolute;
-            top: 0; left: 0;
-            backface-visibility: hidden;
-            border-radius: 16px;
-            padding: 22px;
-            display: flex; flex-direction: column;
-            justify-content: space-between;
-        }
-        .card-front { background: linear-gradient(135deg, #1e3a8a, #3b82f6); }
-        .card-back { background: linear-gradient(135deg, #0f172a, #1e293b); transform: rotateY(180deg); padding: 0; padding-top: 20px; }
-        .black-strip { width: 100%; height: 45px; background-color: #000; }
-        .ccv-strip { width: 80%; height: 35px; background-color: #fff; color: #000; margin: 15px auto; padding: 5px 15px; text-align: right; font-weight: bold; font-style: italic; border-radius: 4px; }
         
-        /* SOHBET KUTUSU PREMIUM RE-DESIGN */
-        .chat-box { height: 350px; overflow-y: auto; background-color: rgba(15, 23, 42, 0.4); border: 1px solid rgba(255,255,255,0.05); border-radius: 12px; padding: 15px; }
+        /* PREMIUM SOHBET ODASI */
+        .chat-box { height: 350px; overflow-y: auto; background-color: var(--bg-input); border: 1px solid var(--border-ui); border-radius: 12px; padding: 15px; }
         .message-row { display: flex; width: 100%; margin-bottom: 12px; }
         .message-row.sent { justify-content: flex-end; }
         .message-row.received { justify-content: flex-start; }
         .message-bubble { max-width: 70%; padding: 12px 16px; border-radius: 16px; font-size: 14px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
         .message-row.sent .message-bubble { background: linear-gradient(135deg, #2563eb, #1d4ed8); color: white; border-bottom-right-radius: 2px; }
-        .message-row.received .message-bubble { background-color: rgba(255,255,255,0.1); color: #f1f5f9; border-bottom-left-radius: 2px; }
+        .message-row.received .message-bubble { background-color: rgba(128,128,128,0.2); color: var(--text-main); border-bottom-left-radius: 2px; }
         
-        .doping-badge { animation: pulse 1.5s infinite; background: linear-gradient(45deg, #f59e0b, #ef4444) !important; color: white !important; font-weight: bold; box-shadow: 0 0 15px rgba(245, 158, 11, 0.5); }
+        .doping-badge { animation: pulse 1.5s infinite; background: linear-gradient(45deg, #f59e0b, #ef4444) !important; color: white !important; font-weight: bold; }
         @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.03); } 100% { transform: scale(1); } }
         
-        /* MODAL PENCERE KARARTMALARI */
-        .modal-content { background-color: #1e293b !important; color: #f8fafc !important; border: 1px solid rgba(255,255,255,0.1) !important; border-radius: 24px !important; }
-        .modal-header { border-bottom: 1px solid rgba(255,255,255,0.08) !important; }
-        .modal-footer { border-top: 1px solid rgba(255,255,255,0.08) !important; }
-        .table { color: #e2e8f0 !important; border-color: rgba(255,255,255,0.08) !important; }
-        th { color: #94a3b8 !important; }
-
-        /* AÇIK MOD ÖZEL SEÇİCİLERİ */
-        body.light-mode {
-            background: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 50%, #f1f5f9 100%) !important;
-            color: #0f172a !important;
-        }
-        body.light-mode .left-sidebar, body.light-mode .right-macbar {
-            background: rgba(255, 255, 255, 0.8) !important;
-            border-color: rgba(0, 0, 0, 0.08) !important;
-        }
-        body.light-mode .car-card {
-            background: rgba(255, 255, 255, 0.9) !important;
-            border-color: rgba(0, 0, 0, 0.08) !important;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
-        }
-        body.light-mode .text-white, body.light-mode h4, body.light-mode h5, body.light-mode .card-body h5 {
-            color: #0f172a !important;
-        }
-        body.light-mode .form-control, body.light-mode .form-select {
-            background-color: rgba(255, 255, 255, 0.9) !important;
-            border: 1px solid rgba(0, 0, 0, 0.15) !important;
-            color: #0f172a !important;
-        }
-        body.light-mode .form-control::placeholder { color: #64748b !important; }
-        body.light-mode .modal-content {
-            background-color: #ffffff !important;
-            color: #0f172a !important;
-            border: 1px solid rgba(0,0,0,0.1) !important;
-        }
-        body.light-mode .table { color: #0f172a !important; }
+        .modal-content { background-color: var(--bg-card) !important; color: var(--text-main) !important; border: 1px solid var(--border-ui) !important; border-radius: 24px !important; }
+        .table { color: var(--text-main) !important; border-color: var(--border-ui) !important; }
+        th { color: var(--table-head) !important; }
     </style>
 </head>
 <body>
 
-    <!-- GÜVENLİK BİLDİRİM ALANI -->
-    <div id="paymentAlertBar" class="text-white text-center py-2.5 fw-bold shadow-lg" style="display: none; font-size: 14px; background: linear-gradient(90deg, #ef4444, #dc2626); box-shadow: 0 4px 20px rgba(239, 68, 68, 0.45); z-index: 9999;">
+    <div id="paymentAlertBar" class="text-white text-center py-2.5 fw-bold shadow-lg" style="display: none; font-size: 14px; background: linear-gradient(90deg, #ef4444, #dc2626); z-index: 9999;">
         <i class="fa-solid fa-triangle-exclamation text-warning me-2 animate-bounce fs-5"></i> 
         🚨 GÜVENLİK BİLDİRİMİ: Verdiğiniz bir fiyat teklifi kabul edildi! 
         <a href="#" onclick="event.preventDefault(); window.showGarageListings();" class="btn btn-sm btn-light text-danger fw-bold ms-3 px-3 rounded-pill shadow-sm" style="font-size: 12px; border: none;">Ödemeye Git <i class="fa-solid fa-arrow-right ms-1"></i></a>
     </div>
 
-    <nav class="navbar top-navbar sticky-top py-3 px-4 navbar-dark shadow">
+    <nav class="navbar top-navbar sticky-top py-3 px-4 navbar-dark shadow" style="background: rgba(15,23,42,0.4); backdrop-filter:blur(10px);">
         <div class="container-fluid d-flex justify-content-between align-items-center">
             <a class="navbar-brand fw-black text-warning fs-3 tracking-wider" href="#" onclick="showAllListings()"><i class="fa-solid fa-car-rear me-2 text-primary"></i> OTOMARKET <span class="badge bg-danger fs-6 pb-1">PRO</span></a>
             
@@ -184,11 +144,11 @@
             </form>
             
             <div class="d-flex align-items-center gap-2">
-                <button class="btn btn-outline-warning rounded-pill px-3 shadow-sm" id="themeToggleBtn" onclick="toggleThemeMode()">
+                <button class="btn btn-outline-warning rounded-pill px-3 shadow-sm" id="themeToggleBtn" onclick="window.toggleThemeMode()">
                     <i class="fa-solid fa-sun" id="themeIcon"></i>
                 </button>
                 
-                <span class="text-white me-2" id="userBadge" style="display:none;">
+                <span class="dynamic-text me-2" id="userBadge" style="display:none;">
                     <i class="fa-solid fa-user-shield text-success me-1"></i> <span id="userBadgeName" class="fw-bold text-info"></span>
                 </span>
                 <button class="btn btn-primary px-4 fw-bold rounded-pill shadow-sm" id="authBtn" onclick="triggerMainAuthBtn()">Giriş / Kayıt Ol</button>
@@ -202,7 +162,7 @@
             <div class="col-md-2 left-sidebar p-4 d-flex flex-column justify-content-between">
                 <div>
                     <div class="d-flex justify-content-between align-items-center mb-4">
-                        <h6 class="text-uppercase fw-bold m-0 small tracking-widest text-secondary" id="panelTitleHeader" ondblclick="triggerAdminLogin()" style="cursor: pointer; user-select: none;" title="Yönetici paneli için çift tıklayın">Panel Kontrol</h6>
+                        <h6 class="text-uppercase fw-bold m-0 small tracking-widest text-secondary" id="panelTitleHeader" ondblclick="triggerAdminLogin()" style="cursor: pointer; user-select: none;">Panel Kontrol</h6>
                         <button id="adminLogoutBtn" class="btn btn-xs btn-danger py-0 px-2 fw-bold" style="display: none; font-size: 11px; border-radius: 4px;" onclick="logoutAdminMode()">Çıkış</button>
                     </div>
                     <ul class="nav flex-column gap-1" id="menuList">
@@ -210,11 +170,9 @@
                         <li class="nav-item"><a id="menuDoping" class="nav-link text-secondary fw-semibold" onclick="showDopingListings()"><i class="fa-solid fa-star me-2 text-warning"></i> Haftanın Yıldızları</a></li>
                         <li class="nav-item"><a id="menuFav" class="nav-link text-secondary fw-semibold" onclick="showFavoriteListings()"><i class="fa-solid fa-heart me-2 text-danger"></i> Favorilerim (<span id="favCount">0</span>)</a></li>
                         <li class="nav-item"><a id="menuGarage" class="nav-link text-secondary fw-semibold" onclick="showGarageListings()"><i class="fa-solid fa-warehouse me-2 text-primary"></i> Garajım / Geçmişim</a></li>
-                        
                         <li class="nav-item"><a id="menuMessages" class="nav-link text-secondary fw-semibold" onclick="showMessagesSection()"><i class="fa-solid fa-comments me-2 text-success"></i> Mesajlarım (<span id="msgCount">0</span>)</a></li>
                         <li class="nav-item"><a id="menuEkspertiz" class="nav-link text-secondary fw-semibold" onclick="showEkspertizSection()"><i class="fa-solid fa-screwdriver-wrench me-2 text-light"></i> Ekspertiz & Bakım</a></li>
                         <li class="nav-item"><a id="menuKredi" class="nav-link text-secondary fw-semibold" onclick="showKrediSection()"><i class="fa-solid fa-calculator me-2 text-warning"></i> Kredi Hesaplama</a></li>
-                        
                         <li class="nav-item"><a id="menuAbout" class="nav-link text-secondary fw-semibold" onclick="showAboutSection()"><i class="fa-solid fa-circle-info me-2 text-muted"></i> Hakkımızda</a></li>
                         <li class="nav-item mt-3"><a id="mainAddCarBtn" class="nav-link text-white fw-bold bg-success bg-opacity-25 border border-success border-opacity-25" onclick="triggerAddCar()"><i class="fa-solid fa-square-plus me-2 text-success fs-5"></i> İlan Yayınla</a></li>
                     </ul>
@@ -231,7 +189,7 @@
             </div>
 
             <div class="col-md-7 p-4" id="mainDynamicContainer">
-                <h4 class="fw-bold mb-4 text-white" id="vitrinTitle">Aktif Araç İlanları</h4>
+                <h4 class="fw-bold mb-4 dynamic-title" id="vitrinTitle">Aktif Araç İlanları</h4>
                 <div class="text-center py-5" id="globalSpinner">
                     <div class="spinner-border text-primary" role="status"></div>
                     <p class="text-muted mt-2 small">Bulut veritabanına bağlanılıyor...</p>
@@ -244,12 +202,12 @@
                     <span class="badge bg-danger me-1" style="width:12px;height:12px;padding:0;border-radius:50%"> </span>
                     <span class="badge bg-warning me-1" style="width:12px;height:12px;padding:0;border-radius:50%"> </span>
                     <span class="badge bg-success me-3" style="width:12px;height:12px;padding:0;border-radius:50%"> </span>
-                    <h6 class="m-0 fw-bold text-white tracking-wide">Gelişmiş Filtreleme</h6>
+                    <h6 class="m-0 fw-bold dynamic-title tracking-wide">Gelişmiş Filtreleme</h6>
                 </div>
                 <hr class="border-secondary">
                 <div class="d-flex flex-column gap-3">
                     <div>
-                        <label class="form-label small fw-bold text-secondary">Kasa Tipi</label>
+                        <label class="form-label small fw-bold dynamic-muted">Kasa Tipi</label>
                         <select id="fKasa" class="form-select form-select-sm" onchange="applyFilters()">
                             <option value="">Tümü</option>
                             <option value="Sedan">Sedan</option>
@@ -258,15 +216,15 @@
                         </select>
                     </div>
                     <div>
-                        <label class="form-label small fw-bold text-secondary">Renk</label>
+                        <label class="form-label small fw-bold dynamic-muted">Renk</label>
                         <input type="text" id="fRenk" class="form-control form-control-sm" placeholder="Örn: Beyaz" oninput="applyFilters()">
                     </div>
                     <div>
-                        <label class="form-label small fw-bold text-secondary">Minimum Model Yılı</label>
+                        <label class="form-label small fw-bold dynamic-muted">Minimum Model Yılı</label>
                         <input type="number" id="fYil" class="form-control form-control-sm" placeholder="Örn: 2015" oninput="applyFilters()">
                     </div>
                     <div>
-                        <label class="form-label small fw-bold text-secondary">Fiyat Aralığı (TL)</label>
+                        <label class="form-label small fw-bold dynamic-muted">Fiyat Aralığı (TL)</label>
                         <div class="d-flex gap-2">
                             <input type="number" id="fMinPrice" class="form-control form-control-sm" placeholder="Minimum" oninput="applyFilters()">
                             <input type="number" id="fMaxPrice" class="form-control form-control-sm" placeholder="Maksimum" oninput="applyFilters()">
@@ -279,22 +237,21 @@
         </div>
     </div>
 
-    <!-- MODAL PENCERELERI -->
     <div class="modal fade" id="offerModal" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered modal-sm">
             <div class="modal-content border-0 shadow">
-                <div class="modal-header text-white py-2">
-                    <h6 class="modal-title fw-bold"><i class="fa-solid fa-hand-holding-dollar me-2 text-warning"></i>Fiyat Teklifi Gönder</h6>
+                <div class="modal-header py-2">
+                    <h6 class="modal-title fw-bold dynamic-title"><i class="fa-solid fa-hand-holding-dollar me-2 text-warning"></i>Fiyat Teklifi Gönder</h6>
                     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
                 </div>
                 <div class="modal-body p-3">
                     <div class="mb-3 p-2 rounded text-center" style="background-color: rgba(15,23,42,0.5)">
-                        <small class="text-secondary d-block">Aracın Orijinal Fiyatı</small>
+                        <small class="dynamic-muted d-block">Aracın Orijinal Fiyatı</small>
                         <b class="text-warning fs-4" id="offerCarPriceView">0 TL</b>
                     </div>
                     <form id="offerForm" onsubmit="submitOfferToCloud(event)">
                         <div class="mb-3">
-                            <label class="form-label small fw-bold text-secondary">Teklif Ettiğiniz Tutar (TL)</label>
+                            <label class="form-label small fw-bold dynamic-muted">Teklif Ettiğiniz Tutar (TL)</label>
                             <input type="number" id="offerAmountInput" class="form-control fw-bold text-primary fs-5" required placeholder="Örn: 850000">
                         </div>
                         <button type="submit" class="btn btn-warning w-100 fw-bold text-dark rounded-3">Teklifi Buluta Gönder</button>
@@ -307,7 +264,7 @@
     <div class="modal fade" id="detailModal" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-lg modal-dialog-centered">
             <div class="modal-content">
-                <div class="modal-header text-white">
+                <div class="modal-header">
                     <h5 class="modal-title fw-bold text-info" id="detTitle">Araç Detayı</h5>
                     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
                 </div>
@@ -318,26 +275,26 @@
                         <button class="carousel-control-next" type="button" data-bs-target="#carSlider" data-bs-slide="next"><span class="carousel-control-next-icon"></span></button>
                     </div>
                     
-                    <h5 class="fw-bold border-bottom border-secondary pb-2 mb-3 text-secondary"><i class="fa-solid fa-circle-info text-primary me-2"></i>İlan Bilgileri</h5>
+                    <h5 class="fw-bold border-bottom border-secondary pb-2 mb-3 dynamic-muted"><i class="fa-solid fa-circle-info text-primary me-2"></i>İlan Bilgileri</h5>
                     <div class="row g-3">
                         <div class="col-md-6">
-                            <table class="table table-sm table-dark table-borderless">
-                                <tr><th class="w-40">Araç Başlığı</th><td id="detTableTitle" class="text-white fw-bold"></td></tr>
-                                <tr><th>Model Yılı</th><td id="detTableYear"></td></tr>
-                                <tr><th>Kasa Tipi</th><td id="detTableBody"></td></tr>
+                            <table class="table table-sm table-borderless">
+                                <tr><th class="w-40">Araç Başlığı</th><td id="detTableTitle" class="fw-bold dynamic-text"></td></tr>
+                                <tr><th>Model Yılı</th><td id="detTableYear" class="dynamic-text"></td></tr>
+                                <tr><th>Kasa Tipi</th><td id="detTableBody" class="dynamic-text"></td></tr>
                             </table>
                         </div>
                         <div class="col-md-6">
-                            <table class="table table-sm table-dark table-borderless">
-                                <tr><th class="w-40">Renk</th><td id="detTableColor"></td></tr>
+                            <table class="table table-sm table-borderless">
+                                <tr><th class="w-40">Renk</th><td id="detTableColor" class="dynamic-text"></td></tr>
                                 <tr><th>Fiyat</th><td id="detTablePrice" class="text-info fw-bold fs-5"></td></tr>
                                 <tr><th>İlan Sahibi</th><td><span id="detTableOwner" class="badge bg-primary"></span></td></tr>
                             </table>
                         </div>
                         <div class="col-md-12 mt-2">
-                            <div class="p-3 rounded border border-secondary" style="background-color: rgba(15,23,42,0.4);">
+                            <div class="p-3 rounded border border-secondary" style="background-color: rgba(128,128,128,0.05);">
                                 <h6 class="fw-bold text-info"><i class="fa-solid fa-file-lines me-1"></i> Satıcı Açıklaması:</h6>
-                                <p class="m-0 small text-secondary" id="detTableDescription" style="white-space: pre-line; color: #cbd5e1 !important;"></p>
+                                <p class="m-0 small dynamic-text" id="detTableDescription" style="white-space: pre-line;"></p>
                             </div>
                         </div>
                     </div>
@@ -356,47 +313,26 @@
                 </div>
                 <div class="modal-body p-4">
                     <div class="text-center mb-3">
-                        <p class="text-muted small m-0" id="payPurposeText">Ödenecek Tutar</p>
+                        <p class="dynamic-muted small m-0" id="payPurposeText">Ödenecek Tutar</p>
                         <h4 class="fw-bold text-warning" id="payAmountText">0 TL</h4>
                     </div>
-
-                    <!-- 3D KREDİ KARTI GÖRSEL ÖNİZLEME ALANI -->
-                    <div class="card-container">
-                        <div class="credit-card-preview" id="cardFlipObject">
-                            <div class="card-front">
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <div class="card-brand"></div><i class="fa-brands fa-cc-visa fa-2x text-white-50"></i>
-                                </div>
-                                <div class="fs-4 my-3 text-center" id="cardNoView" style="letter-spacing: 2px;">•••• •••• •••• ••••</div>
-                                <div class="d-flex justify-content-between align-items-center small">
-                                    <div><div class="text-white-50" style="font-size:9px">KART SAHİBİ</div><div id="cardNameView" class="fw-bold text-uppercase">İSİM SOYİSİM</div></div>
-                                    <div class="text-end"><div class="text-white-50" style="font-size:9px">AA/YY</div><div id="cardDateView" class="fw-bold">00/00</div></div>
-                                </div>
-                            </div>
-                            <div class="card-back">
-                                <div class="black-strip"></div>
-                                <div class="ccv-strip" id="cardCvvView">***</div>
-                            </div>
-                        </div>
-                    </div>
-
                     <form id="paymentForm" onsubmit="processPayment(event)">
                         <div class="mb-3">
-                            <label class="form-label small fw-bold text-secondary">Kart Sahibi İsim Soyisim</label>
+                            <label class="form-label small fw-bold dynamic-muted">Kart Sahibi İsim Soyisim</label>
                             <input type="text" id="cName" class="form-control" required oninput="updateCardUI()">
                         </div>
                         <div class="mb-3">
-                            <label class="form-label small fw-bold text-secondary">Kart Numarası</label>
-                            <input type="text" id="cNo" class="form-control" maxlength="19" required oninput="formatCardNumber(this); updateCardUI();">
+                            <label class="form-label small fw-bold dynamic-muted">Kart Numarası</label>
+                            <input type="text" id="cNo" class="form-control" maxlength="19" required oninput="formatCardNumber(this); updateCardUI();" placeholder="xxxx xxxx xxxx xxxx">
                         </div>
                         <div class="row mb-3">
                             <div class="col-7">
-                                <label class="form-label small fw-bold text-secondary">Son Tüketim (AA/YY)</label>
+                                <label class="form-label small fw-bold dynamic-muted">Son Tüketim (AA/YY)</label>
                                 <input type="text" id="cDate" class="form-control" maxlength="5" required placeholder="05/30" oninput="formatCardDate(this); updateCardUI();">
                             </div>
                             <div class="col-5">
-                                <label class="form-label small fw-bold text-secondary">CVV</label>
-                                <input type="password" id="cCvv" class="form-control" maxlength="3" required onfocus="flipCard(true)" onblur="flipCard(false)" oninput="updateCardUI()">
+                                <label class="form-label small fw-bold dynamic-muted">CVV</label>
+                                <input type="password" id="cCvv" class="form-control" maxlength="3" required onfocus="flipCard(true)" onblur="flipCard(false)" oninput="updateCardUI()" placeholder="***">
                             </div>
                         </div>
                         <button type="submit" class="btn btn-success w-100 fw-bold py-2.5 mt-3 rounded-3" id="paySubmitBtn">Güvenli Ödemeyi Yap</button>
@@ -409,7 +345,7 @@
     <div class="modal fade" id="addCarModal" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-lg modal-dialog-centered">
             <div class="modal-content">
-                <div class="modal-header bg-success bg-opacity-75 text-white">
+                <div class="modal-header bg-success text-white">
                     <h5 class="modal-title fw-bold"><i class="fa-solid fa-camera me-2"></i>Yeni Araç Giriş Kataloğu</h5>
                     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
                 </div>
@@ -417,23 +353,23 @@
                     <form id="addCarForm" onsubmit="saveCar(event)">
                         <div class="row g-3">
                             <div class="col-md-6">
-                                <label class="form-label small fw-bold text-secondary">Araç Başlığı (Marka / Model)</label>
+                                <label class="form-label small fw-bold dynamic-muted">Araç Başlığı (Marka / Model)</label>
                                 <input type="text" id="aTitle" class="form-control" required>
                             </div>
                             <div class="col-md-3">
-                                <label class="form-label small fw-bold text-secondary">Model Yılı</label>
+                                <label class="form-label small fw-bold dynamic-muted">Model Yılı</label>
                                 <input type="number" id="aYear" class="form-control" required>
                             </div>
                             <div class="col-md-3">
-                                <label class="form-label small fw-bold text-secondary">Renk</label>
+                                <label class="form-label small fw-bold dynamic-muted">Renk</label>
                                 <input type="text" id="aColor" class="form-control" required>
                             </div>
                             <div class="col-md-6">
-                                <label class="form-label small fw-bold text-secondary">Fiyat (TL)</label>
+                                <label class="form-label small fw-bold dynamic-muted">Fiyat (TL)</label>
                                 <input type="number" id="aPrice" class="form-control" required>
                             </div>
                             <div class="col-md-6">
-                                <label class="form-label small fw-bold text-secondary">Kasa Tipi</label>
+                                <label class="form-label small fw-bold dynamic-muted">Kasa Tipi</label>
                                 <select id="aBody" class="form-select">
                                     <option value="Sedan">Sedan</option>
                                     <option value="Hatchback">Hatchback</option>
@@ -442,7 +378,7 @@
                             </div>
                             <div class="col-md-12">
                                 <label class="form-label small fw-bold text-danger">İlan Açıklaması (Zorunlu - En az 15 karakter)</label>
-                                <textarea id="aDescription" class="form-control" rows="3" required placeholder="Örn: Araç ilk sahibinden olup hatasız, boyasız ve değişensizdir. Garaj arabasıdır..."></textarea>
+                                <textarea id="aDescription" class="form-control" rows="3" required placeholder="Araç hakkında detaylı bilgi girin..."></textarea>
                             </div>
                             <div class="col-md-3">
                                 <label class="form-label small fw-bold text-primary">Kapak Fotoğrafı</label>
@@ -452,19 +388,19 @@
                                 <input type="hidden" id="h_cover" required>
                             </div>
                             <div class="col-md-3">
-                                <label class="form-label small fw-bold text-secondary">Slider 1 (Opsiyonel)</label>
+                                <label class="form-label small fw-bold dynamic-muted">Slider 1 (Opsiyonel)</label>
                                 <div class="img-preview-box" id="p_i1" onclick="triggerFile('file_i1')"><span class="small text-muted">Seç</span></div>
                                 <input type="file" id="file_i1" hidden accept="image/*" onchange="encodeImg(this, 'p_i1', 'h_i1')">
                                 <input type="hidden" id="h_i1">
                             </div>
                             <div class="col-md-3">
-                                <label class="form-label small fw-bold text-secondary">Slider 2 (Opsiyonel)</label>
+                                <label class="form-label small fw-bold dynamic-muted">Slider 2 (Opsiyonel)</label>
                                 <div class="img-preview-box" id="p_i2" onclick="triggerFile('file_i2')"><span class="small text-muted">Seç</span></div>
                                 <input type="file" id="file_i2" hidden accept="image/*" onchange="encodeImg(this, 'p_i2', 'h_i2')">
                                 <input type="hidden" id="h_i2">
                             </div>
                             <div class="col-md-3">
-                                <label class="form-label small fw-bold text-secondary">Slider 3 (Opsiyonel)</label>
+                                <label class="form-label small fw-bold dynamic-muted">Slider 3 (Opsiyonel)</label>
                                 <div class="img-preview-box" id="p_i3" onclick="triggerFile('file_i3')"><span class="small text-muted">Seç</span></div>
                                 <input type="file" id="file_i3" hidden accept="image/*" onchange="encodeImg(this, 'p_i3', 'h_i3')">
                                 <input type="hidden" id="h_i3">
@@ -534,7 +470,6 @@
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { getFirestore, collection, addDoc, getDocs, deleteDoc, doc, updateDoc, query, orderBy } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
-        // Firebase Yapılandırması
         const firebaseConfig = {
             apiKey: "AIzaSyDa8k6w5FgAVK1Ai8NYForyXC8fg4k_PzE",
             authDomain: "arabamiz-site.firebaseapp.com",
@@ -550,7 +485,6 @@
         const carsCollection = collection(db, "cars");
         const offersCollection = collection(db, "offers"); 
 
-        // Hafıza Katmanları
         let dbCars = [];
         let dbOffers = []; 
         let dbUsers = JSON.parse(localStorage.getItem('dbUsers')) || {"demo": {pass:"1234", email:"demo@otomarket.com"}};
@@ -567,7 +501,6 @@
         let selectedCarIdToOffer = null; 
         let isAdminLoggedIn = false; 
 
-        // GÜVENLİ İLAN VERME DOĞRULAMASI
         window.triggerAddCar = function() {
             if (!activeUser || activeUser === "") {
                 alert("DİKKAT: Giriş yapmayan kullanıcılar ilan veremez! Lütfen önce kayıt olun.");
@@ -578,7 +511,6 @@
             }
         }
 
-        // TEK CİHAZ OTURUM GÜVENLİK KONTROLÜ
         window.checkDeviceSecurity = function() {
             if (activeUser && activeUser !== "") {
                 const localToken = localStorage.getItem('activeSessionToken');
@@ -597,7 +529,6 @@
             }
         };
 
-        // GÜVENLİK SAYAÇ DÖNGÜSÜ
         function startSecuritySessionCheck() {
             if (activeUser) {
                 setInterval(() => {
@@ -772,7 +703,6 @@
                     adminBtnHTML = `<button onclick="deleteCar('${c.id}')" class="btn btn-sm btn-danger w-100 mt-2 fw-bold"><i class="fa-solid fa-radiation"></i> Admin Yetkisiyle Buluttan Sil</button>`;
                 }
 
-                // GİRİŞ YAPMAYAN KULLANICILAR İÇİN FAVORİ BUTONU KORUMASI VE GİZLEME ALANI
                 let favIcon = '';
                 if (!isSold && activeUser && activeUser !== "") {
                     if (isOwner) {
@@ -1002,7 +932,6 @@
             if(card) { if(isBack) card.classList.add('flipped'); else card.classList.remove('flipped'); }
         }
 
-        // KART GÖRSEL ALANINDAKI NULL REFERANS HATASI KORUMASI (GÜVENLİ HALE GETİRİLDİ)
         window.updateCardUI = function() {
             const nameInp = document.getElementById('cName');
             const noInp = document.getElementById('cNo');
@@ -1175,7 +1104,7 @@
                                     <select id="apType" class="form-select" required>
                                         <option value="Full Profesyonel Ekspertiz">Full Profesyonel Ekspertiz</option>
                                         <option value="Periyodik Ağır Bakım">Periyodik Ağır Bakım</option>
-                                        <option value="10.000 KM Rutin Yağ Bakımı">10.000 KM Rutid Yağ Bakımı</option>
+                                        <option value="10.000 KM Rutin Yağ Bakımı">10.000 KM Rutin Yağ Bakımı</option>
                                     </select>
                                 </div>
                                 <div class="mb-3">
@@ -1313,7 +1242,6 @@
             }
         }
 
-        // ESKİ VE BOŞ VERİLERİ (IMAGES EXCEPTION) ES GEÇEN GÜVENLİ DETAY MOTORU
         window.openDetail = function(id, isSold) {
             const car = dbCars.find(c => c.id === id);
             if(!car) return;
@@ -1329,7 +1257,6 @@
 
             const sliderInner = document.getElementById('sliderInner');
             if(sliderInner) {
-                // VERİTABANINDAKİ ESKİ İLANLAR İÇİN DİZİ KORUMASI TANIMLANDI (|| [])
                 const carImagesArray = car.images || [car.coverImage || "https://images.unsplash.com/photo-1542282088-72c9c27ed0cd?w=500"];
                 sliderInner.innerHTML = carImagesArray.map((img, idx) => `
                     <div class="carousel-item ${idx===0 ? 'active' : ''}">
@@ -1534,6 +1461,7 @@
             location.reload(); 
         }
 
+        // ELEMENT GÜVENLİĞİ SAĞLANMIŞ MODAL GEÇİŞ SİSTEMİ
         window.toggleAuthMode = function(m) {
             const lf = document.getElementById('fLogin');
             const rf = document.getElementById('fReg');
